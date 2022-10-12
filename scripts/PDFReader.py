@@ -3,6 +3,12 @@ from PyPDF2 import PdfFileReader , PdfFileWriter
 import os
 import time
 from numpy import convolve
+from dotenv import load_dotenv
+
+load_dotenv()
+
+USER=os.getenv("DBUSER")
+PASSWORD=os.getenv("DBPASSWD")
 
 
 def getString(paginas,kieszelf):
