@@ -1,0 +1,64 @@
+.choice {
+  color: grey;
+  text-decoration: none;
+}
+
+.choice:hover {
+  color: rgb(89, 182, 195);
+}
+
+a.choice div:hover {
+  background-color: rgb(235, 235, 235) !important;
+}
+
+.btn-link:hover {
+  color: rgb(89, 182, 195) !important;
+}
+
+.btn-link {
+  font-weight: 400;
+  color: rgb(89, 182, 195);
+  text-decoration: underline;
+}
+
+.scroll-to-top:hover {
+  background: rgb(89, 182, 195);
+}
+
+.scroll-to-top {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  display: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  text-align: center;
+  color: #fff;
+  background: rgba(89, 182, 195, .5);
+  line-height: 46px;
+}
+
+.navbar {
+  transition: all 200ms !important;
+}
+
+.morebtn:hover {
+  background-color: rgb(83, 160, 170) !important;
+  transition: all 200ms !important;
+  transform: translateY(-1px);
+  box-shadow: 0px 8px 15px rgb(0 0 0 / 10%) !important;
+}
+
+.morebtn {
+  transition: all 500ms !important;
+}
+
+.noselect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+

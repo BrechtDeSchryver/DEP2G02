@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Dashboard - Groep 7</title>
+    <meta name="theme-color" content="rgb(89,182,195)">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:description" content="Het Data Engineering Project van groep 7!">
+    <meta name="description" content="Het Data Engineering Project van groep 7!">
+    <meta name="twitter:title" content="Data Engineering Project">
+    <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="assets/img/180.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/img/16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/32.png">
+    <link rel="icon" type="image/png" sizes="180x180" href="assets/img/180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/img/192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="assets/img/512.png">
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
+    <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/fonts/fontawesome5-overrides.min.css">
+    <link rel="stylesheet" href="assets/css/Stats.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body id="page-top">
+    <div id="wrapper">
+        <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0" style="background: rgb(89,182,195);">
+            <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="index.html">
+                    <div class="sidebar-brand-icon"><i class="fa fa-database"></i></div>
+                    <div class="sidebar-brand-text mx-3"><span>DEP</span></div>
+                </a>
+                <hr class="sidebar-divider my-0">
+                <ul class="navbar-nav text-light" id="accordionSidebar">
+                    <li class="nav-item"><a class="nav-link" href="index.html"><i class="fa fa-home"></i><span>Home</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="sectoren.html"><i class="fa fa-bar-chart"></i><span>Sectoren</span></a></li>
+                    <li class="nav-item"></li>
+                    <li class="nav-item"></li>
+                    <li class="nav-item"></li>
+                </ul>
+                <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
+            </div>
+        </nav>
+        <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content">
+                <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
+                    <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
+                        <div class="input-group"><input class="bg-light form-control border-0 small" type="text" id="searchbar" placeholder="Zoek bedrijf..." style="max-width: 400px;" autocomplete="off" autofill="off" name="new-password"><button class="btn btn-primary py-0" id="searchbtn" type="button" style="background: rgb(89,182,195);border-color: rgb(89,182,195);"><i class="fas fa-search"></i></button></div>
+                        <ul class="navbar-nav flex-nowrap ms-auto">
+                            <li class="nav-item dropdown no-arrow mx-1">
+                                <div class="shadow dropdown-list dropdown-menu dropdown-menu-end" aria-labelledby="alertsDropdown"></div><a class="nav-link" id="phone" href="#" target="_blank"><i class="fas fa-phone-alt"></i></a>
+                            </li>
+                            <li class="nav-item dropdown no-arrow mx-1">
+                                <div class="shadow dropdown-list dropdown-menu dropdown-menu-end" aria-labelledby="alertsDropdown"></div><a class="nav-link" id="pdflink" href="#" title="Jaarrekening" target="_blank"><i class="fas fa-file-pdf"></i></a>
+                            </li>
+                            <li class="nav-item dropdown no-arrow mx-1">
+                                <div class="shadow dropdown-list dropdown-menu dropdown-menu-end" aria-labelledby="alertsDropdown"></div><a class="nav-link" id="websitelink" title="Website" target="_blank"><i class="fas fa-globe-americas"></i></a>
+                            </li>
+                            <li class="nav-item dropdown no-arrow mx-1">
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" id="alert" href="#"><i class="fas fa-bell fa-fw"></i></a>
+                                    <div class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
+                                        <h6 class="dropdown-header" style="background: rgb(89,182,195);border-width: 1px;border-color: rgb(89,182,195);">Meldingen</h6><a class="dropdown-item d-flex align-items-center" href="#" style="border-radius: 0px;border-bottom-left-radius: 6px;border-bottom-right-radius: 6px;">
+                                            <div class="me-3">
+                                                <div class="bg-warning icon-circle"><i class="fas fa-exclamation-triangle text-white"></i></div>
+                                            </div>
+                                            <div><span class="small text-gray-500">3/10/2022</span>
+                                                <p>Dit is een testomgeving!</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+                <div class="flex-column align-items-center" id="options" style="margin-top: -31px;background: #ffffff;position: absolute;border-radius: 18px;box-shadow: 0px 1px 4px 0px rgb(67,68,71);min-width: 470px;min-height: 60px;z-index: 155;margin-left: 10px;"></div>
+                <div class="container-fluid" id="resultset">
+                    <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                        <h3 class="text-dark mb-0" id="naam" style="font-weight: bold;"></h3>
+                        <div class="d-flex align-items-start"><i class="fa fa-map-marker" style="margin-right: 7px;"></i>
+                            <p id="locatie"></p>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <h6 id="btwnum"></h6>
+                        <h6 id="framework"></h6>
+                    </div>
+                    <h6 id="sector">[Sector]</h6>
+                    <h6 id="sectordetail"></h6>
+                    <div class="row">
+                        <div class="col-md-6 col-xl-3 mb-4">
+                            <div class="card shadow border-start-primary py-2">
+                                <div class="card-body">
+                                    <div class="row align-items-center no-gutters">
+                                        <div class="col me-2">
+                                            <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span class="noselect">Aantal werknemers</span></div>
+                                            <div class="text-dark fw-bold h5 mb-0"><span id="werknemers">0</span></div>
+                                        </div>
+                                        <div class="col-auto"><i class="fas fa-users fa-2x text-gray-300"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-3 mb-4">
+                            <div class="card shadow border-start-success py-2">
+                                <div class="card-body">
+                                    <div class="row align-items-center no-gutters">
+                                        <div class="col me-2">
+                                            <div class="text-uppercase text-success fw-bold text-xs mb-1"><span class="noselect">Omzet</span></div>
+                                            <div class="text-dark fw-bold h5 mb-0"><span id="omzet">0</span></div>
+                                        </div>
+                                        <div class="col-auto"><i class="fas fa-dollar-sign fa-2x text-gray-300"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-3 mb-4">
+                            <div class="card shadow border-start-info py-2">
+                                <div class="card-body">
+                                    <div class="row align-items-center no-gutters">
+                                        <div class="col me-2">
+                                            <div class="text-uppercase text-info fw-bold text-xs mb-1"><span class="noselect">Balanstotaal</span></div>
+                                            <div class="row g-0 align-items-center">
+                                                <div class="col-auto">
+                                                    <div class="text-dark fw-bold h5 mb-0 me-3"><span id="balans">/</span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto"><i class="fas fa-balance-scale fa-2x text-gray-300"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-3 mb-4">
+                            <div class="card shadow border-start-warning py-2" data-bs-toggle="tooltip" data-bss-tooltip="" id="scorebox" style="border-width: 2px;border-color: rgb(89,182,195);" title="%">
+                                <div class="card-body">
+                                    <div class="row align-items-center no-gutters">
+                                        <div class="col me-2">
+                                            <div class="text-uppercase fw-bold text-xs mb-1"><span id="scoretitle" class="noselect">Score</span></div>
+                                            <div class="text-dark fw-bold h5 mb-0"><span id="score">/</span></div>
+                                        </div>
+                                        <div class="col-auto"><i class="far fa-clipboard fa-2x text-gray-300"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 20px;">
+                        <div class="col-lg-6 mb-4">
+                            <div class="card shadow mb-4">
+                                <div class="card-header d-flex justify-content-between py-3" style="max-height: 48px;">
+                                    <h6 class="fw-bold m-0 noselect" style="color: rgb(89,182,195);">Natuurlijk Kapitaal</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row" id="nkrow"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 mb-4">
+                            <div class="card shadow mb-4">
+                                <div class="card-header d-flex justify-content-between py-3" style="max-height: 48px;">
+                                    <h6 class="fw-bold m-0 noselect" style="color: rgb(89,182,195);">Menselijk Kapitaal</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row" id="hkrow"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 0px;margin-bottom: 40px;">
+                        <div class="col">
+                            <div class="card text-white shadow" title="Afstand in woorden">
+                                <div class="card-body">
+                                    <h6 class="noselect" style="color: rgb(89,182,195);margin-top: 0px;font-weight: bold;">Zoektermen duurzaamheid &amp; strategie:</h6>
+                                    <div class="row row-cols-md-2">
+                                        <div class="col">
+                                            <div class="text-center d-flex flex-column justify-content-center align-items-center py-3">
+                                                <div class="bs-icon-xl bs-icon-circle bs-icon-primary d-flex flex-shrink-0 justify-content-center align-items-center d-inline-block mb-2 bs-icon lg" style="background: rgb(89,182,195);"><i class="fas fa-file-pdf"></i></div>
+                                                <div class="px-3">
+                                                    <h2 class="fw-bold mb-0" id="zoektermenpdf" style="color: rgb(135,135,150);">0</h2>
+                                                    <p id="avgpdf" class="mb-0" style="color: rgb(135,135,150);">Gemiddelde afstand: 0</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="text-center d-flex flex-column justify-content-center align-items-center py-3">
+                                                <div class="bs-icon-xl bs-icon-circle bs-icon-primary d-flex flex-shrink-0 justify-content-center align-items-center d-inline-block mb-2 bs-icon lg" style="background: rgb(89,182,195);"><i class="fas fa-globe-americas"></i></div>
+                                                <div class="px-3">
+                                                    <h2 class="fw-bold mb-0" id="zoektermenwebsite" style="color: rgb(135,135,150);">0</h2>
+                                                    <p id="avgwebsite" class="mb-0" style="color: rgb(135,135,150);">gemiddelde afstand: 0</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col"></div>
+                    </div>
+                </div>
+            </div>
+            <footer class="bg-white sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span>Copyright © Groep 7 DEP 2022</span></div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/bs-init.js"></script>
+    <script src="assets/js/bedrijven.js"></script>
+    <script src="assets/js/theme.js"></script>
+</body>
+
+</html>
