@@ -110,3 +110,50 @@ def insertRawDuurzaamheidsrapport(ondernemingsnummer, duurzaamheidsrapporttext,p
     pg_conn.execute('UPDATE raw_data SET jaarrekening=%s WHERE "ondernemingsNummer" = %s;', (duurzaamheidsrapporttext, ondernemingsnummer))
     if connaanwezig==False:
         pg_conn.close()
+def inertNBBID(ondernemingsnummer, nbbID,pg_conn=None):
+    #connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig=False
+    else:
+        connaanwezig=True
+    #insert functie
+    pg_conn.execute('UPDATE kmo SET "nbbID"=%s WHERE "ondernemingsNummer" = %s;', (nbbID, ondernemingsnummer))
+    if connaanwezig==False:
+        pg_conn.close()
+def getRawPDF(ondernemingsnummer,pg_conn=None):
+    #connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig=False
+    else:
+        connaanwezig=True
+    #insert functie
+    result=pg_conn.execute('select jaarrekening from raw_data where "ondernemingsNummer"= %s;', (ondernemingsnummer))
+    if connaanwezig==False:
+        pg_conn.close()
+    return result.first()
+def getRawWebsite(ondernemingsnummer,pg_conn=None):
+    #connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig=False
+    else:
+        connaanwezig=True
+    #insert functie
+    result=pg_conn.execute('select website from raw_data where "ondernemingsNummer"= %s;', (ondernemingsnummer))
+    if connaanwezig==False:
+        pg_conn.close()
+    return result.first()
+def getRawDuurzaamheidsrapport(ondernemingsnummer,pg_conn=None):
+    #connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig=False
+    else:
+        connaanwezig=True
+    #insert functie
+    result=pg_conn.execute('select duurzaamheidsrapport from raw_data where "ondernemingsNummer"= %s;', (ondernemingsnummer))
+    if connaanwezig==False:
+        pg_conn.close()
+    return result.first()

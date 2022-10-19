@@ -6,6 +6,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed, ProcessPoolExec
 from threading import BoundedSemaphore
 from sqlfunctions import *
 class BoundedExecutor:
+
     def __init__(self, bound, max_workers):
         self.executor = ThreadPoolExecutor(max_workers=max_workers)
         self.semaphore = BoundedSemaphore(bound + max_workers)
@@ -23,21 +24,23 @@ class BoundedExecutor:
 
     def shutdown(self, wait=True):
         self.executor.shutdown(wait)
-def upload(file_path,dest,odm):
-    GetDataPDF(file_path,dest)
-    pdftext=datatxt(dest)
+
+def upload(file_path,odm,nbbID):
+    pdftext=GetDataPDF2(file_path)
     insertRawPDF(odm, pdftext)
+    inertNBBID(odm, nbbID)
+
 def main():
-    print("geef een pad naar een map met pdf's:")
-    path=input()
+    path="C:/testpdf"
     pdfs= os.listdir(path)
-    with ProcessPoolExecutor(max_workers=8) as executer:
-        for file in pdfs:
-                ondernemingsnummer=file
-                executer.submit(upload,path+file+".pdf",path+file+".txt",ondernemingsnummer)
+    for file in pdfs:
+        file_path=path+'/'+file
+        odm=file.split('_')[1]
+        nbbID=file.split('_')[2].split('.')[0]
+        print(odm)
+        print(nbbID)
+        upload(file_path,dest,odm,nbbID)
 if __name__ == '__main__':
     main()
-    #print("Z:\PDFS\\"+file)
-    #print("Z:\TXT\\"+file+".txt")
-    #GetDataPDF("Z:\PDFS\\"+file,"Z:\TXT\\"+file+".txt")
+
     
