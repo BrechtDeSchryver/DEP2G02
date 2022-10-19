@@ -1,7 +1,14 @@
-from sqlalchemy import create_engine
 from connectie import get_database
 
 def insert_kmo(kmo,pg_conn=None):
+    #kmo[0]=ondernemingsnummer
+    #kmo[1]=naam
+    #kmo[2]=adres
+    #kmo[3]=email
+    #kmo[4]=telefoon
+    #kmo[5]=website
+    #kmo[6]=nbbID
+    #kmo[7]=nacebelCode
     ondernemingsnummer = kmo[0]
     #connect met de databank
     if pg_conn is None:
@@ -10,7 +17,7 @@ def insert_kmo(kmo,pg_conn=None):
     else:
         connaanwezig=True
     #insert functie
-    pg_conn.execute('INSERT INTO kmo VALUES (%s, %s, %s, %s, %s, %s);', kmo)
+    pg_conn.execute('INSERT INTO kmo VALUES (%s, %s, %s, %s, %s, %s,%s);', kmo)
     pg_conn.execute('INSERT INTO raw_data("ondernemingsNummer") VALUES (%s);', ondernemingsnummer)
     if connaanwezig==False:
         pg_conn.close()
