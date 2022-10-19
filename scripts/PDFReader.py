@@ -47,4 +47,6 @@ def GetDataPDF(file_path,dest):
     return path
 def GetDataPDF2(file_path):
     raw = parser.from_file(file_path)
-    return raw['content']
+    content=raw['content']
+    content=content.replace("\n",' ')
+    return content

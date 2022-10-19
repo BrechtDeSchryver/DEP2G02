@@ -26,8 +26,7 @@ class BoundedExecutor:
         self.executor.shutdown(wait)
 
 def upload(file_path,odm,nbbID):
-    pdftext=GetDataPDF2(file_path)
-    insertRawPDF(odm, pdftext)
+    insertRawPDF(odm, GetDataPDF2(file_path))
     inertNBBID(odm, nbbID)
 
 def main():
@@ -39,7 +38,7 @@ def main():
         nbbID=file.split('_')[2].split('.')[0]
         print(odm)
         print(nbbID)
-        upload(file_path,dest,odm,nbbID)
+        upload(file_path,odm,nbbID)
 if __name__ == '__main__':
     main()
 
