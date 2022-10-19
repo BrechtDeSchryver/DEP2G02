@@ -87,3 +87,9 @@ def insertRawDuurzaamheidsrapport(ondernemingsnummer, duurzaamheidsrapporttext,p
     pg_conn.execute('UPDATE raw_data SET jaarrekening=%s WHERE "ondernemingsNummer" = %s;', (duurzaamheidsrapporttext, ondernemingsnummer))
     if connaanwezig==False:
         pg_conn.close()
+def main():
+    print(select_kmos())
+    db=get_database()
+    print(select_kmos(db))
+    db.close()
+main()
