@@ -1,2 +1,13 @@
 *.env
 /__pycache__
+*.pyc 
+*.pyo
+*.pyd
+*.so
+*.dylib
+*.egg-info
+*.egg
+*.egg-link
+*.egg-info
+scripts/__pycache__/connectie.cpython-310.pyc
+scripts/__pycache__/PDFReader.cpython-39.pyc
