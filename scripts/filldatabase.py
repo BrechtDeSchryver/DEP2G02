@@ -1,14 +1,28 @@
 import csv
 import sys
 from nbb import get_id_onderneming
+from sqlfunctions import insert_kmo
+from connectie import get_database
+import time
 
 csv_data = csv.reader(open('data\kmosss.csv'))
 header = next(csv_data)
 
 
 def get_csv_data():
-
+    conn = get_database()
     print('Importing the CSV Files')
+    time.sleep(1)
+    print("ARE YOU READY?")
+    time.sleep(1)
+    print("3")
+    time.sleep(1)
+    print("2")
+    time.sleep(1)
+    print("1")
+    time.sleep(1)
+    print("GO!")
+    time.sleep(0.5)
     for row in csv_data:
         # get the name field
         name = row[1]
@@ -22,9 +36,12 @@ def get_csv_data():
         btw = row[7].replace(' ', '')
         postcode = row[8]
         straat = row[9]
-        telegram = row[10]
+        telefoon = row[10]
         website = row[11]
         email = row[12]
-        nbb_id = get_id_onderneming(btw)
+        # nbb_id = get_id_onderneming(btw)
 
-        print(winst)
+        insert_kmo([btw, name, email, telefoon, website, "w.i.p", nacebel], conn)
+    conn.close()
+
+get_csv_data()
