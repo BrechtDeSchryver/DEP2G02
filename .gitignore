@@ -1,2 +1,11 @@
 *.env
 /__pycache__
+*.pyc 
+*.pyo
+*.pyd
+*.so
+*.dylib
+*.egg-info
+*.egg
+*.egg-link
+*.egg-info
