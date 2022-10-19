@@ -7,6 +7,8 @@ def insert_kmo(kmo,pg_conn=None):
     if pg_conn is None:
         pg_conn = get_database()
         connaanwezig=False
+    else:
+        connaanwezig=True
     #insert functie
     pg_conn.execute('INSERT INTO kmo VALUES (%s, %s, %s, %s, %s, %s);', kmo)
     pg_conn.execute('INSERT INTO raw_data("ondernemingsNummer") VALUES (%s);', ondernemingsnummer)
@@ -18,6 +20,8 @@ def select_kmos(pg_conn=None):
     if pg_conn is None:
         pg_conn = get_database()
         connaanwezig=False
+    else:
+        connaanwezig=True
     #select functie
     result = pg_conn.execute('SELECT * FROM kmo')
     if connaanwezig==False:
@@ -29,6 +33,8 @@ def select_kmo(ondernemingsnummer,pg_conn=None):
     if pg_conn is None:
         pg_conn = get_database()
         connaanwezig=False
+    else:
+        connaanwezig=True
     #select functie
     result = pg_conn.execute('SELECT * FROM kmo WHERE "ondernemingsNummer" = %s;', ondernemingsnummer)
     if connaanwezig==False:
@@ -40,6 +46,8 @@ def select_raw_data(ondernemingsnummer,pg_conn=None):
     if pg_conn is None:
         pg_conn = get_database()
         connaanwezig=False
+    else:
+        connaanwezig=True
     #select functie
     result = pg_conn.execute('SELECT * FROM raw_data WHERE "ondernemingsNummer" = %s;', ondernemingsnummer)
     if connaanwezig==False:
@@ -51,6 +59,8 @@ def select_raw_datas(pg_conn=None):
     if pg_conn is None:
         pg_conn = get_database()
         connaanwezig=False
+    else:
+        connaanwezig=True
     #select functie
     result = pg_conn.execute('SELECT * FROM raw_data')
     if connaanwezig==False:
@@ -62,6 +72,8 @@ def insertRawPDF(ondernemingsnummer, pdftext,pg_conn=None):
     if pg_conn is None:
         pg_conn = get_database()
         connaanwezig=False
+    else:
+        connaanwezig=True
     #insert functie
     pg_conn.execute('UPDATE raw_data SET jaarrekening=%s WHERE "ondernemingsNummer" = %s;', (pdftext, ondernemingsnummer))
     if connaanwezig==False:
@@ -72,6 +84,8 @@ def insertRawWebsite(ondernemingsnummer, websitetext,pg_conn=None):
     if pg_conn is None:
         pg_conn = get_database()
         connaanwezig=False
+    else:
+        connaanwezig=True
     pg_conn = get_database()
     #insert functie
     pg_conn.execute('UPDATE raw_data SET website=%s WHERE "ondernemingsNummer" = %s;', (websitetext, ondernemingsnummer))
@@ -83,13 +97,9 @@ def insertRawDuurzaamheidsrapport(ondernemingsnummer, duurzaamheidsrapporttext,p
     if pg_conn is None:
         pg_conn = get_database()
         connaanwezig=False
+    else:
+        connaanwezig=True
     #insert functie
     pg_conn.execute('UPDATE raw_data SET jaarrekening=%s WHERE "ondernemingsNummer" = %s;', (duurzaamheidsrapporttext, ondernemingsnummer))
     if connaanwezig==False:
         pg_conn.close()
-def main():
-    print(select_kmos())
-    db=get_database()
-    print(select_kmos(db))
-    db.close()
-main()
