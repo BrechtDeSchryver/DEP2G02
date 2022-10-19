@@ -2,7 +2,7 @@ const knex = require("./knex");
 
 
 function getAll() {
-  return knex("bedrijven").select("*");
+  return knex("kmo").select("*");
 }
 
 
