@@ -40,7 +40,17 @@ def getString(paginas,kieszelf):
             strings.append('1001')
             strings.append('1002')
     return strings
-
+def datatxt(file_path):
+    '''
+    deze functie upload de inhoud van de pdf naar de database
+    :par_file_path: de locatie van de pdf
+    '''
+    with open(file_path,'r') as file:
+        data=file.read()
+    file.close()
+    if os.path.exists(file_path):
+        os.remove(file_path)
+    return data
 def GetDataPDF(file_path,dest):
     '''
     deze functie maakt een .txt van de inhoud van de pdf zodat het mooi leesbaar is

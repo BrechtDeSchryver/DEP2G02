@@ -54,6 +54,7 @@ def insertRawPDF(ondernemingsnummer, pdftext):
     #insert functie
     pg_conn.execute('UPDATE raw_data SET jaarrekening=%s WHERE "ondernemingsNummer" = %s;', (pdftext, ondernemingsnummer))
     pg_conn.close()
+    
 def insertRawWebsite(ondernemingsnummer, websitetext):
     #connect met de databank
     pg_engine = get_database()
