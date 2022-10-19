@@ -8,7 +8,7 @@ db_user = os.getenv('DBUSER')
 host = os.getenv('DBHOST')
 port = os.getenv('DBPORT')
 def get_database():
-    return create_engine(f'postgresql://{str(db_user)}:{str(password)}@{host}:{port}/dep')
+    return create_engine(f'postgresql://{str(db_user)}:{str(password)}@{host}:{port}/dep').connect()
 # base = declarative_base()
 # pg_conn = pg_engine.connect()
 # metadata = MetaData(pg_engine)  
