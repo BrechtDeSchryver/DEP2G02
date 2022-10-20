@@ -1,2 +1,6 @@
-# DEP2G02
-Data Engineering Project 2 G02
+# DEP II G2
+
+### Shortcuts
+
+- [Trello](https://trello.com/w/dataengineeringproject22)
+- [Discord](https://discord.gg/b633QwAy3k)
