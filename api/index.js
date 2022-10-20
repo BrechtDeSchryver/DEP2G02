@@ -46,6 +46,12 @@ app.get("/bedrijf/naam/:naam", async (req, res) => {
   res.status(200).json({ kmo, adress });
 });
 
+/** Geeft de hash waarde terug na het ontvangen van een waarde */
+app.get("/gethash/:waarde", async (req, res) => {
+  let hash = db.getHash(req.params.waarde);
+  res.status(200).json({ hash });
+});
+
 /** Geeft de jaarrekening, de website en eventueel een duurzaamheidsrapport terug in json formaat na het ontvangen van een btw nummer. */
 
 /*
