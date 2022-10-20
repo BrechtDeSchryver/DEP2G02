@@ -1,4 +1,6 @@
 const knex = require("./knex");
+const crypto = require('crypto'),
+hash = crypto.getHashes();
 
 /**Retourneert alle bedrijven */
 function getAll() {
@@ -34,4 +36,11 @@ function getAdressByNumber(ondernemingsnummer) {
   return result;
 }
 
-module.exports = { getAll, getKmoByOndernemingsnummer, getKmoNaam, getAdressByNumber };
+function getHash(input_str) {
+  hashPwd = crypto.createHash('sha256')
+    .update(input_str)
+    .digest('hex');
+  return hashPwd;
+}
+
+module.exports = { getAll, getKmoByOndernemingsnummer, getKmoNaam, getAdressByNumber, getHash };
