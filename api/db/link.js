@@ -36,6 +36,7 @@ function getAdressByNumber(ondernemingsnummer) {
   return result;
 }
 
+/** Berekent de hashwaarde van de input string */
 function getHash(input_str) {
   hashPwd = crypto.createHash('sha256')
     .update(input_str)
