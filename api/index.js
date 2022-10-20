@@ -4,6 +4,8 @@ const app = express();
 const bodyParser = require("body-parser");
 const db = require("./db/link");
 const cors = require("cors");
+const crypto = require('crypto'),
+hash = crypto.getHashes();
 app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -37,7 +39,10 @@ app.get("/bedrijf/naam/:naam", async (req, res) => {
   console.log(kmo.ondernemingsNummer)
   let adress = await db.getAdressByNumber(kmo.ondernemingsNummer, req.body);
   adress = adress[0];
-  delete adress.ondernemingsNummer;
+  // check if adress is undefined
+  if (!adress === undefined) {
+    delete adress.ondernemingsNummer;
+  }
   res.status(200).json({ kmo, adress });
 });
 
