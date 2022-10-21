@@ -170,13 +170,13 @@ def get_score_for_word(ondernemingsnummer,word,pg_conn=None):
     result_duurzaamheidsrapport=pg_conn.execute('select ondernemingsnummer from raw_data where "ondernemingsNummer"= %s and "ts_duurzaamheidsrapport" @@ to_tsquery("dutch",%s);', (ondernemingsnummer,word)).first()
     
     score = 0
-    if len(result_website) == 1:
-        if len(result_duurzaamheidsrapport) == 1:
+    if len(result_website) > 0:
+        if len(result_duurzaamheidsrapport) > 0:
             score =  3
         else:
             score = 1
     else:
-        if len(result_duurzaamheidsrapport) == 1:
+        if len(result_duurzaamheidsrapport) > 0:
             score = 2
 
     if connaanwezig==False:
