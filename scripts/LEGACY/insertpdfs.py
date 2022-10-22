@@ -30,15 +30,18 @@ def upload(file_path,odm,nbbID):
     inertNBBID(odm, nbbID)
 
 def main():
-    path="C:/testpdf"
+    path="D:/shared"
     pdfs= os.listdir(path)
+    a=0
     for file in pdfs:
-        file_path=path+'/'+file
-        odm=file.split('_')[1]
-        nbbID=file.split('_')[2].split('.')[0]
-        print(odm)
-        print(nbbID)
-        upload(file_path,odm,nbbID)
+        a=a+1
+        if a>10465:
+            file_path=path+'/'+file
+            odm=file.split('_')[1]
+            nbbID=file.split('_')[2].split('.')[0]
+            print(odm+" : " )
+            upload(file_path,odm,nbbID)
+        print(a)
 if __name__ == '__main__':
     main()
 
