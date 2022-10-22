@@ -182,3 +182,61 @@ def get_score_for_word(ondernemingsnummer,word,pg_conn=None):
     if connaanwezig==False:
         pg_conn.close()
     return score
+def insert_kmo_durabilityitem(ondernemingsnummer,keyword,context):
+    #connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig=False
+    else:
+        connaanwezig=True
+    #insert functie
+    pg_conn.execute('INSERT INTO kmo_durabilityitem(ondernemingsnummer,durability_keyword,context) VALUES (%s,%s,%s);', (ondernemingsnummer,keyword,context))
+    if connaanwezig==False:
+        pg_conn.close()
+##script woordenlijst aanmaken
+#insert statements
+def insert_durability_category(name,pg_conn=None):
+    #connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig=False
+    else:
+        connaanwezig=True
+    #insert functie
+    pg_conn.execute('INSERT INTO durability_category VALUES (%s);', (name))
+    if connaanwezig==False:
+        pg_conn.close()
+def insert_durability_term(name,category,pg_conn=None):
+    #connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig=False
+    else:
+        connaanwezig=True
+    #insert functie
+    pg_conn.execute('INSERT INTO durability_term(durability_category,description,name) VALUES (%s,\'?\',%s);', (category,name))
+    if connaanwezig==False:
+        pg_conn.close()
+def insert_durability_keyword(term,name,pg_conn=None):
+    #connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig=False
+    else:
+        connaanwezig=True
+    #insert functie
+    pg_conn.execute('INSERT INTO durability_keyword(durability_term,name) VALUES (%s,%s);', (term,name))
+    if connaanwezig==False:
+        pg_conn.close()
+#flush statement
+def flush_woordenlijst(pg_conn=None):
+    #connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig=False
+    else:
+        connaanwezig=True
+    #insert functie
+    pg_conn.execute('TRUNCATE population_score,score,durability_category, durability_term, durability_keyword, kmo_durability_item;')
+    if connaanwezig==False:
+        pg_conn.close()
