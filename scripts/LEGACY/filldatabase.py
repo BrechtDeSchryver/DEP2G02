@@ -1,7 +1,7 @@
 import csv
 import sys
 from nbb import get_id_onderneming
-from sqlfunctions import insert_kmo
+from sqlfunctions import insert_kmo, select_onderneemsningsnummers
 from connectie import get_database
 import time
 
@@ -9,7 +9,7 @@ csv_data = csv.reader(open('data\kmosss.csv'))
 header = next(csv_data)
 
 
-def get_csv_data():
+def insert_csvData():
     conn = get_database()
     print('Importing the CSV Files')
     time.sleep(1)
@@ -44,4 +44,3 @@ def get_csv_data():
         insert_kmo([btw, name, email, telefoon, website, "w.i.p", nacebel], conn)
     conn.close()
 
-get_csv_data()
