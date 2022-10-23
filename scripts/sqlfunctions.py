@@ -190,10 +190,47 @@ def insert_kmo_durabilityitem(ondernemingsnummer,keyword,context):
     else:
         connaanwezig=True
     #insert functie
-    pg_conn.execute('INSERT INTO kmo_durabilityitem(ondernemingsnummer,durability_keyword,context) VALUES (%s,%s,%s);', (ondernemingsnummer,keyword,context))
+    pg_conn.execute('INSERT INTO kmo_durability_item(ondernemingsnummer,durability_keyword,context) VALUES (%s,%s,%s);', (ondernemingsnummer,keyword,context))
     if connaanwezig==False:
         pg_conn.close()
 ##script woordenlijst aanmaken
+#select statements
+def get_durability_category(pg_conn=None):
+    #connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig=False
+    else:
+        connaanwezig=True
+    #select functie
+    results=pg_conn.execute('select name from durability_category;')
+    if connaanwezig==False:
+        pg_conn.close()
+    return results.all()
+def get_durability_terms_fromcategory(category,pg_conn=None):
+    #connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig=False
+    else:
+        connaanwezig=True
+    #select functie
+    results=pg_conn.execute('select name from durability_term where durability_category=%s;',(category))
+    if connaanwezig==False:
+        pg_conn.close()
+    return results.all()
+def get_durability_keyword_fromterm(term,pg_conn=None):
+    #connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig=False
+    else:
+        connaanwezig=True
+    #select functie
+    result=pg_conn.execute('select name from durability_keyword where durability_term=%s;',(term))
+    if connaanwezig==False:
+        pg_conn.close()
+    return result.all()
 #insert statements
 def insert_durability_category(name,pg_conn=None):
     #connect met de databank
@@ -226,6 +263,19 @@ def insert_durability_keyword(term,name,pg_conn=None):
         connaanwezig=True
     #insert functie
     pg_conn.execute('INSERT INTO durability_keyword(durability_term,name) VALUES (%s,%s);', (term,name))
+    if connaanwezig==False:
+        pg_conn.close()
+#detele statements
+def delete_durability_keyword_and_hits(name,pg_conn=None):
+    #connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig=False
+    else:
+        connaanwezig=True
+    #delete functie
+    pg_conn.execute('DELETE FROM kmo_durability_item Where kmo_durability_item."ID"=(SELECT "ID" from durability_keyword WHERE name=%s)', (name))
+    pg_conn.execute('DELETE FROM durability_keyword WHERE name=%s;', (name))
     if connaanwezig==False:
         pg_conn.close()
 #flush statement
