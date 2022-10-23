@@ -4,17 +4,50 @@ const app = express();
 const bodyParser = require("body-parser");
 const db = require("./db/link");
 const cors = require("cors");
+const { auth } = require('express-openid-connect');
+const { requiresAuth } = require('express-openid-connect');
 const crypto = require('crypto'),
 hash = crypto.getHashes();
+
+const config = {
+  authRequired: false,
+  auth0Logout: true,
+  secret: 'b28f8099f58ca8bee0c89f13e066d6c56d1b93f15038dc8e1fcdc8086d053b09',
+  baseURL: 'http://localhost:40007',
+  clientID: '5C3MR3X7nkkYKXcrZRAZlDgdgj73zh9R',
+  issuerBaseURL: 'https://dev-b3lg7xnbvdrbnv55.us.auth0.com'
+};
+
 app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+// auth router attaches /login, /logout, and /callback routes to the baseURL
+app.use(auth(config));
+
+// req.isAuthenticated is provided from the auth router
+app.get('/', (req, res) => {
+  res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
+});
+
+app.get('/homepage', (req, res) => {
+  res.send("after logout");
+});
+app.get('/configg', (req, res) => {
+  res.send("after auth");
+});
+
+app.get('/profile', requiresAuth(), (req, res) => {
+  res.send(JSON.stringify(req.oidc.user));
+});
+
+
 /** Status pagina die op de homepage van de service draait. */
+/*
 app.get("/", (req, res) => {
   res.status(200).json({ status: "online" });
-});
+});*/
 
 /** Vraagt alle kmo's op */
 /*  app.get("/bedrijven/all", async (req, res) => {
