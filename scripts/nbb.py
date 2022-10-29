@@ -17,6 +17,7 @@ def get_id_onderneming(on):
     r = requests.get(URL, headers={
                      "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0"})
     json_data = json.loads(r.text)
+
     id = ""
     for x in json_data["content"]:
         if x["periodEndDateYear"] == 2021:
@@ -56,7 +57,7 @@ def save_as_pdf(on, id, bytes_):
     par_bytes_ = 
     '''
     
-    with open(fr"C:\Users\jarno\OneDrive - Hogeschool Gent\Data_engineering2\jaarraport_{on}_{id}.pdf", 'wb') as f:
+    with open(fr"C:\Users\jarno\OneDrive - Hogeschool Gent\Data_engineering2\shared\jaarraport_{on}_{id}.pdf", 'wb') as f:
         f.write(bytes_)
     
 def download_pdf_on(on):
@@ -97,12 +98,27 @@ def get_bedrijven_nrs():
 
     return nrs
 
+
+def get_missing_ids_new_excel():
+    excel_path = r"C:\Users\jarno\Downloads\kmo's_Vlaanderen_2021.xlsx"
+    nieuwe_onedrive_path = r"C:\Users\jarno\OneDrive - Hogeschool Gent\Data_engineering2\shared"
+    df = pd.read_excel(excel_path, sheet_name="Lijst")
+
+    ondernemings_nummers = df["Ondernemingsnummer"].tolist()
+    ondernemings_nummers = [x.replace(" ", "") for x in ondernemings_nummers]
+    ondernemings_nummers_in_onedrive_shared = [x.split("_")[1] for x in os.listdir(nieuwe_onedrive_path)]
+
+    unique_numbers = set(ondernemings_nummers).difference(ondernemings_nummers_in_onedrive_shared)
+    print(len(unique_numbers))
+    return unique_numbers
+
+
 def main():
-    bedrijven_nummers = get_bedrijven_nrs()
-    print(len(bedrijven_nummers))
+    # bedrijven_nummers = get_bedrijven_nrs()
+    # print(len(bedrijven_nummers))
 
     with ProcessPoolExecutor(max_workers=12) as executor:
-        for on in bedrijven_nummers:
+        for on in get_missing_ids_new_excel():
             executor.submit(download_pdf_on, on)
         # schrijf_id_naar_db(on)
 
