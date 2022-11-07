@@ -44,4 +44,22 @@ function getHash(input_str) {
   return hashPwd;
 }
 
-module.exports = { getAll, getKmoByOndernemingsnummer, getKmoNaam, getAdressByNumber, getHash };
+function getuser(username, password) {
+  password = getHash(password);
+  let result = knex("credentials")
+    .select("passwordHash")
+    .where('username', 'like', `${username}`)
+    .where('passwordHash', 'like', `${password}`);
+  result.limit(1)
+  return result;
+}
+
+function checksession(password) {
+  let result = knex("credentials")
+    .select("passwordHash")
+    .where('passwordHash', 'like', `${password}`);
+  result.limit(1)
+  return result;
+}
+
+module.exports = { getAll, getKmoByOndernemingsnummer, getKmoNaam, getAdressByNumber, getHash, getuser, checksession };

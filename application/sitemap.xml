@@ -4,6 +4,9 @@
         <loc>/</loc>
     </url>
     <url>
+        <loc>/login.html</loc>
+    </url>
+    <url>
         <loc>/search.html</loc>
     </url>
     <url>
@@ -14,5 +17,8 @@
     </url>
     <url>
         <loc>/vergelijk-sectoren.html</loc>
+    </url>
+    <url>
+        <loc>/woorden.html</loc>
     </url>
 </urlset>
