@@ -48,12 +48,13 @@ app.get("/bedrijf/naam/:naam", async (req, res) => {
   res.status(200).json({ kmo, adress });
 });
 
-/** Geeft de hash waarde terug na het ontvangen van een waarde */
+/** Geeft de hash waarde terug van de ontvangen waarde. */
 app.get("/gethash/:waarde", async (req, res) => {
   let hash = db.getHash(req.params.waarde);
   res.status(200).json({ hash });
 });
 
+/** Checkt of de megegeven gebruikersnaam en het megegeven wachtwoord overeenkomt met die in de database en geeft een sessie terug als dit het geval is.  */
 app.get("/getuser", async (req, res) => {
   let username = req.query.user;
   let password = req.query.pass;
@@ -67,6 +68,7 @@ app.get("/getuser", async (req, res) => {
   }
 });
 
+/** Checkt of de meegegeven sessie overeenkomt met de sessie in de database en geeft deze terug indien deze aanwezig is in de databank. */
 app.get("/checksession", async (req, res) => {
   let password = req.query.pass;
   let session = await db.get(password);

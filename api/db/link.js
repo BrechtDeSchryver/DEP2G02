@@ -2,12 +2,12 @@ const knex = require("./knex");
 const crypto = require('crypto'),
 hash = crypto.getHashes();
 
-/**Retourneert alle bedrijven */
+/** Retourneert alle bedrijven */
 function getAll() {
   return knex("kmo").select("*");
 }
 
-/**Retourneert een rij uit de tabel "KMO" waar "ondernemingsNummer" overeenkomt met het meegegeven ondernemingsnummer*/
+/** Retourneert een rij uit de tabel "KMO" waar "ondernemingsNummer" overeenkomt met het meegegeven ondernemingsnummer. */
 function getKmoByOndernemingsnummer(ondernemingsnummer) {
   return knex("kmo")
     .select("*")
@@ -15,7 +15,7 @@ function getKmoByOndernemingsnummer(ondernemingsnummer) {
     .orderBy([{ column: "ondernemingsNummer", order: "asc" }]);
 }
 
-/**Retourneert een rij uit de tabel "KMO" waar "name" overeenkomt met de meegegeven naam*/
+/** Retourneert een rij uit de tabel "KMO" waar "name" overeenkomt met de meegegeven naam. */
 function getKmoNaam(name) {
   let realname = unescape(name)
   console.log(realname)
@@ -26,7 +26,7 @@ function getKmoNaam(name) {
   return result;
 }
 
-/**Retourneert een rij uit de tabel "adress" waar "ondernemingsNummer" overeenkomt met het meegegeven ondernemingsnummer*/
+/** Retourneert een rij uit de tabel "adress" waar "ondernemingsNummer" overeenkomt met het meegegeven ondernemingsnummer. */
 function getAdressByNumber(ondernemingsnummer) {
   let result = knex("adress")
     .select("*")
@@ -36,7 +36,7 @@ function getAdressByNumber(ondernemingsnummer) {
   return result;
 }
 
-/** Berekent de hashwaarde van de input string */
+/** Berekent de hashwaarde van de input string. */
 function getHash(input_str) {
   hashPwd = crypto.createHash('sha256')
     .update(input_str)
@@ -44,6 +44,7 @@ function getHash(input_str) {
   return hashPwd;
 }
 
+/** Zoekt de combinatie username en gehasht password in de database  */
 function getuser(username, password) {
   password = getHash(password);
   let result = knex("credentials")
@@ -54,6 +55,7 @@ function getuser(username, password) {
   return result;
 }
 
+/** Zoekt een session token in de database en geeft deze terug. */
 function checksession(password) {
   let result = knex("credentials")
     .select("passwordHash")
