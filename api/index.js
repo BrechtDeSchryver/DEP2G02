@@ -71,7 +71,7 @@ app.get("/getuser", async (req, res) => {
 /** Checkt of de meegegeven sessie overeenkomt met de sessie in de database en geeft deze terug indien deze aanwezig is in de databank. */
 app.get("/checksession", async (req, res) => {
   let password = req.query.pass;
-  let session = await db.get(password);
+  let session = await db.checksession(password);
   if (session.length == 1) {
   session = session[0];
   session = session.passwordHash
