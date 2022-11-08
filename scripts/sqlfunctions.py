@@ -193,6 +193,61 @@ def insert_kmo_durabilityitem(ondernemingsnummer,keyword,context):
     pg_conn.execute('INSERT INTO kmo_durability_item(ondernemingsnummer,durability_keyword,context) VALUES (%s,%s,%s);', (ondernemingsnummer,keyword,context))
     if connaanwezig==False:
         pg_conn.close()
+def insert_municipality(postcode,gemeente,pg_conn=None):
+    #connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig=False
+    else:
+        connaanwezig=True
+    #insert functie
+    pg_conn.execute('INSERT INTO municipality(zipcode,name) VALUES (%s,%s);', (postcode,gemeente))
+    if connaanwezig==False:
+        pg_conn.close()
+def insert_adress(ondernemingsnummer,straat,zipcode,pg_conn=None):
+    #connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig=False
+    else:
+        connaanwezig=True
+    #insert functie
+    pg_conn.execute('INSERT INTO adress VALUES (%s,%s,%s);', (ondernemingsnummer,straat,zipcode))
+    if connaanwezig==False:
+        pg_conn.close()
+def insert_personeel(ondernemingsnummer,personeel,pg_conn=None):
+    #connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig=False
+    else:
+        connaanwezig=True
+    #insert functie
+    pg_conn.execute('INSERT INTO employees VALUES (%s,%s);', (ondernemingsnummer,personeel))
+    if connaanwezig==False:
+        pg_conn.close()
+def insert_sector(naam,nacebel,pg_conn=None):
+    #connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig=False
+    else:
+        connaanwezig=True
+    #insert functie
+    pg_conn.execute('INSERT INTO sector VALUES (%s,%s);', (naam,nacebel))
+    if connaanwezig==False:
+        pg_conn.close()
+def insert_stedelijkheidsklasse(stedelijkheidsklasse,zipcode,pg_conn=None):
+    #connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig=False
+    else:
+        connaanwezig=True
+    #insert functie
+    pg_conn.execute('UPDATE municipality set stedelijkheidsklasse=%s WHERE zipcode = %s;', (stedelijkheidsklasse,zipcode))
+    if connaanwezig==False: 
+        pg_conn.close()
 ##script woordenlijst aanmaken
 #select statements
 def get_durability_category(pg_conn=None):
@@ -290,3 +345,5 @@ def flush_woordenlijst(pg_conn=None):
     pg_conn.execute('TRUNCATE population_score,score,durability_category, durability_term, durability_keyword, kmo_durability_item;')
     if connaanwezig==False:
         pg_conn.close()
+##end
+
