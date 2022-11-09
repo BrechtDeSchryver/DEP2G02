@@ -82,6 +82,54 @@ app.get("/checksession", async (req, res) => {
 });
 
 
+app.get("/categories", async (req, res) => {
+  let all = await db.getCategories();
+  let categories = [];
+  all.forEach(element => { categories.push(element.name) });
+  res.status(200).json({ categories });
+});
+
+app.get("/subcategories/:category", async (req, res) => {
+  let all = await db.getSubCategories(req.params.category);
+  let categories = [];
+  all.forEach(element => { categories.push(element.name) });
+  res.status(200).json({ categories });
+});
+
+app.get("/searchterms/:subcategory", async (req, res) => {
+  let all = await db.getSearchTerms(req.params.subcategory);
+  let searchterms = [];
+  all.forEach(element => { searchterms.push(element.name) });
+  res.status(200).json({ all });
+});
+
+app.get("/delete/searchterms", async (req, res) => {
+  let session = await db.checksession(req.query.session);
+  if (session.length == 1) {
+  await db.deleteSearchTerm(req.query.id);
+  res.status(200).json({ status : "deleted" });
+  
+  } else {
+    res.status(200).json({ status : "denied" });
+  }
+});
+
+app.get("/add/searchterms", async (req, res) => {
+  let session = await db.checksession(req.query.session);
+  if (session.length == 1) {
+    let zoekterm = await db.getSearchTerm(req.query.term, req.query.subcategory);
+    if (zoekterm.length == 0) {
+      let id = await db.addSearchTerm(req.query.term, req.query.subcategory);
+      console.log(id);
+      res.status(200).json({ status : id[0] });
+    } else {
+      res.status(200).json({ status : "failed" });
+    }
+  } else {
+    res.status(200).json({ status : "denied" });
+  }
+});
+
 /** Geeft de jaarrekening, de website en eventueel een duurzaamheidsrapport terug in json formaat na het ontvangen van een btw nummer. */
 
 /*
