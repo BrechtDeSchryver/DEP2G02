@@ -2,3 +2,4 @@ knex
 express
 cors
 dotenv
+pg
