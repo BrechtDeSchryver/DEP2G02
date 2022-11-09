@@ -1,7 +1,7 @@
 import csv
 import sys
 from nbb import get_id_onderneming
-from sqlfunctions import insert_municipality,insert_stedelijkheidsklasse,insert_adress,insert_personeel,insert_sector
+from sqlfunctions import insert_municipality,insert_stedelijkheidsklasse,insert_adress,insert_personeel,insert_sector,insert_kmo_sector
 from connectie import get_database
 import time
 
@@ -39,7 +39,7 @@ def vull_sector():
     print('Importing the CSV Files')
     time.sleep(0.5)
     codes = {}
-    inserted_sector = []
+    i=1
     for row in csv_data_namen:
         # get the name field
         code = row[1]
@@ -51,10 +51,10 @@ def vull_sector():
         nacebel = row[3]
         btw = row[7].replace(' ', '')
         if nacebel in codes.keys():
-            if nacebel not in inserted_sector:
-                insert_sector(codes.get(nacebel),nacebel,conn)
-                print(nacebel,codes.get(nacebel))
-                inserted_sector.append(nacebel)
+            sector= codes[nacebel]
+            insert_kmo_sector(i,btw,sector,conn)
+            i+=1
+            print(i,btw,sector)
 
     conn.close()
 def vull_personeel():

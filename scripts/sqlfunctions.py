@@ -248,6 +248,28 @@ def insert_stedelijkheidsklasse(stedelijkheidsklasse,zipcode,pg_conn=None):
     pg_conn.execute('UPDATE municipality set stedelijkheidsklasse=%s WHERE zipcode = %s;', (stedelijkheidsklasse,zipcode))
     if connaanwezig==False: 
         pg_conn.close()
+def insert_kmo_sector(i,ondernemingsnummer,sector,pg_conn=None):
+    #connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig=False
+    else:
+        connaanwezig=True
+    #insert functie
+    pg_conn.execute('INSERT INTO kmo_sector VALUES (%s,%s,%s);', (i,ondernemingsnummer,sector))
+    if connaanwezig==False:
+        pg_conn.close()
+def insert_website_kmo(odn,webiste,pg_conn=None):
+    #connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig=False
+    else:
+        connaanwezig=True
+    #insert functie
+    pg_conn.execute('UPDATE kmo set website=%s where "ondernemingsNummer"=%s;', (webiste,odn))
+    if connaanwezig==False:
+        pg_conn.close()
 ##script woordenlijst aanmaken
 #select statements
 def get_durability_category(pg_conn=None):
