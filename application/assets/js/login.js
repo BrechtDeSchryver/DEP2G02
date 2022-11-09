@@ -1,16 +1,18 @@
 
 function checkSession() {
     // if localstorage has a session, then redirect to home
-    if (localStorage.getItem("session") != null) {
-        window.location.href = "index.html";
+    try {
+        if (localStorage.getItem("session") != null) {
+            window.location.href = "index.html";
+        }
+    } catch (error) {
+        window.location.href = "index.html"
     }
 }
 
 
 function login() {
-    let button = document.getElementById("submitbtn");
-    button.onclick = function () {
-        fetch(`http://localhost:8080/getuser?user=${document.getElementById("InputUser").value}&pass=${document.getElementById("InputPassword").value}`)
+        fetch(`http://localhost:8080/getuser?user=${document.getElementById("InputUser").value.toLowerCase()}&pass=${document.getElementById("InputPassword").value}`)
       .then((res) => res.json())
       .then((data) => {
         try {
@@ -30,15 +32,33 @@ function login() {
       })
       .catch((error) => {
         console.log(error);
+        console.log("Is the API running and the site on localhost?")
       });
+
 }
+
+function enterkeylistner() {
+    document.getElementById("InputPassword").addEventListener("keyup", (event) => {
+        if (event.key === "Enter") {
+          console.log('Enter key pressed')
+          login();
+        }
+      });
+      document.getElementById("InputUser").addEventListener("keyup", (event) => {
+        if (event.key === "Enter") {
+          console.log('Enter key pressed')
+          login();
+        }
+      });
 }
 
 
 function init() {
-    login();
+    let button = document.getElementById("submitbtn");
+    button.onclick = function () {login();}
     document.getElementById("errortext").style.display = "none";
     checkSession();
+    enterkeylistner();
 }
 
 window.onload = init;
