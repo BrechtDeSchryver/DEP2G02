@@ -96,6 +96,7 @@ app.get("/bedrijf/rawdata/:nummer", async (req, res) => {
 let port = 8080;
 
 /**Start de API service. */
+
 /*https.createServer(options,app)*/ app.listen(port, () =>
-  console.log(`The API is running on port ${port}`)
+  console.log(`The API is running on http://localhost:${port}/`)
 );
