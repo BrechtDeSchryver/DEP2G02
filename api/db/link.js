@@ -18,7 +18,6 @@ function getKmoByOndernemingsnummer(ondernemingsnummer) {
 /** Retourneert een rij uit de tabel "KMO" waar "name" overeenkomt met de meegegeven naam. */
 function getKmoNaam(name) {
   let realname = unescape(name);
-  console.log(realname);
   let result = knex("kmo")
     .select("*")
     .where("name", "like", `%${realname.toUpperCase()}%`);
@@ -103,6 +102,10 @@ function addSearchTerm(word, subcategory) {
   return result;
 }
 
+function getLocalTime(localTime) {
+  return localTime.getHours() + ":" + localTime.getMinutes() + ":" + localTime.getSeconds();
+}
+
 module.exports = {
   getAll,
   getKmoByOndernemingsnummer,
@@ -116,5 +119,6 @@ module.exports = {
   getSearchTerms,
   deleteSearchTerm,
   getSearchTerm,
-  addSearchTerm
+  addSearchTerm,
+  getLocalTime,
 };
