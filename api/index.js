@@ -16,6 +16,7 @@ app.use(bodyParser.json());
 /** Status pagina die op de homepage van de service draait. */
 app.get("/", (req, res) => {
   res.status(200).json({ status: "online" });
+  console.log(`[${new Date().toLocaleString()}] - ${req.socket.remoteAddress} - Status`);
 });
 
 /** Vraagt alle kmo's op */
@@ -32,13 +33,13 @@ app.get("/bedrijf/btw/:nummer", async (req, res) => {
   delete adress[0].ondernemingsNummer;
   adress = adress[0];
   res.status(200).json({ kmo, adress });
+  console.log(`[${db.getLocalTime(new Date())}] ${req.socket.remoteAddress} heeft ${req.params.nummer} opgevraagd`);
 });
 
 /** Geeft een KMO terug in json formaat na het ontvangen van een naam. */
 app.get("/bedrijf/naam/:naam", async (req, res) => {
   let bedrijf = await db.getKmoNaam(req.params.naam, req.body);
   kmo = bedrijf[0];
-  console.log(kmo.ondernemingsNummer);
   let adress = await db.getAdressByNumber(kmo.ondernemingsNummer, req.body);
   adress = adress[0];
   // check if adress is undefined
@@ -46,12 +47,15 @@ app.get("/bedrijf/naam/:naam", async (req, res) => {
     delete adress.ondernemingsNummer;
   }
   res.status(200).json({ kmo, adress });
+  // get local time hh:mm:ss
+  console.log(`[${db.getLocalTime(new Date())}] IP: ${req.socket.remoteAddress} | Naam: ${req.params.naam}`);
 });
 
 /** Geeft de hash waarde terug van de ontvangen waarde. */
 app.get("/gethash/:waarde", async (req, res) => {
   let hash = db.getHash(req.params.waarde);
   res.status(200).json({ hash });
+  console.log(`[${db.getLocalTime(new Date())}] Hash: ${hash} from ${req.socket.remoteAddress}`);
 });
 
 /** Checkt of de megegeven gebruikersnaam en het megegeven wachtwoord overeenkomt met die in de database en geeft een sessie terug als dit het geval is.  */
@@ -63,8 +67,10 @@ app.get("/getuser", async (req, res) => {
   user = user[0];
   user = user.passwordHash
   res.status(200).json({ session : user });
+  console.log("[" + db.getLocalTime(new Date())+ "] " + "User logged in: " + username + " from ip: " + req.socket.remoteAddress);
   } else {
     res.status(200).json({ session : "false" });
+    console.log("[" + db.getLocalTime(new Date())+ "] " + "User failed to log in: " + username + " from ip: " + req.socket.remoteAddress);
   }
 });
 
@@ -76,11 +82,68 @@ app.get("/checksession", async (req, res) => {
   session = session[0];
   session = session.passwordHash
   res.status(200).json({ check : session });
+  console.log(`[${db.getLocalTime(new Date())}] Session ${session} from ${req.socket.remoteAddress} was checked successfully`);
   } else {
     res.status(200).json({ check : "false" });
+    console.log(`[${db.getLocalTime(new Date())}] Session ${password} from ${req.socket.remoteAddress} was checked but not found in database`);
   }
 });
 
+
+app.get("/categories", async (req, res) => {
+  let all = await db.getCategories();
+  let categories = [];
+  all.forEach(element => { categories.push(element.name) });
+  res.status(200).json({ categories });
+  console.log("["+ db.getLocalTime(new Date()) + "] " + "Returned categories to " + req.socket.remoteAddress);
+});
+
+app.get("/subcategories/:category", async (req, res) => {
+  let all = await db.getSubCategories(req.params.category);
+  let categories = [];
+  all.forEach(element => { categories.push(element.name) });
+  res.status(200).json({ categories });
+  console.log(`[${db.getLocalTime(new Date())}] Returned subcategories of ${req.params.category} to ` + req.socket.remoteAddress);
+});
+
+app.get("/searchterms/:subcategory", async (req, res) => {
+  let all = await db.getSearchTerms(req.params.subcategory);
+  let searchterms = [];
+  all.forEach(element => { searchterms.push(element.name) });
+  res.status(200).json({ all });
+  console.log(`[${db.getLocalTime(new Date())}] Returned searchterms of category ${req.params.subcategory} to ${req.socket.remoteAddress}` );
+});
+
+app.get("/delete/searchterms", async (req, res) => {
+  let session = await db.checksession(req.query.session);
+  if (session.length == 1) {
+  await db.deleteSearchTerm(req.query.id);
+  res.status(200).json({ status : "deleted" });
+  console.log(`[${db.getLocalTime(new Date())}] ${req.socket.remoteAddress} deleted term with id ${req.query.id}`);
+  
+  } else {
+    res.status(200).json({ status : "denied" });
+    console.log("[" + db.getLocalTime(new Date()) + "] " +"Denied delete request becourse of invalid session from " + req.socket.remoteAddress);
+  }
+});
+
+app.get("/add/searchterms", async (req, res) => {
+  let session = await db.checksession(req.query.session);
+  if (session.length == 1) {
+    let zoekterm = await db.getSearchTerm(req.query.term, req.query.subcategory);
+    if (zoekterm.length == 0) {
+      let id = await db.addSearchTerm(req.query.term, req.query.subcategory);
+      console.log(`[${db.getLocalTime(new Date())}] Added '${req.query.term}' to subcategory '${req.query.subcategory}'`);
+      res.status(200).json({ status : id[0] });
+    } else {
+      res.status(200).json({ status : "failed" });
+      console.log(`[${db.getLocalTime(new Date())}] ${req.socket.remoteAddress} tried to add ${req.query.term} but it was already in ${req.query.subcategory}`);
+    }
+  } else {
+    res.status(200).json({ status : "denied" });
+    console.log(`[${db.getLocalTime(new Date())}] ${req.socket.remoteAddress} tried to add a term but authentication failed`);	
+  }
+});
 
 /** Geeft de jaarrekening, de website en eventueel een duurzaamheidsrapport terug in json formaat na het ontvangen van een btw nummer. */
 
