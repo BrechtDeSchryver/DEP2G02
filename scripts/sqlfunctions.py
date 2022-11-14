@@ -34,7 +34,18 @@ def select_kmos(pg_conn=None):
     if connaanwezig==False:
         pg_conn.close()
     return result.all()
-
+def select_naam_ondernemingsnummer_kmos(pg_conn=None):
+    #connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig=False
+    else:
+        connaanwezig=True
+    #select functie
+    result = pg_conn.execute('SELECT "ondernemingsNummer", name FROM kmo')
+    if connaanwezig==False:
+        pg_conn.close()
+    return result.all()
 def select_kmo(ondernemingsnummer,pg_conn=None):
     #connect met de databank
     if pg_conn is None:
@@ -268,6 +279,17 @@ def insert_website_kmo(odn,webiste,pg_conn=None):
         connaanwezig=True
     #insert functie
     pg_conn.execute('UPDATE kmo set website=%s where "ondernemingsNummer"=%s;', (webiste,odn))
+    if connaanwezig==False:
+        pg_conn.close()
+def insert_beursgenoteerd(odn,beursgenoteerd,pg_conn=None):
+    #connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig=False
+    else:
+        connaanwezig=True
+    #insert functie
+    pg_conn.execute('INSERT INTO finance values (%s,0,0,0,%s)', (odn,beursgenoteerd))
     if connaanwezig==False:
         pg_conn.close()
 ##script woordenlijst aanmaken
