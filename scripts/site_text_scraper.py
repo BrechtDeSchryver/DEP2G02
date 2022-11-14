@@ -49,50 +49,9 @@ def get_text(site):
     return big_string
 
 
-def ZoekmachineWebsite(text):
-    '''
-    deze functie gaat het voorkomen van Zoekterm1 en Zoekterm2 zoeken binnen een range van 50 woorden op de website 
-
-    :par_text: alle tekst van de website waarin we de 2 zoektermen willen in zoeken
-    :return(list(int,int)): geeft terug hoeveel keer de 2 zoektermen voorkomen binnen een range van 50 woorden 
-                          : geeft ook terug wat de average afstand was wanneer de 2 zoektermen binnen 50 woorden werden gevonden
-    '''
-    ZOEKTERMEN = {
-        'Zoekterm1': ['duurzaamheid', 'duurzame', 'duurzaamheidsstrategie', 'duurzaam'],
-        'Zoekterm2': ['strategie', 'strategisch', 'strategische', 'strategieën', 'beleid', 'engagement', ]
-    }
-    text = text.split()
-    i = 0
-    combinatie = 0
-    averagewoorden = []
-    zoekterm1 = False
-    a = 0
-    for word in text:
-        for zoekterm in ZOEKTERMEN['Zoekterm1']:
-            if zoekterm in word:
-                zoekterm1 = True
-        if zoekterm1 == True:
-            i += 1
-            for zoekterm in ZOEKTERMEN['Zoekterm2']:
-                if zoekterm in word:
-                    averagewoorden.append(i)
-                    combinatie += 1
-                    zoekterm1 = False
-                    i = 0
-        if i == 50:
-            i = 0
-    if combinatie != 0:
-        a = 0
-        b = len(averagewoorden)
-        for value in averagewoorden:
-            a += value/b
-    return [combinatie, a]
-
-
 def main():
-
+    # TODO: Over alle bedrijven itereren en schrijven naar db met functie insert_raw_text
     # r = get_text("https://www.haviland.be/")
-    print(Zoekmachine("https://www.kbc.be/"))
     # with open("test.txt", "w", encoding="utf-8") as f:
     #     f.write(r)
 
