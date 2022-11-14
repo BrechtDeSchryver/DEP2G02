@@ -5,6 +5,8 @@ import pandas as pd
 from requests_html import HTML
 from requests_html import HTMLSession
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+from sqlfunctions import insert_website_kmo
+from connectie import get_database
 import os
 import random
 import time
@@ -227,12 +229,28 @@ def main():
     gaat alle bedrijven nemen van de db waarvoor nog geen site is opgeslagen
     en gaat voor deze bedrijven de site zoeken 
     '''
-    excel_path = r"C:\Users\jarno\Downloads\kmo's_Vlaanderen_2021.xlsx"
-    df = excel_to_df(excel_path)
+    # excel_path = r"C:\Users\jarno\Downloads\kmo's_Vlaanderen_2021.xlsx"
+    # df = excel_to_df(excel_path)
 
-    with ProcessPoolExecutor(max_workers=8) as executor:
-        for index, row in df.iterrows():
-            executor.submit(zoek_site_bedrijf, row["Naam"], row["Gemeente"], row["Ondernemingsnummer"].replace(" ", ""))
+    # with ProcessPoolExecutor(max_workers=8) as executor:
+    #     for index, row in df.iterrows():
+    #         executor.submit(zoek_site_bedrijf, row["Naam"], row["Gemeente"], row["Ondernemingsnummer"].replace(" ", ""))
+
+    with open(r"C:\Users\jarno\Desktop\hogent\jaar 3\sem 1\Data project 2\DEP2G02\data\links_using_adres.txt", "r") as file:
+        fails = 0
+        pg_con = get_database()
+        for line in file:
+            try:
+                on = line.split(":")[1]
+                new_site = line.split(":", maxsplit=2)[2]
+                insert_website_kmo(on, new_site, pg_con)
+                print(f"Inserting {new_site} for {on}")
+            except IndexError as e:
+                print(e)
+                fails += 1
+
+                continue
+        print(fails)
 
 
 if __name__ == "__main__":
