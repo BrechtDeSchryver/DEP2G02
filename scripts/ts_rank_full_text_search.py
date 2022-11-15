@@ -1,6 +1,8 @@
 from datetime import datetime
 from connectie import get_database
 
+N_afstand = 10
+DOCS = ['ts_jaarrekening','ts_website']
 kmo_id_start = ''#Voor als je wilt beginnen vanaf een specifieke kmo als je dit niet nodig hebt zet op ''
 
 pg_engine = get_database()
@@ -21,6 +23,40 @@ def get_kmos_met_data():
 
     return kmos
 
+#hulpfunctie dat bepaald of keyword dicht bij de words liggen per kmo. De threshold voor als de dicht liggen wordt bepaald door N_afstand
+def is_keyword_close_to_words(keyword,words,type_docu,kmo_id):
+    query = f'SELECT \"ondernemingsNummer\" FROM raw_data WHERE \"ondernemingsNummer\" = %s AND {type_docu} @@ to_tsquery(\'dutch\',\''
+    for word in words:
+        for i in range(1,N_afstand+1):
+            # keyword <1> word | word <1> keyword | keyword <2> word | ...
+            query += f'{keyword} <{i}> {word} | {word} <{i}> {keyword} | '
+
+    query = query[:-3]
+    query += '\');'
+    res = pg_engine.execute(query,(kmo_id)).all()
+    return False if len(res)==0 else True
+
+#geeft query terug met alle keywords om ze te gaan zoeken en checkt of keyword dicht bij andere woorden zit indien er ()haakjes inzitten
+def get_query_keywords(keywords,kmo_id,type_docu):
+    keywords_to_delete = []
+    for i in range(len(keywords)):
+        keyword = keywords[i]
+        #Als extra conditie dan is er een ( in keyword
+        if '(' in keyword:
+            words_str = keyword[keyword.index('('):keyword.index(')')]
+            words = words_str.replace('(','').replace(')','').replace('/',',').split(',')
+            words = [word.strip().replace(' ',' <1> ') for word in words]
+            if is_keyword_close_to_words(keywords[i][0:keyword.index('(')].strip().replace(' ',' <1> '),words,type_docu,kmo_id):
+                keywords[i] = keywords[i][0:keyword.index('(')].strip() 
+            else: 
+                keywords_to_delete.append(keyword)
+
+    [keywords.remove(keyword) for keyword in keywords_to_delete]
+    words = [keyword.replace(' ',' <1> ') for keyword in keywords]
+    return ' | '.join(words)# neemt elk woord per subdomain in 1 query en neemt het gemiddelde van hun scores per subdomain
+    
+
+
 #return dict van domain van subdomains van keywords
 #example : {'Social' : {'subdomain' : [keyword1,keyword2],'subdomain2': [...]}, 'Goverance' : {...}, 'Environment' : {...}}
 def get_all_keywords_by_domains():
@@ -28,7 +64,7 @@ def get_all_keywords_by_domains():
     raw_keywords = pg_engine.execute('SELECT * FROM durability_keyword').all()
     for data in raw_keywords:
         subdomain = data[2].strip()
-        keyword = data[1][:(len(data[1]) if data[1].find('(')==-1 else data[1].find('('))].strip()
+        keyword = data[1].strip()
         if subdomain in dict_keywords.keys():
             dict_keywords[subdomain].append(keyword)
         else:
@@ -39,10 +75,11 @@ def get_all_keywords_by_domains():
     for data in raw_domains:
         subdomain = data[0].strip()
         domain = data[2].strip()
-        if domain in dict_domains.keys():
-            dict_domains[domain][subdomain] = dict_keywords[subdomain]
-        else:
-            dict_domains[domain] = {subdomain : dict_keywords[subdomain]}
+        if not domain=='testcat':# test waarde in db
+            if (domain in dict_domains.keys()):
+                dict_domains[domain][subdomain] = dict_keywords[subdomain]
+            else:
+                dict_domains[domain] = {subdomain : dict_keywords[subdomain]}
 
     return dict_domains
 
@@ -87,12 +124,11 @@ def main():
         keywords = get_all_keywords_by_domains()
         for domain in keywords.keys():
             for subdomain in keywords[domain].keys():
-                #subdomain score is de hoogste berekende score van de 3 documenten. Omdat meestal maar 1 document in de databank voor elke KMO.
+                #subdomain score is de hoogste berekende score van de 3 documenten
                 score = 0
-                for type_docu in ['ts_jaarrekening','ts_website','ts_duurzaamheidsrapport']:
+                for type_docu in DOCS:
                     query = f'SELECT ts_rank({type_docu},queri) as rank FROM raw_data,to_tsquery(\'dutch\',%s) queri WHERE "ondernemingsNummer" = %s and queri @@ {type_docu};'
-                    raw_words = [word.replace(' ',' <1> ') for word in keywords[domain][subdomain]]
-                    words = ' | '.join(raw_words) # neemt elk woord per subdomain in 1 query en neemt het gemiddelde van hun scores per subdomain
+                    words = get_query_keywords(keywords[domain][subdomain],kmo_id,type_docu)
                     args = (words,kmo_id)
                     res=pg_engine.execute(query,args).all()
                     if not len(res) == 0:
