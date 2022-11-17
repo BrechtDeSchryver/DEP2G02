@@ -106,6 +106,17 @@ function getLocalTime(localTime) {
   return localTime.getHours() + ":" + localTime.getMinutes() + ":" + localTime.getSeconds();
 }
 
+function getSectors(sorting) {
+  // select s."name", count(s."name") from kmo k join kmo_sector ks on ks."ondernemingsNummer" = k."ondernemingsNummer" join sector s on s."name" = ks."sector_ID" group by s."name" order by 2 desc
+  let result = knex("kmo_sector")
+    .select("sector_ID")
+    .count("sector_ID")
+    .groupBy("sector_ID")
+    .orderBy("count", sorting)
+    .orderBy("sector_ID", "asc");
+  return result;
+}
+
 module.exports = {
   getAll,
   getKmoByOndernemingsnummer,
@@ -121,4 +132,5 @@ module.exports = {
   getSearchTerm,
   addSearchTerm,
   getLocalTime,
+  getSectors
 };

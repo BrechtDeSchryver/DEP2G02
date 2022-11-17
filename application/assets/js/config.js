@@ -18,6 +18,9 @@ function getCategories() {
         .then(data => {
             let list = data.categories;
             console.log(list);
+            document.getElementById("cardtitle").innerHTML = "Domeinen";
+            let breadcrumb = document.getElementById("breadcrumb");
+            breadcrumb.innerHTML = ` `;
             let categories = document.getElementById("categories");
             categories.innerHTML = "";
             additioncard.style.display = "none";
@@ -41,7 +44,7 @@ function getSubCategorie(category) {
             document.getElementById("cardtitle").innerHTML = category;
             additioncard.style.display = "none";
             let breadcrumb = document.getElementById("breadcrumb");
-            breadcrumb.innerHTML = `<li onclick="getCategories()" class="breadcrumb-item"><a href="#"><span>Domeinen</span></a></li>`;
+            breadcrumb.innerHTML = `<li onclick="getCategories()" class="breadcrumb-item"><a href="#"><span>Domeinen</span></a></li><li class="breadcrumb-item"><a href="#"><span> </span></a></li>`;
             list.forEach(element => {
                 categories.insertAdjacentHTML('beforeend', `<button id="${element.toLowerCase()}" class="btn btn-primary" onclick="getSearchTerms('${element}', '${category}')" type="button" style="background: rgb(89,182,195);border-color: rgb(89,182,195);">${element}`); });
 })
@@ -104,9 +107,9 @@ function addWord() {
                 document.getElementById("woorden").insertAdjacentHTML('beforeend', `<div id="div${data.status.ID}" class="d-flex align-items-center" style="border-right-width: 1px;">
                 <p style="margin-top: 12px;margin-right: 12px;margin-left: 12px;">${word}</p><button onclick="deleteWord(${data.status.ID})" class="btn btn-primary" type="button" style="background: rgb(223,87,78);border-color: rgb(255,255,255);">Delete</button>
             </div>`)
-            word.reset();
             }
         })
+    word.value = "";
 
 }
 
