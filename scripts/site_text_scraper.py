@@ -1,6 +1,6 @@
-import requests
-
-
+from sqlfunctions import insertRawWebsite, select_kmos, select_bedrijven_zonder_site
+from connectie import get_database
+from concurrent.futures import ThreadPoolExecutor
 from webscraper import Webscraper
 
 keywords = ["duurzaamheid", "milieu", "missie"]
@@ -49,12 +49,29 @@ def get_text(site):
     return big_string
 
 
+def do_all(site, on, db):
+    print(f"--------Bedrijf {on} met site {site} wordt verwerkt------------")
+    r = get_text(site)
+    insertRawWebsite(on, r, db)
+
+
 def main():
-    # TODO: Over alle bedrijven itereren en schrijven naar db met functie insert_raw_text
+    # TODO: Over alle bedrijven itereren en schrijven naar db met functie insertRawWebsite
     # r = get_text("https://www.haviland.be/")
     # with open("test.txt", "w", encoding="utf-8") as f:
     #     f.write(r)
+    db = get_database()
+    kmos = select_bedrijven_zonder_site(db)
+    # use threadpoolexecutor
+    print(kmos)
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        for kmo in kmos:
+            on = kmo[0]
+            site = kmo[4].rstrip()
+            print(on, site)
+            # executor.submit(do_all, site, on, db)
 
 
 if __name__ == "__main__":
     main()
+# 0415468816

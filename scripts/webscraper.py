@@ -5,7 +5,6 @@ import urllib.request
 import ssl
 import random
 import requests
-from functions import get_random_user_agent
 import socket
 import sys
 import urllib.parse
@@ -78,8 +77,9 @@ class Webscraper:
         # try:
         url = self.UrlChecker(url)
         headers = {
-            'User-Agent': get_random_user_agent()
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
         }
+        
         request = urllib.request.Request(url.replace(" ", ""), headers=headers)
         try:
             webUrl = urllib.request.urlopen(request, timeout=3)
@@ -88,6 +88,8 @@ class Webscraper:
         except URLError as e:
             # if 'timed out' in str(e):
             #     sys.exit()
+            return ''
+        except TimeoutError as e:
             return ''
 
         if webUrl.url.endswith(self.blacklisted_words):
@@ -152,7 +154,9 @@ class Webscraper:
             try:
                 tempurl = self.UrlChecker(f"{url}/{keyword}")
                 print(f"Kijken of {tempurl} bestaat")
-                self.GetWebpage(tempurl)
+                r = self.GetWebpage(tempurl)
+                if r == '':
+                    continue
                 self.links.append(tempurl)
                 found.append(tempurl)
                 print(f"Keyword pagina: {url} gevonden")
