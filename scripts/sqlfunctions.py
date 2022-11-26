@@ -37,20 +37,24 @@ def select_kmos(pg_conn=None):
     if connaanwezig == False:
         pg_conn.close()
     return result.all()
+
+
 def select_naam_ondernemingsnummer_kmos(pg_conn=None):
-    #connect met de databank
+    # connect met de databank
     if pg_conn is None:
         pg_conn = get_database()
-        connaanwezig=False
+        connaanwezig = False
     else:
-        connaanwezig=True
-    #select functie
+        connaanwezig = True
+    # select functie
     result = pg_conn.execute('SELECT "ondernemingsNummer", name FROM kmo')
-    if connaanwezig==False:
+    if connaanwezig == False:
         pg_conn.close()
     return result.all()
-def select_kmo(ondernemingsnummer,pg_conn=None):
-    #connect met de databank
+
+
+def select_kmo(ondernemingsnummer, pg_conn=None):
+    # connect met de databank
     if pg_conn is None:
         pg_conn = get_database()
         connaanwezig = False
@@ -347,19 +351,37 @@ def insert_website_kmo(odn, website, pg_conn=None):
         'UPDATE kmo set website=%s where "ondernemingsNummer"=%s;', (website, odn))
     if connaanwezig == False:
         pg_conn.close()
-def insert_beursgenoteerd(odn,beursgenoteerd,pg_conn=None):
-    #connect met de databank
+
+
+def insert_beursgenoteerd(odn, beursgenoteerd, pg_conn=None):
+    # connect met de databank
     if pg_conn is None:
         pg_conn = get_database()
-        connaanwezig=False
+        connaanwezig = False
     else:
-        connaanwezig=True
-    #insert functie
-    pg_conn.execute('INSERT INTO finance values (%s,0,0,0,%s)', (odn,beursgenoteerd))
-    if connaanwezig==False:
+        connaanwezig = True
+    # insert functie
+    pg_conn.execute('INSERT INTO finance values (%s,0,0,0,%s)',
+                    (odn, beursgenoteerd))
+    if connaanwezig == False:
         pg_conn.close()
-##script woordenlijst aanmaken
-#select statements
+
+
+def get_datapunten_voor_model(pg_conn=None):
+    pg_conn = get_database()
+    # select functie
+    result = pg_conn.execute('select rd."ondernemingsNummer", f.turnover as omzet, f.beursgenoteerd, k."sector_ID" as sector, e.total as total_employees \
+                             from raw_data rd \
+                             join finance f on rd."ondernemingsNummer"=f."ondernemingsNummer" \
+                             join employees e on f."ondernemingsNummer"=e."ondernemingsNummer" \
+                             join kmo_sector k on k."ondernemingsNummer"=e."ondernemingsNummer" \
+                             ').fetchall()
+    pg_conn.close()
+    return result
+# script woordenlijst aanmaken
+# select statements
+
+
 def get_durability_category(pg_conn=None):
     # connect met de databank
     if pg_conn is None:
