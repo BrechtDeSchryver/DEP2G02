@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine
+from connectie import get_database
 from datetime import datetime
 
 N_afstand = 10 # bij extra conditie afstand van keyword tot words
@@ -7,7 +7,7 @@ kmo_id_start = ''#Voor als je wilt beginnen vanaf een specifieke kmo als je dit 
 
 #De variable laatste_id dat je ook kan aanpassen staat in de main functie. 
 
-pg_engine = create_engine('postgresql://pyuser:dikkeberta@vichogent.be:40035/dep')
+pg_engine = get_database()
 
 def fill_kmo_durability_item(keywords,kmos,laatste_id_found_term):
     print(f'{len(kmos)} kmo\'s te overlopen met {len(keywords)} keywords')
