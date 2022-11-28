@@ -1,7 +1,7 @@
 import csv
 import sys
 from nbb import get_id_onderneming
-from sqlfunctions import insert_municipality,insert_stedelijkheidsklasse,insert_adress,insert_personeel,insert_sector,insert_kmo_sector
+from sqlfunctions import insert_municipality,insert_stedelijkheidsklasse,insert_adress,insert_personeel,insert_sector,insert_kmo_sector,select_ondernemingsnummers,getRawPDF
 from connectie import get_database
 import time
 
@@ -103,19 +103,37 @@ def vull_municipallity():
             listinsert.append(postcode)
         i+=1
     conn.close()
-def vull_verstedelijking():
-    csv_data = csv.reader(open('C:/woorden/std.csv'))
-    header = next(csv_data)
+
+def vull_omzet():
     conn = get_database()
-    print('Importing the CSV Files')
-    time.sleep(0.5)
-    for row in csv_data:
-        postcode = int(row[0])
-        verstedelijking = int(row[1])
-        if verstedelijking == -99997:
-            verstedelijking = 0
-        print(postcode,verstedelijking)
-        insert_stedelijkheidsklasse(verstedelijking,postcode,conn)
+    bedrijven=select_ondernemingsnummers(conn)
+    print(bedrijven)
+    string1="9900"
+    string2="70/76A"
+    flag=0   
+    for bedrijf in bedrijven:
+        bedrijf=bedrijf[0]
+        print(bedrijf)
+        omzet=""
+        pdfData=getRawPDF(bedrijf,conn)
+        if pdfData[0] is not None:
+            dataset=pdfData[0].split()
+            for word in dataset:
+                if flag==1 and omzet=="":
+                    word=word.replace(".","")
+                    if word.isdigit():
+                        omzet=word
+                        flag=0
+                        print(omzet)
+                        insert_omzet(bedrijf,omzet,conn)
+                    flag=0
+                if word==string1:
+                    flag=1 
+                if word==string2:
+                    flag=1
+        else:
+            print("pdfData is None")
     conn.close()
+            
 if __name__=='__main__':
-    vull_sector()
+    vull_omzet()

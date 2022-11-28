@@ -95,115 +95,49 @@ def GetinfoPDF(file_path,kieszelf=False):
     :par_file_path : de locatie van de pdf dat we willen lezen
     :return (list(str)) : de informatie die we nodig hebben uit de inhoud van de pdf 
     '''
-    try:
-        informatie=['','','','','']
-        path = f"{file_path}.txt"
-        pdf = PdfFileReader(file_path)
-        with open(path, 'w') as x:
-            for page in range(pdf.numPages):
-                pageObj=pdf.getPage(page)
+    informatie=''
+    path = f"{file_path}.txt"
+    pdf = PdfFileReader(file_path)
+    with open(path, 'w') as x:
+        for page in range(pdf.numPages):
+            pageObj=pdf.getPage(page)
+            try:
+                txt = pageObj.extractText()
+            except:
+                pass
+            else:
                 try:
-                    txt = pageObj.extractText()
+                    x.write('Page {0}'.format(page+1))
+                    x.write(''.center(100,'-')+'\n')
+                    x.write(txt)
                 except:
                     pass
-                else:
-                    try:
-                        x.write('Page {0}'.format(page+1))
-                        x.write(''.center(100,'-')+'\n')
-                        x.write(txt)
-                    except:
-                        pass
-            x.close()
-        Strings=getString(int(pdf.getNumPages()),kieszelf)
-        string1=Strings[0]
-        string2=Strings[1]
-        string3=Strings[2]
-        string4=Strings[3]
-        socialbalans="SOCIALE BALANS"
-        #frameworks=["GRI",'IIRC','ISO 26000']
-        #models=["B2B","B2C",'B2B2C']
-        file = open(path, 'r')
+        x.close()
+    Strings=getString(int(pdf.getNumPages()),kieszelf)
+    string1=Strings[0]
+    #frameworks=["GRI",'IIRC','ISO 26000']
+    #models=["B2B","B2C",'B2B2C']
+    file = open(path, 'r')
+    flag=0
+    for line in file:
+        line=line.rstrip('\n')
+        if flag==1 and informatie=='':
+            informatie=line
         flag=0
-        Flag2=False
-        sb=False
-        for line in file:
-            line=line.rstrip('\n')
-            if Flag2==True:
-                try:
-                    line=line.replace(',','.')
-                    line=float(line)
-                    informatie[3]=line
-                    flag=0
-                    Flag2=False
-                    continue
-                except ValueError:
-                    flag=0
-                    continue
-            if flag==3 and string3=="100" and sb==True and informatie[3]=='':
-                try:
-                    line=line.replace(',','.')
-                    line=float(line)
-                    informatie[2]=line
-                    Flag2=True
-                    continue
-                except ValueError:
-                    flag=0 
-                    continue
-            if flag==3:
-                if informatie[2]=='' and string3=='1001' and sb==True:
-                    try:
-                        line=line.replace(',','.')
-                        line=float(line)
-                        informatie[2]=line
-                        flag=0
-                        continue
-                    except ValueError:
-                        flag=0
-                        continue
-            if flag==4 and sb==True:
-                if informatie[3]=='':
-                    try:
-                        line=line.replace(',','.')
-                        line=float(line)
-                        informatie[3]=line
-                        flag=0
-                        continue
-                    except ValueError:
-                        flag=0
-                        continue
-            if flag==1 and informatie[0]=='':
-                informatie[0]=line
-            if flag==2 and informatie[1]=='':
-                informatie[1]=line
-            flag=0
-            if string1==line:
-                flag= 1
-            if string2==line: 
-                flag= 2
-            if string3==line:
-                flag= 3
-            if string4==line:
-                flag= 4
-            if socialbalans==line:
-                sb=True
-        file.close()
-    except ValueError as err:
-        file.close()
-        print(err)
-        print(file_path)
-        print(flag)
-        print(line)
-        return informatie
-    except:
-        try:
-            file.close()
-            print(flag)
-            print(line)
-            return informatie
-        except:
-            return informatie
-    if os.path.exists(path):
-       os.remove(path)
-    if informatie[0]=="" and informatie[1]=="" and informatie[2]!="" and kieszelf==False:
+        if string1==line:
+            flag= 1
+    file.close()
+    #if os.path.exists(path):
+    #    os.remove(path)
+    if informatie=='' and kieszelf==False:
         return GetinfoPDF(file_path,True)
     return informatie
+
+def main():
+    location="D:/shared"
+    for file in os.listdir(location):
+        if file.endswith(".pdf"):
+            file_path=f"{location}/{file}"
+            data=GetinfoPDF(file_path)
+            print(data)
+main()

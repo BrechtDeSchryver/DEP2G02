@@ -6,6 +6,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from sqlfunctions import *
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed, ProcessPoolExecutor
+from threading import BoundedSemaphore
 def beursgenoteerd(bedrijf):
     ticker=yf.Ticker(bedrijf)
     try:
@@ -18,38 +20,35 @@ def yahooscraperseleniumstartup():
     driver = webdriver.Chrome(PATH)
     url = 'https://finance.yahoo.com'
     driver.get(url)
-    driver.implicitly_wait(10)
     driver.find_element(By.NAME,"agree").click()
+    return driver
+def yahoosearchbedrijf(bedrijfnaam,bedrijfnummer,driver):
     search = driver.find_element(By.ID, 'yfin-usr-qry')
-    return driver, search
-def yahoosearchbedrijf(bedrijf,driver,search):
-    #driver, search = yahooscraperseleniumstartup()
-    search.send_keys(bedrijf)
-    time.sleep(0.1)
-    result=False
+    search.send_keys(bedrijfnaam)
+    time.sleep(1.5)
     try:
         driver.find_element(By.XPATH, "/html/body/div[1]/div/div/div[1]/div/div[1]/div[1]/div/div/div[1]/div/div/div/div[1]/div/div[2]/div/form/div[2]/div[1]/div/ul[1]")
         bedrijf=driver.find_element(By.ID,"result-quotes-0").text
         if bedrijf.find("Equity - BRU") != -1:
-            result=True
+            insert_beursgenoteerd(bedrijfnummer,"TRUE")
+            print("true ",bedrijfnaam)
+            search.clear()
+        else:
+            insert_beursgenoteerd(bedrijfnummer,"FALSE")
+            print("false ",bedrijfnaam)
+            search.clear()
     except:
-        pass
-    search.clear()
-    return result
+        insert_beursgenoteerd(bedrijfnummer,"FALSE")
+        print("false err",bedrijfnaam)
+        search.clear()
 def main():
-    pg_conn = get_database()
-    driver,search=yahooscraperseleniumstartup()
-    bedrijven=select_naam_ondernemingsnummer_kmos(pg_conn)
+    bedrijven=select_naam_ondernemingsnummer_kmos()
+    driver=yahooscraperseleniumstartup()
     i=0
     for bedrijf in bedrijven:
         i+=1
-        if yahoosearchbedrijf(bedrijf[1],driver,search):
-            print(bedrijf[1])
-            insert_beursgenoteerd(bedrijf[0],"TRUE",pg_conn)
-        else:
-            print("Niets gevonden")
-            insert_beursgenoteerd(bedrijf[0],"FALSE",pg_conn)
-        print(i)
-    pg_conn.close()
+        if i>=12561:
+            print(i)
+            yahoosearchbedrijf(bedrijf[1],bedrijf[0],driver)
 if __name__ == "__main__":
     main()

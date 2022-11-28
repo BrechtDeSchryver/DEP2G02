@@ -34,6 +34,19 @@ def select_kmos(pg_conn=None):
     if connaanwezig==False:
         pg_conn.close()
     return result.all()
+
+def select_ondernemingsnummers(pg_conn=None):
+    #connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig=False
+    else:
+        connaanwezig=True
+    #select functie
+    result = pg_conn.execute('SELECT "ondernemingsNummer" FROM kmo')
+    if connaanwezig==False:
+        pg_conn.close()
+    return result.all()
 def select_naam_ondernemingsnummer_kmos(pg_conn=None):
     #connect met de databank
     if pg_conn is None:
@@ -130,6 +143,17 @@ def inertNBBID(ondernemingsnummer, nbbID,pg_conn=None):
         connaanwezig=True
     #insert functie
     pg_conn.execute('UPDATE kmo SET "nbbID"=%s WHERE "ondernemingsNummer" = %s;', (nbbID, ondernemingsnummer))
+    if connaanwezig==False:
+        pg_conn.close()
+def insert_omzet(ondernemingsnummer, omzet,pg_conn=None):
+    #connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig=False
+    else:
+        connaanwezig=True
+    #insert functie
+    pg_conn.execute('UPDATE finance SET turnover=%s WHERE "ondernemingsNummer" = %s;', (omzet, ondernemingsnummer))
     if connaanwezig==False:
         pg_conn.close()
 def getRawPDF(ondernemingsnummer,pg_conn=None):
@@ -292,6 +316,7 @@ def insert_beursgenoteerd(odn,beursgenoteerd,pg_conn=None):
     pg_conn.execute('INSERT INTO finance values (%s,0,0,0,%s)', (odn,beursgenoteerd))
     if connaanwezig==False:
         pg_conn.close()
+
 ##script woordenlijst aanmaken
 #select statements
 def get_durability_category(pg_conn=None):
