@@ -145,6 +145,15 @@ app.get("/add/searchterms", async (req, res) => {
   }
 });
 
+app.get("/sectors", async (req, res) => {
+  let sorting = "desc";
+  if (req.query.sorting == "asc") {
+    sorting = "asc";}
+  let sectors = await db.getSectors(sorting);
+  res.status(200).json({ sectors });
+  console.log("["+ db.getLocalTime(new Date()) + "] " + "Returned sectors to " + req.socket.remoteAddress);
+});
+
 /** Geeft de jaarrekening, de website en eventueel een duurzaamheidsrapport terug in json formaat na het ontvangen van een btw nummer. */
 
 /*
