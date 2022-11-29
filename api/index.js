@@ -27,26 +27,24 @@ app.get("/", (req, res) => {
 
 /** Geeft een KMO terug in json formaat na het ontvangen van een btw nummer. */
 app.get("/bedrijf/btw/:nummer", async (req, res) => {
-  let kmo = await db.getKmoByOndernemingsnummer(req.params.nummer, req.body);
-  kmo = kmo[0];
-  let adress = await db.getAdressByNumber(req.params.nummer, req.body);
-  delete adress[0].ondernemingsNummer;
-  adress = adress[0];
-  res.status(200).json({ kmo, adress });
+  let bedrijven = await db.getKmoByOndernemingsnummer(req.params.nummer, req.body);
+  res.status(200).json({ bedrijven });
   console.log(`[${db.getLocalTime(new Date())}] ${req.socket.remoteAddress} heeft ${req.params.nummer} opgevraagd`);
 });
 
 /** Geeft een KMO terug in json formaat na het ontvangen van een naam. */
 app.get("/bedrijf/naam/:naam", async (req, res) => {
-  let bedrijf = await db.getKmoNaam(req.params.naam, req.body);
+  let bedrijven = await db.getKmoNaam(req.params.naam, req.body);
+  console.log(bedrijven);
+  /*
   kmo = bedrijf[0];
   let adress = await db.getAdressByNumber(kmo.ondernemingsNummer, req.body);
   adress = adress[0];
   // check if adress is undefined
   if (!adress === undefined) {
     delete adress.ondernemingsNummer;
-  }
-  res.status(200).json({ kmo, adress });
+  }*/
+  res.status(200).json({ bedrijven });
   // get local time hh:mm:ss
   console.log(`[${db.getLocalTime(new Date())}] IP: ${req.socket.remoteAddress} | Naam: ${req.params.naam}`);
 });
@@ -156,6 +154,22 @@ app.get("/sectors", async (req, res) => {
     sorting = "asc";}
   let sectors = await db.getSectors(sorting);
   res.status(200).json({ sectors });
+  console.log("["+ db.getLocalTime(new Date()) + "] " + "Returned sectors to " + req.socket.remoteAddress);
+});
+
+/** Geeft een bepaalde sector terug */
+app.get("/sector/:sector", async (req, res) => {
+  let bedrijven = await db.getSector(req.params.sector);
+  let name = await db.getSectorName(req.params.sector);
+  aantal = bedrijven.length;
+  name = name[0].name;
+  //rename the total key to aantal
+  bedrijven = bedrijven.map(function (obj) {
+    obj.personeel = obj.total;
+    delete obj.total;
+    return obj;
+  });
+  res.status(200).json({ "aantal":aantal,"naam":name,bedrijven });
   console.log("["+ db.getLocalTime(new Date()) + "] " + "Returned sectors to " + req.socket.remoteAddress);
 });
 

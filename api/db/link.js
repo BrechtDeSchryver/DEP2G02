@@ -9,20 +9,62 @@ function getAll() {
 
 /** Retourneert een rij uit de tabel "KMO" waar "ondernemingsNummer" overeenkomt met het meegegeven ondernemingsnummer. */
 function getKmoByOndernemingsnummer(ondernemingsnummer) {
-  return knex("kmo")
-    .select("*")
-    .where("ondernemingsNummer", "like", `%${ondernemingsnummer}%`)
-    .orderBy([{ column: "ondernemingsNummer", order: "asc" }]);
+  let result = knex("kmo")
+    .select(
+      "k.ondernemingsNummer",
+      "k.name",
+      "k.email",
+      "k.telephone",
+      "k.website",
+      "k.nbbID",
+      "k.nacebelCode",
+      "k.score",
+      "a.street",
+      "a.zipcode",
+      "m.name as city",
+      "m.stedelijkheidsklasse"
+    )
+    .from("kmo as k")
+    .join("adress as a", "a.ondernemingsNummer", "k.ondernemingsNummer")
+    .join("municipality as m", "m.zipcode", "a.zipcode")
+    .where("k.ondernemingsNummer", "like", `${ondernemingsnummer}%`)
+    .orderBy([{ column: "k.name", order: "asc" }])
+    .limit(5);
+  return result;
 }
 
 /** Retourneert een rij uit de tabel "KMO" waar "name" overeenkomt met de meegegeven naam. */
 function getKmoNaam(name) {
   let realname = unescape(name);
-  let result = knex("kmo")
+  /*let result = knex("kmo")
     .select("*")
-    .where("name", "like", `%${realname.toUpperCase()}%`);
+    .where("name", "like", `${realname.toUpperCase()}%`);
   result.limit(5);
+  return result;*/
+  //select k."ondernemingsNummer", k."name", k.email, k.telephone, k.website, k."nbbID", k."nacebelCode", k.score, a.street, a.zipcode, m."name" as 'city', m.stedelijkheidsklasse from kmo k join adress a ON a."ondernemingsNummer" = k."ondernemingsNummer" join municipality m ON m.zipcode = a.zipcode
+  let result = knex("kmo")
+    .select(
+      "k.ondernemingsNummer",
+      "k.name",
+      "k.email",
+      "k.telephone",
+      "k.website",
+      "k.nbbID",
+      "k.nacebelCode",
+      "k.score",
+      "a.street",
+      "a.zipcode",
+      "m.name as city",
+      "m.stedelijkheidsklasse"
+    )
+    .from("kmo as k")
+    .join("adress as a", "a.ondernemingsNummer", "k.ondernemingsNummer")
+    .join("municipality as m", "m.zipcode", "a.zipcode")
+    .where("k.name", "like", `${realname.toUpperCase()}%`)
+    .orderBy([{ column: "k.name", order: "asc" }])
+    .limit(5);
   return result;
+
 }
 
 /** Retourneert een rij uit de tabel "adress" waar "ondernemingsNummer" overeenkomt met het meegegeven ondernemingsnummer. */
@@ -116,13 +158,33 @@ function getLocalTime(localTime) {
 
 /** Reourneert alle sectoren gesorteerd volgens de meegegeven sorteer volgorde */
 function getSectors(sorting) {
-  // select s."name", count(s."name") from kmo k join kmo_sector ks on ks."ondernemingsNummer" = k."ondernemingsNummer" join sector s on s."name" = ks."sector_ID" group by s."name" order by 2 desc
+  // select s."name", count(s."name"), s.nacebelcode from kmo k join kmo_sector ks on ks."ondernemingsNummer" = k."ondernemingsNummer" join sector s on s."name" = ks."sector_ID" group by s."name" order by 2 desc
   let result = knex("kmo_sector")
-    .select("sector_ID")
+    .select("sector_ID", "nacebelcode")
+    .join("sector", "sector.name", "=", "kmo_sector.sector_ID")
     .count("sector_ID")
-    .groupBy("sector_ID")
+    .groupBy("nacebelcode", "sector_ID")
     .orderBy("count", sorting)
     .orderBy("sector_ID", "asc");
+  return result;
+  
+}
+
+/** Zoekt een sector en geeft deze terug */
+function getSector(nacebelcode) {
+  // select * from finance join kmo ON kmo."ondernemingsNummer" = finance."ondernemingsNummer" where kmo."nacebelCode" = '45113'
+  let result = knex("kmo")
+    .select("*")
+    .join("finance", "finance.ondernemingsNummer", "=", "kmo.ondernemingsNummer")
+    .join("employees", "employees.ondernemingsNummer", "=", "kmo.ondernemingsNummer")
+    .where("kmo.nacebelCode", nacebelcode);
+  return result;
+}
+
+function getSectorName(nacebelcode) {
+  let result = knex("sector")
+    .select("*")
+    .where("nacebelcode", nacebelcode);
   return result;
 }
 
@@ -141,5 +203,8 @@ module.exports = {
   getSearchTerm,
   addSearchTerm,
   getLocalTime,
-  getSectors
+  getSectors,
+  getSector,
+  getSectorName
+
 };
