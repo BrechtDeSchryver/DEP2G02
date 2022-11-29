@@ -12,20 +12,30 @@ function getUrlVars() {
 
   /** Haalt de data van een sector op en plaatst de data op het dashboard */
   function getSector() {
-    fetch(`http://vichogent.be:40021/getsectordata/${getUrlVars().sector}`)
+    fetch(`http://localhost:8080/sector/${getUrlVars().sector}`)
       .then((res) => res.json())
       .then((date) => {
         return date;
       })
       .then((data) => {
         console.log(data)
-        const sdata = data.sectordata[0][0]
-        console.log(sdata)
-        document.getElementById("werknemerstot").innerHTML = sdata.Personeel_totaal;
-        document.getElementById("werknemersgem").innerHTML = Math.floor(sdata.Personeel_gem);
-        document.getElementById("omzettot").innerHTML = `€ ${numberWithCommas(sdata.Omzet_totaal)}`;
-        document.getElementById("omzetgem").innerHTML = `€ ${numberWithCommas(Math.floor(sdata.Omzet__gem))}`;
-        document.getElementById("aantal").innerHTML = Math.floor(sdata.aantal);
+        document.getElementById("naam").innerHTML = data.naam;
+        document.getElementById("aantal").innerHTML = data.aantal;
+        let totalturnover = 0;
+        let totalemployees = 0;
+        let totalscore = 0;
+        let total = 0;
+        data.bedrijven.forEach((bedrijf) => {
+          totalturnover += parseFloat(bedrijf.turnover);
+          totalscore += parseFloat(bedrijf.score);
+          totalemployees += bedrijf.personeel;
+        });
+        console.log(totalturnover);
+        console.log((data.aantal));
+        document.getElementById("omzettot").innerHTML = "€ " + numberWithCommas(totalturnover);
+        document.getElementById("omzetgem").innerHTML = "€ " + numberWithCommas(parseInt(totalturnover / data.aantal));
+        document.getElementById("werknemerstot").innerHTML = totalemployees;
+        document.getElementById("werknemersgem").innerHTML = parseInt(totalemployees / data.aantal);
     })
       .catch((error) => {
         console.log(error);
@@ -156,12 +166,10 @@ function numberWithCommas(x) {
 
 /** Roept alle functies aan en corigeert verkeerde namen  */
   function init() {
-    document.getElementById("charttttt").style.display = "none"
+    //document.getElementById("charttttt").style.display = "none"
     checkAlert();
     document.getElementById("alert").onclick = function() {removeAlert()};
     getSector();
-    getDuurzaamheid();
-    createChart();
     /*getsectorzoektermen();*/
     document.getElementById("naam").innerHTML = unescape(getUrlVars().sector).replace("Ã«","ë");
   }
