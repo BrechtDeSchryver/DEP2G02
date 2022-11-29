@@ -61,11 +61,14 @@ function checksession(password) {
   return result;
 }
 
+/** Zoekt alle durablility categories en geeft deze terug */
 function getCategories() {
   let result = knex("durability_category").select("*");
   return result;
 }
 
+
+/** Zoekt alle subcategories en geeft deze terug */
 function getSubCategories(category) {
   let result = knex("durability_term")
     .select("*")
@@ -73,6 +76,7 @@ function getSubCategories(category) {
   return result;
 }
 
+/** Zoekt alle searchterms en geeft deze terug */
 function getSearchTerms(subcategory) {
   let result = knex("durability_keyword")
     .select("*")
@@ -80,6 +84,7 @@ function getSearchTerms(subcategory) {
   return result;
 }  
 
+/** Verwijdert het zoekwoord met de meegegeven id uit de databank */
 function deleteSearchTerm(id) {
   let result = knex("durability_keyword")
     .where("ID", id)
@@ -87,6 +92,7 @@ function deleteSearchTerm(id) {
   return result;
 }
 
+/** Geeft een meegegeven keyword van de meegegeven subcategory terug */
 function getSearchTerm(word, subcategory) {
   let result = knex("durability_keyword")
     .select("*")
@@ -95,6 +101,7 @@ function getSearchTerm(word, subcategory) {
   return result;
 }
 
+/** Voegt een meegegeven zoekterm toe aan een de meegegeven subcategory */
 function addSearchTerm(word, subcategory) {
   let result = knex("durability_keyword")
     .insert({ name: word, durability_term: subcategory })
@@ -102,10 +109,12 @@ function addSearchTerm(word, subcategory) {
   return result;
 }
 
+/** Retourneert de lokale tijd */
 function getLocalTime(localTime) {
   return localTime.getHours() + ":" + localTime.getMinutes() + ":" + localTime.getSeconds();
 }
 
+/** Reourneert alle sectoren gesorteerd volgens de meegegeven sorteer volgorde */
 function getSectors(sorting) {
   // select s."name", count(s."name") from kmo k join kmo_sector ks on ks."ondernemingsNummer" = k."ondernemingsNummer" join sector s on s."name" = ks."sector_ID" group by s."name" order by 2 desc
   let result = knex("kmo_sector")

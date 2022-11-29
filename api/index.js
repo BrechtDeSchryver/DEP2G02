@@ -89,7 +89,7 @@ app.get("/checksession", async (req, res) => {
   }
 });
 
-
+/** Geeft alle categories weer */
 app.get("/categories", async (req, res) => {
   let all = await db.getCategories();
   let categories = [];
@@ -98,6 +98,7 @@ app.get("/categories", async (req, res) => {
   console.log("["+ db.getLocalTime(new Date()) + "] " + "Returned categories to " + req.socket.remoteAddress);
 });
 
+/** Toont de subcategory met meegegeven naam */
 app.get("/subcategories/:category", async (req, res) => {
   let all = await db.getSubCategories(req.params.category);
   let categories = [];
@@ -106,6 +107,7 @@ app.get("/subcategories/:category", async (req, res) => {
   console.log(`[${db.getLocalTime(new Date())}] Returned subcategories of ${req.params.category} to ` + req.socket.remoteAddress);
 });
 
+/** Toont de subcategory met meegegeven naam */
 app.get("/searchterms/:subcategory", async (req, res) => {
   let all = await db.getSearchTerms(req.params.subcategory);
   let searchterms = [];
@@ -114,6 +116,7 @@ app.get("/searchterms/:subcategory", async (req, res) => {
   console.log(`[${db.getLocalTime(new Date())}] Returned searchterms of category ${req.params.subcategory} to ${req.socket.remoteAddress}` );
 });
 
+/** Verwijdert de searchterm van de subcategory die beide megegeven zijn */
 app.get("/delete/searchterms", async (req, res) => {
   let session = await db.checksession(req.query.session);
   if (session.length == 1) {
@@ -127,6 +130,7 @@ app.get("/delete/searchterms", async (req, res) => {
   }
 });
 
+/** Voegt de searchterm toe van de subcategory die beide megegeven zijn */
 app.get("/add/searchterms", async (req, res) => {
   let session = await db.checksession(req.query.session);
   if (session.length == 1) {
@@ -145,6 +149,7 @@ app.get("/add/searchterms", async (req, res) => {
   }
 });
 
+/** Geeft alle sectoren terug */
 app.get("/sectors", async (req, res) => {
   let sorting = "desc";
   if (req.query.sorting == "asc") {
