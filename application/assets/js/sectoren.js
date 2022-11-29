@@ -35,7 +35,7 @@ function getSectoren(sorting) {
         <tr>
             <td>${data.sectors[i].sector_ID}</td>
             <td>${data.sectors[i].count}</td>
-            <td><a class="btn btn-sm morebtn" role="button" href="sector.html?sector=${data.sectors[i].sector_ID}" style="background: rgb(89,182,195);color: rgb(255,255,255);">Meer</a></td>
+            <td><a class="btn btn-sm morebtn" role="button" href="sector.html?sector=${data.sectors[i].sector_ID}" style="background: rgb(89,182,195);color: rgb(255,255,255);">Details</a></td>
         </tr>
         
         `)
