@@ -1,6 +1,9 @@
 from datetime import datetime
 from connectie import get_database
+import json
 
+#tekst bestand met dictionary van keywords vertaalt naar engels
+path_txt_keywords_eng = '../data/keywords_eng.txt'
 N_afstand = 10
 DOCS = ['ts_jaarrekening','ts_website']
 LANGUAGES = ['dutch','english']
@@ -106,6 +109,15 @@ def delete_scores_kmo_id_start():
     pg_engine.execute('DELETE FROM subdomain_score WHERE \"ondernemingsNummer\" = %s',(kmo_id_start))
 
 def main():
+    #nederlanse keywords in dict vorm met subdomain en domain
+    keywords = get_all_keywords_by_domains()
+    
+    #engelse keywords
+    with open(path_txt_keywords_eng) as f:
+        data = f.read()
+
+    keywords_eng = json.loads(data)
+
     #Neem enkel de KMO's die een website of jaarrekening of duurzaamheidsrapport hebben en filter ze met de globale variable kmo_id_start om niet altijd opnieuw te beginnen
     kmos_met_data = get_kmos_met_data()
     if not kmo_id_start == '':
@@ -122,7 +134,6 @@ def main():
     for kmo_id in kmos_met_data:
         start = datetime.now()
         print(f'KMO({kmo_id}) bezig : {round(teller/len(kmos_met_data),4)*100}%')
-        keywords = get_all_keywords_by_domains()
         for domain in keywords.keys():
             for subdomain in keywords[domain].keys():
                 #subdomain score is de optelling van de scores van de 3 documenten
@@ -130,9 +141,13 @@ def main():
                 for type_docu in DOCS:
                     score_lang = 0
                     for lang in LANGUAGES: # berekent score voor elke taal in LANGUAGES en neemt het hoogste
+                        words = keywords[domain][subdomain]
+                        if lang == 'english':
+                            type_docu+='_eng'
+                            words = keywords[domain][subdomain]
                         query = f'SELECT ts_rank({type_docu},queri) as rank FROM raw_data,to_tsquery(%s,%s) queri WHERE "ondernemingsNummer" = %s and queri @@ {type_docu};'
-                        words = get_query_keywords(keywords[domain][subdomain],kmo_id,type_docu)
-                        args = (lang,words,kmo_id)
+                        words_query = get_query_keywords(words,kmo_id,type_docu)
+                        args = (lang,words_query,kmo_id)
                         res=pg_engine.execute(query,args).all()
                         if not len(res) == 0:
                             if score_lang < float(res[0][0]):
@@ -140,7 +155,7 @@ def main():
                                 score_lang = float(res[0][0])
                     score += score_lang
                 print(f'{subdomain} : {score} : ID {id}') if not score == 0 else None
-                insert_subdomain_score(kmo_id,score,subdomain,id)
+                # insert_subdomain_score(kmo_id,score,subdomain,id)
                 id+=1
 
         end = datetime.now()

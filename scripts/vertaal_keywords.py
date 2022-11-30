@@ -1,9 +1,8 @@
-from connectie import get_database
 import translators as ts
 import json
+from connectie import get_database
 
 pg_engine = get_database()
-
 
 def get_all_keywords_by_domains():
     dict_keywords = {}
@@ -32,17 +31,15 @@ def get_all_keywords_by_domains():
 def vertaal_eng(keywords):
     keywords_eng = {}
     for domain in keywords.keys():
-        res_dom = ts.google(domain, from_language='nl', to_language='en').lower()
-        keywords_eng[res_dom] = {}
+        keywords_eng[domain] = {}
         for subdomain in keywords[domain].keys():
-            res_sub = ts.google(subdomain, from_language='nl', to_language='en').lower()
-            keywords_eng[res_dom][res_sub] = []
+            keywords_eng[domain][subdomain] = []
             words = []
             for word in keywords[domain][subdomain]:
                 res = ts.google(word, from_language='nl', to_language='en').lower()
                 if '-' in res: res=res.replace(' -','-')
                 words.append(res)
-            keywords_eng[res_dom][res_sub] = words
+            keywords_eng[domain][subdomain] = words
 
     return keywords_eng
 
