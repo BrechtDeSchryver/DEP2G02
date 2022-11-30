@@ -22,11 +22,16 @@ function getKmoByOndernemingsnummer(ondernemingsnummer) {
       "a.street",
       "a.zipcode",
       "m.name as city",
-      "m.stedelijkheidsklasse"
+      "m.stedelijkheidsklasse",
+      "ks.sector_ID as sector",
+      "e.total as employees"
+
     )
     .from("kmo as k")
     .join("adress as a", "a.ondernemingsNummer", "k.ondernemingsNummer")
     .join("municipality as m", "m.zipcode", "a.zipcode")
+    .join("kmo_sector as ks", "ks.ondernemingsNummer", "k.ondernemingsNummer")
+    .join("employees as e", "e.ondernemingsNummer", "k.ondernemingsNummer")
     .where("k.ondernemingsNummer", "like", `${ondernemingsnummer}%`)
     .orderBy([{ column: "k.name", order: "asc" }])
     .limit(5);
@@ -55,11 +60,15 @@ function getKmoNaam(name) {
       "a.street",
       "a.zipcode",
       "m.name as city",
-      "m.stedelijkheidsklasse"
+      "m.stedelijkheidsklasse",
+      "ks.sector_ID as sector",
+      "e.total as employees"
     )
     .from("kmo as k")
     .join("adress as a", "a.ondernemingsNummer", "k.ondernemingsNummer")
     .join("municipality as m", "m.zipcode", "a.zipcode")
+    .join("kmo_sector as ks", "ks.ondernemingsNummer", "k.ondernemingsNummer")
+    .join("employees as e", "e.ondernemingsNummer", "k.ondernemingsNummer")
     .where("k.name", "like", `${realname.toUpperCase()}%`)
     .orderBy([{ column: "k.name", order: "asc" }])
     .limit(5);
