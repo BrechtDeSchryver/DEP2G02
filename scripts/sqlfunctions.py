@@ -39,19 +39,20 @@ def select_kmos(pg_conn=None):
     return result.all()
 
 
-
 def select_ondernemingsnummers(pg_conn=None):
-    #connect met de databank
+    # connect met de databank
     if pg_conn is None:
         pg_conn = get_database()
-        connaanwezig=False
+        connaanwezig = False
     else:
-        connaanwezig=True
-    #select functie
+        connaanwezig = True
+    # select functie
     result = pg_conn.execute('SELECT "ondernemingsNummer" FROM kmo')
-    if connaanwezig==False:
+    if connaanwezig == False:
         pg_conn.close()
     return result.all()
+
+
 def select_naam_ondernemingsnummer_kmos(pg_conn=None):
     # connect met de databank
     if pg_conn is None:
@@ -79,6 +80,21 @@ def select_kmo(ondernemingsnummer, pg_conn=None):
     if connaanwezig == False:
         pg_conn.close()
     return result.first()
+
+
+def select_postcodes(pg_conn=None):
+    # connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig = False
+    else:
+        connaanwezig = True
+    # select functie
+    result = pg_conn.execute(
+        'SELECT "ondernemingsNummer", zipcode FROM adress')
+    if connaanwezig == False:
+        pg_conn.close()
+    return result.fetchall()
 
 
 def select_raw_data(ondernemingsnummer, pg_conn=None):
@@ -138,6 +154,20 @@ def insertRawPDF(ondernemingsnummer, pdftext, pg_conn=None):
         pg_conn.close()
 
 
+def insert_capital_city(ondernemingsnummer, capital_city, pg_conn=None):
+    # connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig = False
+    else:
+        connaanwezig = True
+    # insert functie
+    pg_conn.execute('UPDATE adress SET capital_city=%s WHERE "ondernemingsNummer" = %s;',
+                    (capital_city, ondernemingsnummer))
+    if connaanwezig == False:
+        pg_conn.close()
+
+
 def insertRawWebsite(ondernemingsnummer, websitetext, pg_conn=None):
     # connect met de databank
     if pg_conn is None:
@@ -179,8 +209,10 @@ def inertNBBID(ondernemingsnummer, nbbID, pg_conn=None):
         'UPDATE kmo SET "nbbID"=%s WHERE "ondernemingsNummer" = %s;', (nbbID, ondernemingsnummer))
     if connaanwezig == False:
         pg_conn.close()
-def getRawPDF(ondernemingsnummer,pg_conn=None):
-    #connect met de databank
+
+
+def getRawPDF(ondernemingsnummer, pg_conn=None):
+    # connect met de databank
     if pg_conn is None:
         pg_conn = get_database()
         connaanwezig = False
@@ -222,6 +254,19 @@ def getRawDuurzaamheidsrapport(ondernemingsnummer, pg_conn=None):
     if connaanwezig == False:
         pg_conn.close()
     return result.first()
+
+
+def get_datapunten_voor_model(pg_conn=None):
+    pg_conn = get_database()
+    # select functie
+    result = pg_conn.execute('select rd."ondernemingsNummer", f.turnover as omzet, f.beursgenoteerd, k."sector_ID" as sector, e.total as total_employees \
+                             from raw_data rd \
+                             join finance f on rd."ondernemingsNummer"=f."ondernemingsNummer" \
+                             join employees e on f."ondernemingsNummer"=e."ondernemingsNummer" \
+                             join kmo_sector k on k."ondernemingsNummer"=e."ondernemingsNummer" \
+                             ').fetchall()
+    pg_conn.close()
+    return result
 # returnt 0 als het niet voorkomt, 1 als het op website voorkomt, 2 als het op duurzaamheidsrapport voorkomt en 3 als het op beide voorkomt
 
 
@@ -376,8 +421,10 @@ def insert_beursgenoteerd(odn, beursgenoteerd, pg_conn=None):
                     (odn, beursgenoteerd))
     if connaanwezig == False:
         pg_conn.close()
-##script woordenlijst aanmaken
-#select statements
+# script woordenlijst aanmaken
+# select statements
+
+
 def get_durability_category(pg_conn=None):
     # connect met de databank
     if pg_conn is None:
