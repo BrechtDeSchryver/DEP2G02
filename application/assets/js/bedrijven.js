@@ -35,6 +35,9 @@ function getFromBTW(btw) {
       document.getElementById("naam").innerHTML = data.bedrijven[0].name
       document.getElementById("btwnum").innerHTML = data.bedrijven[0].ondernemingsNummer
       document.getElementById("werknemers").innerHTML = data.bedrijven[0].employees
+      console.log(data.bedrijven[0].score);
+      let score = data.bedrijven[0].score == null ? "Geen score" : data.bedrijven[0].score
+      document.getElementById("score").innerHTML = `${score}`
       document.getElementById("pdflink").href = `https://consult.cbso.nbb.be/api/external/broker/public/deposits/pdf/${data.bedrijven[0].nbbID}`
       let websiteicon = document.getElementById("websitelink");
       let website = data.bedrijven[0].website
@@ -86,6 +89,10 @@ function getFromNaam(naam) {
       document.getElementById("sector").innerHTML = data.bedrijven[0].sector
       document.getElementById("btwnum").innerHTML = data.bedrijven[0].ondernemingsNummer
       document.getElementById("werknemers").innerHTML = data.bedrijven[0].employees
+      console.log(data.bedrijven[0].score);
+      let score = data.bedrijven[0].score == null ? "Geen score" : data.bedrijven[0].score
+      document.getElementById("score").innerHTML = `${score}`
+
       let websiteicon = document.getElementById("websitelink");
       let website = data.bedrijven[0].website
       if (website != null){
@@ -293,8 +300,6 @@ function numberWithCommas(x) {
  */
 function init() {
 suggestOff();
-checkAlert();
-document.getElementById("alert").onclick = function() {removeAlert()};
   try{
     const vars = getUrlVars();
     if(vars.btw != undefined){
