@@ -167,8 +167,6 @@ function numberWithCommas(x) {
 /** Roept alle functies aan en corigeert verkeerde namen  */
   function init() {
     //document.getElementById("charttttt").style.display = "none"
-    checkAlert();
-    document.getElementById("alert").onclick = function() {removeAlert()};
     getSector();
     /*getsectorzoektermen();*/
     document.getElementById("naam").innerHTML = unescape(getUrlVars().sector).replace("Ã«","ë");

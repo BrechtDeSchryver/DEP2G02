@@ -79,8 +79,6 @@ function removeAlert() {
 }
 /**Roept alle functies aan en detecteert het ingeven van letters en enter */
 function init() {
-    checkAlert();
-    document.getElementById("alert").onclick = function() {removeAlert()};
     getSectoren("desc");
     
 }

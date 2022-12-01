@@ -176,10 +176,7 @@ function removeAlert() {
  * zet een listner op je toetsenbord en detecteerd het intypen van letters of een enter
  */
 function init() {
-
-    checkAlert();
     suggestOff();
-    document.getElementById("alert").onclick = function() {removeAlert()};
     try{
       const vars = getUrlVars();
       if(vars.btw != undefined){
