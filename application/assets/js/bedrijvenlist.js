@@ -24,13 +24,14 @@ function getBedrijven(sector, sortingkey, sorting) {
             document.getElementById("sectordetailsbtn").href = `sector.html?sector=${sector}`;
             document.getElementById("aantal").innerHTML = data.aantal;
             data.bedrijven.forEach((bedrijf) => {
+                let beurs = bedrijf.beursgenoteerd == true ? `<i class="fas fa-check" title="Beursgenoteerd"></i>` : `<i class="fas fa-times" title="Niet beursgenoteerd"></i>`;
                 tbl.insertAdjacentHTML("beforeend", `
                 <tr>
     <td id="bedrijfnaam" title="${bedrijf.ondernemingsNummer}">${bedrijf.name}</td>
-    <td id="personeel">${bedrijf.personeel}</td>
-    <td id="omzet">${bedrijf.turnover}</td>
-    <td id="beurs">${bedrijf.beursgenoteerd}</td>
-    <td id="score">${bedrijf.score}</td>
+    <td id="personeel" class="text-end">${bedrijf.personeel}</td>
+    <td id="omzet" class="text-end">${bedrijf.turnover}</td>
+    <td id="beurs" class="text-center">${beurs}</td>
+    <td id="score" class="text-end">${bedrijf.score}</td>
     <td><a id="detailsbtn" class="btn btn-sm morebtn" role="button" href="search.html?btw=${bedrijf.ondernemingsNummer}" style="background: rgb(89,182,195);color: rgb(255,255,255);">Details</a></td>
 </tr>
                 `)
@@ -60,6 +61,29 @@ function changeSorting(id, key, sorting) {
     changeSorting(id, key, sorting == "asc" ? "desc" : "asc")};
     let sortingicon = sorting == "asc" ? "fas fa-sort-up" : "fas fa-sort-down";
     document.getElementById(id+"arrow").classList = sortingicon;
+}
+
+function addToCompare(btw) {
+    let compare = localStorage.getItem("compare");
+    if (compare == null) {
+        localStorage.setItem("compare", btw);
+    } else {
+        compare = compare + "," + btw;
+        localStorage.setItem("compare", compare);
+    }
+    document.getElementById("comparebtn").innerHTML = `<i class="fas fa-chart-bar fa-fw"></i> Vergelijk (${localStorage.getItem("compare").split(",").length})`;
+}
+
+function removeFromCompare(btw) {
+    let compare = localStorage.getItem("compare");
+    if (compare != null) {
+        compare = compare.split(",");
+        compare = compare.filter((item) => item != btw);
+        compare = compare.join(",");
+        localStorage.setItem("compare", compare);
+    } else
+        localStorage.setItem("compare", "");
+    document.getElementById("comparebtn").innerHTML = `<i class="fas fa-chart-bar fa-fw"></i> Vergelijk (${localStorage.getItem("compare").split(",").length})`;
 }
 
 /** controleert of er in de local storage staat of de notificatie ooit al aangeklikt is */

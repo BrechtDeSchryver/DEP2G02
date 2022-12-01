@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Dashboard - Groep 7</title>
+    <title>Sector - Data Engineering Project</title>
     <meta name="theme-color" content="rgb(89,182,195)">
     <meta name="twitter:description" content="Het Data Engineering Project van groep 2!">
     <meta name="description" content="Het Data Engineering Project II van groep 2!">
@@ -76,7 +76,7 @@
                     <div class="d-sm-flex justify-content-between align-items-center align-items-lg-start mb-4">
                         <h3 class="text-dark mb-0" id="naam" style="font-weight: bold;">&nbsp;</h3>
                         <div>
-                            <p>Bedrijven:&nbsp;<span id="aantal">&nbsp;</span></p><a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" id="sectordetailsbtn" href="#" style="background: rgb(89,182,195);border-color: rgb(89,182,195);"><i class="fas fa-search fa-sm text-white-50"></i>&nbsp;Sector Details</a>
+                            <p>Bedrijven:&nbsp;<span id="aantal">&nbsp;</span></p><a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" id="sectordetailsbtn" href="#" style="background: rgb(89,182,195);border-color: rgb(89,182,195);" title="Details van deze sector"><i class="fas fa-search fa-sm text-white-50"></i>&nbsp;Sector Details</a><a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" id="comparebtn" href="#" style="background: rgb(89,182,195);border-color: rgb(89,182,195);" title="Details van deze sector"><i class="fas fa-search fa-sm text-white-50"></i>&nbsp;Sector Details</a>
                         </div>
                     </div>
                     <div class="card shadow">
@@ -93,10 +93,10 @@
                                     <thead>
                                         <tr>
                                             <th id="namefield" class="noselect" style="cursor: pointer;">Naam<i class="fas fa-sort-down" id="namefieldarrow"></i></th>
-                                            <th id="employeesfield" class="noselect" style="cursor: pointer;">Personeel<i class="fas fa-sort-down" id="employeesfieldarrow"></i></th>
-                                            <th id="turnoverfield" class="noselect" style="cursor: pointer;">Omzet<i class="fas fa-sort-down" id="turnoverfieldarrow"></i></th>
-                                            <th id="stocksfield" class="noselect" style="cursor: pointer;">Beursnotatie<i class="fas fa-sort-down" id="stocksfieldarrow"></i></th>
-                                            <th id="scorefield" class="noselect" style="cursor: pointer;">Score<i class="fas fa-sort-down" id="scorefieldarrow"></i></th>
+                                            <th class="text-end noselect" id="employeesfield" style="cursor: pointer;">Personeel<i class="fas fa-sort-down" id="employeesfieldarrow"></i></th>
+                                            <th class="text-end noselect" id="turnoverfield" style="cursor: pointer;">Omzet<i class="fas fa-sort-down" id="turnoverfieldarrow"></i></th>
+                                            <th class="text-center noselect" id="stocksfield" style="cursor: pointer;">Beursnotatie<i class="fas fa-sort-down" id="stocksfieldarrow"></i></th>
+                                            <th class="text-end noselect" id="scorefield" style="cursor: pointer;">Score<i class="fas fa-sort-down" id="scorefieldarrow"></i></th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -104,8 +104,8 @@
                                         <tr>
                                             <td id="bedrijfnaam" title="${data[i].ondernemingsNummer}">Bedrijf</td>
                                             <td id="personeel">0</td>
-                                            <td id="omzet">0</td>
-                                            <td id="beurs">0</td>
+                                            <td class="text-end" id="omzet">0</td>
+                                            <td id="beurs"><i class="fas fa-check"></i></td>
                                             <td id="score">0</td>
                                             <td><a class="btn btn-sm morebtn" role="button" id="detailsbtn" href="#" style="background: rgb(89,182,195);color: rgb(255,255,255);">Details</a></td>
                                         </tr>
