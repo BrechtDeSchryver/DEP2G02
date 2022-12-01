@@ -25,13 +25,14 @@ function getBedrijven(sector, sortingkey, sorting) {
             document.getElementById("aantal").innerHTML = data.aantal;
             data.bedrijven.forEach((bedrijf) => {
                 let beurs = bedrijf.beursgenoteerd == true ? `<i class="fas fa-check" title="Beursgenoteerd"></i>` : `<i class="fas fa-times" title="Niet beursgenoteerd"></i>`;
+                let score = bedrijf.score == null ? `<i class="fas fa-times" title="Niet beoordeeld"></i>` : bedrijf.score.replace(".", ",");
                 tbl.insertAdjacentHTML("beforeend", `
                 <tr>
     <td id="bedrijfnaam" title="${bedrijf.ondernemingsNummer}">${bedrijf.name}</td>
     <td id="personeel" class="text-end">${bedrijf.personeel}</td>
-    <td id="omzet" class="text-end">${bedrijf.turnover}</td>
+    <td id="omzet" class="text-end">${numberWithCommas(bedrijf.turnover)}</td>
     <td id="beurs" class="text-center">${beurs}</td>
-    <td id="score" class="text-end">${bedrijf.score}</td>
+    <td id="score" class="text-end">${score}</td>
     <td><a id="detailsbtn" class="btn btn-sm morebtn" role="button" href="search.html?btw=${bedrijf.ondernemingsNummer}" style="background: rgb(89,182,195);color: rgb(255,255,255);">Details</a></td>
 </tr>
                 `)
@@ -85,6 +86,11 @@ function removeFromCompare(btw) {
         localStorage.setItem("compare", "");
     document.getElementById("comparebtn").innerHTML = `<i class="fas fa-chart-bar fa-fw"></i> Vergelijk (${localStorage.getItem("compare").split(",").length})`;
 }
+
+/** grote getallen leesbaar maken door een punt te zetten om de 3 cijfers */
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
 
 /** controleert of er in de local storage staat of de notificatie ooit al aangeklikt is */
 function checkAlert() {
