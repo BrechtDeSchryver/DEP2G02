@@ -28,7 +28,7 @@ function getBedrijven(sector, sortingkey, sorting) {
                 let score = bedrijf.score == null ? `<i class="fas fa-times" title="Niet beoordeeld"></i>` : bedrijf.score.replace(".", ",");
                 tbl.insertAdjacentHTML("beforeend", `
                 <tr>
-    <td id="bedrijfnaam" title="${bedrijf.ondernemingsNummer}">${bedrijf.name}</td>
+    <td id="bedrijfnaam" onclick="addToCompare('${bedrijf.ondernemingsNummer}')" title="${bedrijf.ondernemingsNummer}">${bedrijf.name}</td>
     <td id="personeel" class="text-end">${bedrijf.personeel}</td>
     <td id="omzet" class="text-end">${numberWithCommas(bedrijf.turnover)}</td>
     <td id="beurs" class="text-center">${beurs}</td>
@@ -68,23 +68,101 @@ function addToCompare(btw) {
     let compare = localStorage.getItem("compare");
     if (compare == null) {
         localStorage.setItem("compare", btw);
+        initBedrijvenlist();
     } else {
+        let comparearray = compare.split(",");
+        if (comparearray.length > 1) {
+            alert("Je kan maar 2 bedrijven tegelijk vergelijken");
+        } else { 
         compare = compare + "," + btw;
         localStorage.setItem("compare", compare);
+        initBedrijvenlist();
     }
-    document.getElementById("comparebtn").innerHTML = `<i class="fas fa-chart-bar fa-fw"></i> Vergelijk (${localStorage.getItem("compare").split(",").length})`;
+    //document.getElementById("comparebtn").innerHTML = `<i class="fas fa-chart-bar fa-fw"></i> Vergelijk (${localStorage.getItem("compare").split(",").length})`;
+}
 }
 
 function removeFromCompare(btw) {
     let compare = localStorage.getItem("compare");
-    if (compare != null) {
+    if (compare != null && compare != "") {
         compare = compare.split(",");
         compare = compare.filter((item) => item != btw);
+        if (compare.length == 0) {
+            localStorage.removeItem("compare");
+            document.getElementById("badge").style.display = "none";
+        } else {
         compare = compare.join(",");
         localStorage.setItem("compare", compare);
+        }
+    } else {localStorage.setItem("compare", "");}
+        
+    //document.getElementById("comparebtn").innerHTML = `<i class="fas fa-chart-bar fa-fw"></i> Vergelijk (${localStorage.getItem("compare").split(",").length})`;
+    initBedrijvenlist();
+}
+
+function returnCompare(btw) {
+    let compare = localStorage.getItem("compare");
+    if (compare != null) {
+        compare = compare.split(",");
+        if (compare.includes(btw))
+            return true;
+        else
+            return false;
     } else
-        localStorage.setItem("compare", "");
-    document.getElementById("comparebtn").innerHTML = `<i class="fas fa-chart-bar fa-fw"></i> Vergelijk (${localStorage.getItem("compare").split(",").length})`;
+        return false;
+}
+
+function initBedrijvenlist() {
+    let menu = document.getElementById("comparemenu");
+    let compare = localStorage.getItem("compare");
+    menu.innerHTML = `<h6 class="dropdown-header" style="background: rgb(89,182,195);border-width: 1px;border-color: rgb(89,182,195);">Vergelijken</h6>`;
+    let counter = 0;
+    if (compare != null && compare != "") {
+        
+        compare = compare.split(",");
+        compare.forEach((btw) => {
+            fetch(`http://localhost:8080/bedrijf/btw/${btw}`)
+                .then((res) => res.json())
+                .then((data) => {
+                    menu.insertAdjacentHTML("beforeend", `
+                    <a class="dropdown-item d-flex align-items-center" href="#" style="border-radius: 0px;border-bottom-left-radius: 6px;border-bottom-right-radius: 6px;">
+    <div class="me-3"><i class="fas fa-minus-circle" style="font-size: 19.6px;color: rgb(213,44,33);" onclick="removeFromCompare('${data.bedrijven[0].ondernemingsNummer}')"></i></div>
+    <div><span class="small text-gray-500">${data.bedrijven[0].ondernemingsNummer}</span>
+        <p>${data.bedrijven[0].name}</p>
+    </div>
+</a>
+                    `)
+                })
+                counter++;
+        })
+
+        console.log(counter);
+        if (counter >= 2) {
+            let comparebtn = document.getElementById("comparebtn");
+            comparebtn.innerHTML = `<i class="fas fa-chart-bar fa-fw"></i> Vergelijk (${counter})`;
+            comparebtn.style.display = "block";
+        } else {
+            let comparebtn = document.getElementById("comparebtn");
+            comparebtn.style.display = "none";
+        }
+        if (counter == 0) {
+            document.getElementById("badge").style.display = "none";
+        } else {
+            document.getElementById("badge").style.display = "block";
+            document.getElementById("badge").innerHTML = `${counter}`;
+        }
+    }
+
+    
+    
+    /*menu.insertAdjacentHTML("beforeend", `
+    <a class="dropdown-item d-flex align-items-center" href="#" style="border-radius: 0px;border-bottom-left-radius: 6px;border-bottom-right-radius: 6px;">
+    <div class="me-3"><i class="fas fa-minus-circle" style="font-size: 19.6px;color: rgb(213,44,33);"></i></div>
+    <div><span class="small text-gray-500">BE64646544654</span>
+        <p>Bedrijfnaam</p>
+    </div>
+</a>
+    `)   */
 }
 
 /** grote getallen leesbaar maken door een punt te zetten om de 3 cijfers */
@@ -120,9 +198,9 @@ function removeAlert() {
 }
 /**Roept alle functies aan en detecteert het ingeven van letters en enter */
 function init() {
-    checkAlert();
-    document.getElementById("alert").onclick = function() {removeAlert()};
+
     getBedrijven(getUrlVars()["sector"]);
     initSorting();
+    initBedrijvenlist();
 }
 window.onload = init;
