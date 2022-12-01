@@ -158,9 +158,11 @@ app.get("/sectors", async (req, res) => {
 });
 
 /** Geeft een bepaalde sector terug */
-app.get("/sector/:sector", async (req, res) => {
-  let bedrijven = await db.getSector(req.params.sector);
-  let name = await db.getSectorName(req.params.sector);
+app.get("/sector", async (req, res) => {
+  let sortingkey = req.query.sortingkey == undefined ? "name" : req.query.sortingkey;
+  let sorting = req.query.sorting == undefined ? "asc" : req.query.sorting;
+  let bedrijven = await db.getSector(req.query.sector, sortingkey, sorting);
+  let name = await db.getSectorName(req.query.sector);
   aantal = bedrijven.length;
   name = name[0].name;
   //rename the total key to aantal

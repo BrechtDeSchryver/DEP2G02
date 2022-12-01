@@ -12,7 +12,7 @@ function getUrlVars() {
 
   /** Haalt de data van een sector op en plaatst de data op het dashboard */
   function getSector() {
-    fetch(`http://localhost:8080/sector/${getUrlVars().sector}`)
+    fetch(`http://localhost:8080/sector?sector=${getUrlVars().sector}`)
       .then((res) => res.json())
       .then((date) => {
         return date;
@@ -172,6 +172,7 @@ function numberWithCommas(x) {
     getSector();
     /*getsectorzoektermen();*/
     document.getElementById("naam").innerHTML = unescape(getUrlVars().sector).replace("Ã«","ë");
+    document.getElementById("bedrijvenbtn").href = "bedrijven.html?sector=" + getUrlVars().sector;
   }
 
 window.onload = init;

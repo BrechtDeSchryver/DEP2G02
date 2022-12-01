@@ -180,13 +180,14 @@ function getSectors(sorting) {
 }
 
 /** Zoekt een sector en geeft deze terug */
-function getSector(nacebelcode) {
+function getSector(nacebelcode, sortingkey, sorting) {
   // select * from finance join kmo ON kmo."ondernemingsNummer" = finance."ondernemingsNummer" where kmo."nacebelCode" = '45113'
   let result = knex("kmo")
     .select("*")
     .join("finance", "finance.ondernemingsNummer", "=", "kmo.ondernemingsNummer")
     .join("employees", "employees.ondernemingsNummer", "=", "kmo.ondernemingsNummer")
-    .where("kmo.nacebelCode", nacebelcode);
+    .where("kmo.nacebelCode", nacebelcode)
+    .orderBy(sortingkey, sorting);
   return result;
 }
 

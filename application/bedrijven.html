@@ -36,10 +36,9 @@
                 </a>
                 <hr class="sidebar-divider my-0">
                 <ul class="navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item"><a class="nav-link active" href="index.html"><i class="fa fa-home"></i><span>Home</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="sectoren.html"><i class="fa fa-bar-chart"></i><span>Sectoren</span></a></li>
-                    <li class="nav-item" id="navconfig" style="display:none"><a class="nav-link" href="config.html"><i class="fa fa-gears"></i><span>Configuratie</span></a></li>
-                    <li class="nav-item"></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html"><i class="fa fa-home"></i><span>Home</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="sectoren.html"><i class="fa fa-bar-chart"></i><span>Sectoren</span></a></li>
+                    <li class="nav-item" id="navconfig"><a class="nav-link" href="config.html"><i class="fa fa-gears"></i><span>Configuratie</span></a></li>
                     <li class="nav-item"></li>
                     <li class="nav-item"></li>
                 </ul>
@@ -51,18 +50,15 @@
                 <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
                     <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
                         <ul class="navbar-nav flex-nowrap ms-auto">
-                            <li class="nav-item dropdown no-arrow mx-1" id="ioslink">
-                                <div class="shadow dropdown-list dropdown-menu dropdown-menu-end" aria-labelledby="alertsDropdown"></div><a class="nav-link" href="https://projectletsgo.be/DataEngineeringProject.mobileconfig" title="iOS App" target="_blank" download=""><i class="fab fa-app-store-ios" style="font-size: 18px;"></i></a>
-                            </li>
                             <li class="nav-item dropdown no-arrow mx-1">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" id="alert"><i class="fas fa-bell fa-fw"></i></a>
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" id="alert" href="#"><i class="fas fa-bell fa-fw"></i></a>
                                     <div class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
-                                        <h6 class="dropdown-header" style="background: rgb(89,182,195);border-color: rgb(89,182,195);">Meldingen</h6><a class="dropdown-item d-flex align-items-center" href="config.html" style="border-radius: 0px;border-bottom-left-radius: 6px;border-bottom-right-radius: 6px;">
+                                        <h6 class="dropdown-header" style="background: rgb(89,182,195);border-width: 1px;border-color: rgb(89,182,195);">Meldingen</h6><a class="dropdown-item d-flex align-items-center" href="#" style="border-radius: 0px;border-bottom-left-radius: 6px;border-bottom-right-radius: 6px;">
                                             <div class="me-3">
-                                                <div class="bg-warning icon-circle"><i class="fa fa-gear text-white"></i></div>
+                                                <div class="bg-warning icon-circle"><i class="fas fa-exclamation-triangle text-white"></i></div>
                                             </div>
-                                            <div><span class="small text-gray-500">30/11/2022</span>
-                                                <p>Log in om aanpassingen te doen aan de configuratie.</p>
+                                            <div><span class="small text-gray-500">3/10/2022</span>
+                                                <p>Dit is een testomgeving!</p>
                                             </div>
                                         </a>
                                     </div>
@@ -76,18 +72,59 @@
                         </ul><a class="btn btn-primary" role="button" id="loginbtn" style="background: rgb(89,182,195);border-color: rgb(89,182,195);" href="login.html">Login</a>
                     </div>
                 </nav>
-                <div class="container-fluid" id="searchsection">
-                    <div class="d-sm-flex justify-content-between align-items-center mb-4">
-                        <h3 class="text-dark mb-0 noselect" id="naam" style="font-weight: bold;">Data Engineering Project</h3>
+                <div class="container-fluid" id="resultset">
+                    <div class="d-sm-flex justify-content-between align-items-center align-items-lg-start mb-4">
+                        <h3 class="text-dark mb-0" id="naam" style="font-weight: bold;">&nbsp;</h3>
+                        <div>
+                            <p>Bedrijven:&nbsp;<span id="aantal">&nbsp;</span></p><a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" id="sectordetailsbtn" href="#" style="background: rgb(89,182,195);border-color: rgb(89,182,195);"><i class="fas fa-search fa-sm text-white-50"></i>&nbsp;Sector Details</a>
+                        </div>
                     </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="card shadow">
-                                <div class="card-body">
-                                    <h4 class="card-title noselect">Bedrijven zoekmachine</h4>
-                                    <p class="card-text">Zoek een bedrijf aan de hand van de naam of het BTW nummer.</p>
-                                    <div class="input-group"><input class="bg-light form-control border-0 small" type="text" id="searchbar" placeholder="Zoek bedrijf..." style="max-width: 400px;" autocomplete="off" autofill="off" name="new-password"><button class="btn btn-primary py-0" id="searchbtn" type="button" style="background: rgb(89,182,195);border-color: rgb(89,182,195);"><i class="fas fa-search"></i></button></div>
-                                    <div class="flex-column align-items-center" id="options" style="margin-top: 5px;background: #ffffff;position: absolute;border-radius: 18px;box-shadow: 0px 1px 4px 0px rgb(67,68,71);min-width: 470px;min-height: 60px;z-index: 155;margin-left: -10px; display:none"></div>
+                    <div class="card shadow">
+                        <div class="card-header py-3">
+                            <p class="text-primary m-0 fw-bold noselect" style="color: rgb(89,182,195) !important;">Bedrijven</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 text-nowrap"></div>
+                                <div class="col-md-6"></div>
+                            </div>
+                            <div class="table-responsive table mt-2" id="dataTable-1" role="grid" aria-describedby="dataTable_info">
+                                <table class="table my-0" id="dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th id="namefield" class="noselect" style="cursor: pointer;">Naam<i class="fas fa-sort-down" id="namefieldarrow"></i></th>
+                                            <th id="employeesfield" class="noselect" style="cursor: pointer;">Personeel<i class="fas fa-sort-down" id="employeesfieldarrow"></i></th>
+                                            <th id="turnoverfield" class="noselect" style="cursor: pointer;">Omzet<i class="fas fa-sort-down" id="turnoverfieldarrow"></i></th>
+                                            <th id="stocksfield" class="noselect" style="cursor: pointer;">Beursnotatie<i class="fas fa-sort-down" id="stocksfieldarrow"></i></th>
+                                            <th id="scorefield" class="noselect" style="cursor: pointer;">Score<i class="fas fa-sort-down" id="scorefieldarrow"></i></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="bedrijventbl">
+                                        <tr>
+                                            <td id="bedrijfnaam" title="${data[i].ondernemingsNummer}">Bedrijf</td>
+                                            <td id="personeel">0</td>
+                                            <td id="omzet">0</td>
+                                            <td id="beurs">0</td>
+                                            <td id="score">0</td>
+                                            <td><a class="btn btn-sm morebtn" role="button" id="detailsbtn" href="#" style="background: rgb(89,182,195);color: rgb(255,255,255);">Details</a></td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td class="noselect"><strong>Naam<br></strong></td>
+                                            <td class="noselect"><strong>Personeel</strong></td>
+                                            <td class="noselect"><strong>Omzet</strong></td>
+                                            <td class="noselect"><strong>Beursnotatie</strong></td>
+                                            <td class="noselect"><strong>Score</strong></td>
+                                            <td><strong></strong></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 align-self-center">
+                                    <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">0 resultaten</p>
                                 </div>
                             </div>
                         </div>
@@ -96,16 +133,15 @@
             </div>
             <footer class="bg-white sticky-footer">
                 <div class="container my-auto">
-                    <div class="text-center my-auto copyright"><span>Copyright © Groep 2 DEP II 2022<br></span></div>
+                    <div class="text-center my-auto copyright"><span>Copyright © Groep 2 DEP II 2022</span></div>
                 </div>
             </footer>
-        </div>
+        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
     </div>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/bs-init.js"></script>
     <script src="assets/js/acchandler.js"></script>
-    <script src="assets/js/index.js"></script>
-    <script src="assets/js/mobile.js"></script>
+    <script src="assets/js/bedrijvenlist.js"></script>
     <script src="assets/js/theme.js"></script>
 </body>
 
