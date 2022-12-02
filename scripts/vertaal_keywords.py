@@ -2,6 +2,8 @@ import translators as ts
 import json
 from connectie import get_database
 
+path_engelsekeywords = r'C:\Users\manuv\Documents\School\DEP2\OudProjectTeam\DEP2G02\data\keywords_eng.txt'
+
 pg_engine = get_database()
 
 def get_all_keywords_by_domains():
@@ -46,7 +48,7 @@ def vertaal_eng(keywords):
 keywords = get_all_keywords_by_domains()            
 res = vertaal_eng(keywords)
 
-with open('../data/keywords_eng.txt', 'w') as convert_file:
+with open(path_engelsekeywords, 'w') as convert_file:
     convert_file.write(json.dumps(res))
 
 # Om terug te lezen
