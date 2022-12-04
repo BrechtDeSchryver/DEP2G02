@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Dashboard - Groep 7</title>
+    <title>Sectordetails - Data Engineering Project</title>
     <meta name="theme-color" content="rgb(89,182,195)">
     <meta name="twitter:description" content="Het Data Engineering Project van groep 2!">
     <meta name="description" content="Het Data Engineering Project II van groep 2!">
@@ -49,28 +49,15 @@
             <div id="content">
                 <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
                     <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
-                        <ul class="navbar-nav flex-nowrap ms-auto">
-                            <li class="nav-item dropdown no-arrow mx-1">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" id="alert" href="#"><i class="fas fa-bell fa-fw"></i></a>
-                                    <div class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
-                                        <h6 class="dropdown-header" style="background: rgb(89,182,195);border-width: 1px;border-color: rgb(89,182,195);">Meldingen</h6><a class="dropdown-item d-flex align-items-center" href="#" style="border-radius: 0px;border-bottom-left-radius: 6px;border-bottom-right-radius: 6px;">
-                                            <div class="me-3">
-                                                <div class="bg-warning icon-circle"><i class="fas fa-exclamation-triangle text-white"></i></div>
-                                            </div>
-                                            <div><span class="small text-gray-500">3/10/2022</span>
-                                                <p>Dit is een testomgeving!</p>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
+                        <ul class="navbar-nav flex-nowrap ms-auto"></ul>
                     </div>
                 </nav>
                 <div class="container-fluid" id="resultset">
-                    <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                    <div class="d-sm-flex justify-content-between align-items-center align-items-lg-start mb-4">
                         <h3 class="text-dark mb-0" id="naam" style="font-weight: bold;">Naam</h3>
-                        <p>Bedrijven:&nbsp;<span id="aantal">0</span></p>
+                        <div>
+                            <p>Bedrijven:&nbsp;<span id="aantal">0</span></p><a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" id="bedrijvenbtn" href="#" style="background: rgb(89,182,195);border-color: rgb(89,182,195);"><i class="fas fa-list fa-sm text-white-50"></i>&nbsp;Toon bedrijven</a>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 col-xl-3 mb-4">
@@ -130,50 +117,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="card shadow">
-                                <div class="card-header py-3">
-                                    <p class="text-primary m-0 fw-bold noselect" style="color: rgb(89,182,195) !important;">Zoektermen Natural capital</p>
-                                </div>
-                                <div class="card-body"><canvas id="pieChartt"></canvas></div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card shadow">
-                                <div class="card-header py-3">
-                                    <p class="text-primary m-0 fw-bold noselect" style="color: rgb(89,182,195) !important;">Zoektermen Human capital</p>
-                                </div>
-                                <div class="card-body">
-                                    <div id="charttttt" style="color: rgb(89,182,195) !important;"><canvas data-bss-chart="{&quot;type&quot;:&quot;pie&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;January&quot;,&quot;February&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Revenue&quot;,&quot;backgroundColor&quot;:[&quot;rgb(239,2,2)&quot;,&quot;rgb(255,138,0)&quot;],&quot;borderColor&quot;:[&quot;#4e73df&quot;,&quot;#4e73df&quot;],&quot;data&quot;:[&quot;4500&quot;,&quot;5300&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:true,&quot;legend&quot;:{&quot;display&quot;:false,&quot;labels&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;,&quot;fontColor&quot;:&quot;rgb(89,182,195) !important&quot;}},&quot;title&quot;:{&quot;fontStyle&quot;:&quot;bold&quot;,&quot;text&quot;:&quot;&quot;}}}"></canvas></div><canvas id="pieChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="card shadow" style="margin-top: 25px;">
-                                <div class="card-header py-3">
-                                    <p class="text-primary m-0 fw-bold noselect" style="color: rgb(89,182,195) !important;">Duurzaamheidscore en zoektermen</p>
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="noselect" style="font-weight: bold;color: rgb(89,182,195) !important;margin-left: 6px;">Duurzaamheidscore</h5>
-                                    <div class="table-responsive table mt-2" id="dataTable-1" role="grid" aria-describedby="dataTable_info">
-                                        <table class="table my-0" id="dataTable">
-                                            <thead>
-                                                <tr>
-                                                    <th>Score</th>
-                                                    <th>Aantal bedrijven</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="tbody"></tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col"></div>
-                    </div>
                 </div>
             </div>
             <footer class="bg-white sticky-footer">
@@ -184,9 +127,7 @@
         </div>
     </div>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="assets/js/chart.min.js"></script>
     <script src="assets/js/bs-init.js"></script>
-    <script src="assets/js/acchandler.js"></script>
     <script src="assets/js/sector.js"></script>
     <script src="assets/js/theme.js"></script>
 </body>

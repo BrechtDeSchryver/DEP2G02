@@ -14,17 +14,17 @@ function getUrlVars() {
   /** Naar dashboard pagina gaan van een bedrijf via het btw-nummer
    */
   function getFromBTW(btw) {
-    fetch(`http://www.vichogent.be:40021/btw/${btw}`)
+    fetch(`http://localhost:8080/bedrijf/btw/${btw}`)
       .then((res) => res.json())
       .then((date) => {
         return date;
       })
       .then((data) => {
-        console.log(data.bedrijf.length);
-        if (data.bedrijf.length == 0) {
+        console.log(data.bedrijven.length);
+        if (data.bedrijven.length == 0) {
             document.getElementById("resultset").style.display = "none";
         } else{
-            document.location.href = `search.html?btw=${data.bedrijf[0].BvD_ID_nummer}`;}
+            document.location.href = `search.html?btw=${data.bedrijven[0].ondernemingsNummer}`;}
       })
       .catch((error) => {
         console.log(error);
@@ -33,17 +33,17 @@ function getUrlVars() {
 
     /** Naar dashboard pagina gaan van een bedrijf via de naam*/
   function getFromNaam(naam) {
-    fetch(`http://www.vichogent.be:40021/bedrijf/${naam}`)
+    fetch(`http://localhost:8080/bedrijf/naam/${naam}`)
       .then((res) => res.json())
       .then((date) => {
         return date;
       })
       .then((data) => {
-        console.log(data.bedrijf.length);
-        if (data.bedrijf.length == 0) {
+        console.log(data.bedrijven.length);
+        if (data.bedrijven.length == 0) {
             document.getElementById("resultset").style.display = "none";
         } else{
-            document.location.href = `search.html?btw=${data.bedrijf[0].BvD_ID_nummer}`;}
+            document.location.href = `search.html?btw=${data.bedrijven[0].ondernemingsNummer}`;}
       })
       .catch((error) => {
         console.log(error);
@@ -66,23 +66,23 @@ function getUrlVars() {
  * :par_btw: het btw nummer van het bedrijf
 */
   function typeSugBTW(btw) {
-    fetch(`http://www.vichogent.be:40021/btw/${btw}`)
+    fetch(`http://localhost:8080/bedrijf/btw/${btw}`)
       .then((res) => res.json())
       .then((date) => {
         return date;
       })
       .then((data) => {
           let options = document.getElementById("options")
-          console.log(data.bedrijf)
+          console.log(data.bedrijven)
           options.innerHTML = ""
           let i = 0;
           let mtop = 10
-          while (i < data.bedrijf.length) { 
-            let bedrijf = data.bedrijf[i].Naam.replace("'", "")
+          while (i < data.bedrijven.length) { 
+            let bedrijf = data.bedrijven[i].name.replace("'", "")
             if (i > 0) {
                 mtop = 0
             }
-            options.insertAdjacentHTML("beforeend", `<a class="choice" href="${"search.html?btw="+data.bedrijf[i].BvD_ID_nummer}" style="margin-left: 0px;min-width: 90%;margin-top: ${mtop}px;margin-bottom: 10px;">
+            options.insertAdjacentHTML("beforeend", `<a class="choice" href="${"search.html?btw="+data.bedrijven[i].ondernemingsNummer}" style="margin-left: 0px;min-width: 90%;margin-top: ${mtop}px;margin-bottom: 10px;">
             <div id="chdiv" style="min-width: 90%;margin-top: 0px;margin-bottom: 0px;background: rgba(252,252,252,0.46);border-radius: 5px;">
                 <p style="margin-bottom: 0px;margin-left: 5px;">${bedrijf}</p>
             </div>
@@ -100,23 +100,23 @@ function getUrlVars() {
  * :par_naam: de naam van het bedrijf
  */
   function typeSugName(naam) {
-    fetch(`http://www.vichogent.be:40021/bedrijf/${naam}`)
+    fetch(`http://localhost:8080/bedrijf/naam/${naam}`)
       .then((res) => res.json())
       .then((date) => {
         return date;
       })
       .then((data) => {
           let options = document.getElementById("options")
-          console.log(data.bedrijf)
+          console.log(data.bedrijven)
           options.innerHTML = ""
           let i = 0;
           let mtop = 10
-          while (i < data.bedrijf.length) { 
-            let bedrijf = data.bedrijf[i].Naam.replace("'", "")
+          while (i < data.bedrijven.length) { 
+            let bedrijf = data.bedrijven[i].name.replace("'", "")
             if (i > 0) {
                 mtop = 0
             }
-            options.insertAdjacentHTML("beforeend", `<a class="choice" href="${"search.html?btw="+data.bedrijf[i].BvD_ID_nummer}" style="margin-left: 0px;min-width: 90%;margin-top: ${mtop}px;margin-bottom: 10px;">
+            options.insertAdjacentHTML("beforeend", `<a class="choice" href="${"search.html?btw="+data.bedrijven[i].ondernemingsNummer}" style="margin-left: 0px;min-width: 90%;margin-top: ${mtop}px;margin-bottom: 10px;">
             <div id="chdiv" style="min-width: 90%;margin-top: 0px;margin-bottom: 0px;background: rgba(252,252,252,0.46);border-radius: 5px;">
                 <p style="margin-bottom: 0px;margin-left: 5px;">${bedrijf}</p>
             </div>
@@ -176,10 +176,7 @@ function removeAlert() {
  * zet een listner op je toetsenbord en detecteerd het intypen van letters of een enter
  */
 function init() {
-
-    checkAlert();
     suggestOff();
-    document.getElementById("alert").onclick = function() {removeAlert()};
     try{
       const vars = getUrlVars();
       if(vars.btw != undefined){

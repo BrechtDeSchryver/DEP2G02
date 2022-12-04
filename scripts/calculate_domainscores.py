@@ -1,6 +1,6 @@
-from sqlalchemy import create_engine
+from connectie import get_database
 
-pg_engine = create_engine('postgresql://pyuser:dikkeberta@vichogent.be:40035/dep')
+pg_engine = get_database()
 
 # Voer script alleen uit bij lege score tabel
 
@@ -42,6 +42,10 @@ def get_domain_from_subdomain(subdomain,keywords):
         if subdomain in keywords[domain].keys():
             return domain
 
+def insert_kmo_into_score(id,domain_score,domain,kmo_id):
+    args = (id,domain_score,domain,0,kmo_id)
+    pg_engine.execute('INSERT INTO score VALUES (%s,%s,%s,%s,%s)',args)
+
 def main():
     keywords = get_all_keywords_by_domains()
     id = get_laatste_id_score()+1
@@ -60,7 +64,7 @@ def main():
 
             if not domain == vorig_domain:
                 domain_score = domain_score/len(keywords[domain])# domain_score is de som van alle subdomain_scores en dan delen door het aantal subdomeinen van het domein. ~ Gemiddelde van de subdomeinscores
-                # insert_kmo_into_score(id,domain_score,vorig_domain,kmo_id)
+                insert_kmo_into_score(id,domain_score,vorig_domain,kmo_id)
                 print(f'{kmo_id} : {vorig_domain} {domain_score} : ID {id}')
                 id+=1
                 domain_score = 0
