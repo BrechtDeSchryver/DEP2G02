@@ -1,7 +1,7 @@
 import csv
 import sys
 from nbb import get_id_onderneming
-from sqlfunctions import insert_municipality,insert_stedelijkheidsklasse,insert_adress,insert_personeel,insert_sector,insert_kmo_sector,select_ondernemingsnummers,getRawPDF
+from sqlfunctions import insert_municipality,insert_stedelijkheidsklasse,insert_adress,insert_personeel,insert_sector,insert_kmo_sector,select_ondernemingsnummers,getRawPDF,insert_omzet,insert_balanstotaal
 from connectie import get_database
 import time
 
@@ -103,6 +103,36 @@ def vull_municipallity():
             listinsert.append(postcode)
         i+=1
     conn.close()
+def vull_balanstotaal():
+    conn = get_database()
+    bedrijven=select_ondernemingsnummers(conn)
+    print(bedrijven)
+    string1="20/58"
+    flag=0   
+    i=1
+    for bedrijf in bedrijven:
+        print(i)
+        i+=1
+        bedrijf=bedrijf[0]
+        print(bedrijf)
+        balanstotaal=""
+        pdfData=getRawPDF(bedrijf,conn)
+        if pdfData[0] is not None:
+            dataset=pdfData[0].split()
+            for word in dataset:
+                if flag==1 and balanstotaal=="":
+                    word=word.replace(".","")
+                    if word.isdigit():
+                        balanstotaal=word
+                        flag=0
+                        print(balanstotaal)
+                        insert_balanstotaal(bedrijf,balanstotaal,conn)
+                    flag=0
+                if word==string1:
+                    flag=1 
+        else:
+            print("pdfData is None")
+    conn.close()
 
 def vull_omzet():
     conn = get_database()
@@ -111,7 +141,10 @@ def vull_omzet():
     string1="9900"
     string2="70/76A"
     flag=0   
+    i=1
     for bedrijf in bedrijven:
+        print(i)
+        i+=1
         bedrijf=bedrijf[0]
         print(bedrijf)
         omzet=""
@@ -136,4 +169,4 @@ def vull_omzet():
     conn.close()
             
 if __name__=='__main__':
-    vull_omzet()
+    vull_balanstotaal()

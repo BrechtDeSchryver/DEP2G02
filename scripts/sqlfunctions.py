@@ -494,3 +494,27 @@ def flush_woordenlijst(pg_conn=None):
     if connaanwezig == False:
         pg_conn.close()
 # end
+def insert_balanstotaal(odn, balanstotaal, pg_conn=None):
+    # connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig = False
+    else:
+        connaanwezig = True
+    # insert functie
+    pg_conn.execute('UPDATE finance set total_assets=%s where "ondernemingsNummer"=%s;',
+                    (balanstotaal, odn))
+    if connaanwezig == False:
+        pg_conn.close()
+def insert_omzet(odn, omzet, pg_conn=None):
+    # connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig = False
+    else:
+        connaanwezig = True
+    # insert functie
+    pg_conn.execute('UPDATE finance set turnover=%s where "ondernemingsNummer"=%s;',
+                    (omzet, odn))
+    if connaanwezig == False:
+        pg_conn.close()
