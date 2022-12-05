@@ -259,11 +259,13 @@ def getRawDuurzaamheidsrapport(ondernemingsnummer, pg_conn=None):
 def get_datapunten_voor_model(pg_conn=None):
     pg_conn = get_database()
     # select functie
-    result = pg_conn.execute('select rd."ondernemingsNummer", f.turnover as omzet, f.beursgenoteerd, k."sector_ID" as sector, e.total as total_employees \
+    result = pg_conn.execute('select rd."ondernemingsNummer", f.turnover as omzet, f.beursgenoteerd, k."sector_ID" as sector, e.total as total_employees, a.capital_city, null, null, s.score \
                              from raw_data rd \
+                             join adress a on a."ondernemingsNummer"=rd."ondernemingsNummer" \
                              join finance f on rd."ondernemingsNummer"=f."ondernemingsNummer" \
                              join employees e on f."ondernemingsNummer"=e."ondernemingsNummer" \
                              join kmo_sector k on k."ondernemingsNummer"=e."ondernemingsNummer" \
+                             join score s on s."forain_ID"=e."ondernemingsNummer" \
                              ').fetchall()
     pg_conn.close()
     return result
@@ -541,6 +543,8 @@ def flush_woordenlijst(pg_conn=None):
     if connaanwezig == False:
         pg_conn.close()
 # end
+
+
 def insert_balanstotaal(odn, balanstotaal, pg_conn=None):
     # connect met de databank
     if pg_conn is None:
@@ -553,6 +557,8 @@ def insert_balanstotaal(odn, balanstotaal, pg_conn=None):
                     (balanstotaal, odn))
     if connaanwezig == False:
         pg_conn.close()
+
+
 def insert_omzet(odn, omzet, pg_conn=None):
     # connect met de databank
     if pg_conn is None:
