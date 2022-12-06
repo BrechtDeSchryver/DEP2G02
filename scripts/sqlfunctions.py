@@ -571,3 +571,16 @@ def insert_omzet(odn, omzet, pg_conn=None):
                     (omzet, odn))
     if connaanwezig == False:
         pg_conn.close()
+
+def insert_bevolkingsdichtheid(name, bev, pg_conn=None):
+    # connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig = False
+    else:
+        connaanwezig = True
+    # insert functie
+    pg_conn.execute('UPDATE municipality set bevolkingsdichtheidPermm2=%s where "name"=%s;',
+                    (bev, name))
+    if connaanwezig == False:
+        pg_conn.close()
