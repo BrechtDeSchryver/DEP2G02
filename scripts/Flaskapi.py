@@ -17,7 +17,7 @@ def get_posts(code):
     #hashes=[]
     #for hash in sql:
         #hashes.append(hash[0])
-    if code=="DikkeBerta":
+    if code is "DikkeBerta":
       if running!="running":
           running="running"
           test()
