@@ -6,7 +6,7 @@ import json
 import time
 app = Flask(__name__)
 CORS(app)
-running="nog niet gestart"
+running="done"
 def test():
     global running
     time.sleep(10)
