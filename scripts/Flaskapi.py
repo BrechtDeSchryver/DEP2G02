@@ -18,7 +18,7 @@ def get_posts(code):
     for hash in sql:
         hashes.append(hash[0])
     if running!="running":
-      if code is not None and code in hashes:
+      if code in hashes:
         running="running"
         test()
         #fill_tables_with_score()
