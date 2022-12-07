@@ -592,7 +592,7 @@ def select_passwordhashes(pg_conn=None):
     else:
         connaanwezig = True
     # select functie
-    results = pg_conn.execute('select "passwordHash" from users;')
+    results = pg_conn.execute('select "passwordHash" from credentials;')
     if connaanwezig == False:
         pg_conn.close()
     return results.all()

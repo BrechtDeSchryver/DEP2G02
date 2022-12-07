@@ -13,7 +13,10 @@ def test():
 @app.route("/api/recalculate/<code>",methods=['GET'])
 def get_posts(code):
     global running
-    hashes=select_passwordhashes()
+    sql=select_passwordhashes()
+    hashes=[]
+    for hash in sql:
+        hashes.append(hash[0])
     if running!="running":
       if code is not None and code in hashes:
         running="running"
