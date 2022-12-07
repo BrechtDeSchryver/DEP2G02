@@ -584,3 +584,15 @@ def insert_bevolkingsdichtheid(name, bev, pg_conn=None):
                     (bev, name))
     if connaanwezig == False:
         pg_conn.close()
+def select_passwordhashes(pg_conn=None):
+    # connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig = False
+    else:
+        connaanwezig = True
+    # select functie
+    results = pg_conn.execute('select "passwordHash" from users;')
+    if connaanwezig == False:
+        pg_conn.close()
+    return results.all()
