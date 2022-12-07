@@ -12,7 +12,7 @@ def main():
         # extracting each data row one by one
         for row in csvreader:
             print(f"insterting: {row[0]},{row[1]}")
-            insert_bevolkingsdichtheid(row[0],row[1])
+            insert_bevolkingsdichtheid(row[0].upper(),row[1])
             #print(row)
             
         

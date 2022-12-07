@@ -580,7 +580,7 @@ def insert_bevolkingsdichtheid(name, bev, pg_conn=None):
     else:
         connaanwezig = True
     # insert functie
-    pg_conn.execute('UPDATE municipality set bevolkingsdichtheidPermm2=%s where "name"=%s;',
+    pg_conn.execute('UPDATE municipality set "bevolkingsdichtheidPermm2"=%s where "name"=%s;',
                     (bev, name))
     if connaanwezig == False:
         pg_conn.close()
