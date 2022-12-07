@@ -1,6 +1,6 @@
-from sqlalchemy import create_engine
+from connectie import get_database
 
-pg_engine = create_engine('postgresql://pyuser:dikkeberta@vichogent.be:40035/dep')
+pg_engine = get_database()
 
 def insert_score_into_kmo(kmo_id,score):
     args = (score,kmo_id)
@@ -30,4 +30,4 @@ def main():
 
     print('Klaar let\'s go')
 
-main()
+# main()
