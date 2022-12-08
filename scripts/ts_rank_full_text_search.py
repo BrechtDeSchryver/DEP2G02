@@ -3,11 +3,11 @@ from connectie import get_database
 import json
 
 # VOOR UITVOER VAN SCRIPT MOETEN BEIDE PADEN HIERONDER BESCHREVEN BESTAAN
-# ANDERS VOER VOLGENDE SCRIPT IN DEZE VOLGORDE UIT: vertaal_keywords.py -> detect_lang.py -> get_nl_en_kmo_ids.py
+# ANDERS VOER VOLGENDE SCRIPT IN DEZE VOLGORDE UIT: vertaal_keywords.py -> detect_lang.py
 
 #tekst bestand met dictionary van keywords vertaalt naar engels
 # path_txt_keywords_eng = r'C:\Users\manuv\Documents\School\DEP2\OudProjectTeam\DEP2G02\data\keywords_eng.txt'# vertaalde keywords van nederlands naar engels -> Eerst vertaal_keywords.py uitvoeren
-# path_kmos_nl_en = r'C:\Users\manuv\Documents\School\DEP2\OudProjectTeam\DEP2G02\data\kmos_nl_en.txt'# Alle kmo_ids in het nederlands en engels -> Voer eerst detect_lang.py, dan get_nl_eng_kmo_ids.py uit
+# path_kmos_nl_en = r'C:\Users\manuv\Documents\School\DEP2\OudProjectTeam\DEP2G02\data\kmos_lang.txt'# Alle kmo_ids in het nederlands en engels -> Voer eerst detect_lang.py, dan get_nl_eng_kmo_ids.py uit
 N_afstand = 10
 DOCS = ['ts_jaarrekening','ts_website']
 LANGUAGES = ['dutch','english']
@@ -122,22 +122,24 @@ def main(path_txt_keywords_eng,path_kmos_nl_en):
     with open(path_kmos_nl_en) as f:
         data = f.read()
     kmos_met_data = json.loads(data)
-    
+    count_kmo_ids = len(kmos_met_data['jaarrekening']['english'])+len(kmos_met_data['website']['english'])+len(kmos_met_data['jaarrekening']['dutch'])+len(kmos_met_data['website']['dutch'])
     teller=0
     id = get_laatste_id_subdomain_score()+1# ID van de tabel subdomain_score
+    som_score_kmos = {}
     print(f'START ID {id}')
-    count_kom_ids = sum([len(kmos_met_data[key]) for key in kmos_met_data])
-    print(f"{count_kom_ids} KMO\'s te gaan")
-    for lang in LANGUAGES:
-        #Loop over elke kmo van specifieke language en dan over elke subdomein en bepaal subdomainscore.
-        for kmo_id in kmos_met_data[lang]:
-            start = datetime.now()
-            print(f'KMO({kmo_id}) bezig : {round(teller/count_kom_ids,4)*100}%')
-            for domain in keywords.keys():
-                for subdomain in keywords[domain].keys():
-                    #subdomain score is de optelling van de scores van de 3 documenten
-                    score = 0
-                    for type_docu in DOCS:# neemt som van de scores van documenten op per subdomain.
+    print(f"{count_kmo_ids} KMO\'s te gaan")
+    
+    for type_docu in DOCS:
+        for lang in LANGUAGES:
+            print(f'START {lang} : {type_docu}')
+            #Loop over elke kmo van specifieke language en specifieke document(website,jaarrekening) en dan over elke subdomein en bepaal subdomainscore.
+            for kmo_id in kmos_met_data[type_docu.replace('ts_','')][lang]:
+                start = datetime.now()
+                print(f'KMO({kmo_id}) bezig : {round(teller/count_kmo_ids,4)*100}%')
+                for domain in keywords.keys():
+                    for subdomain in keywords[domain].keys():
+                        #subdomain score is de optelling van de scores van de 2 documenten
+                        score = 0
                         words = keywords[domain][subdomain]
                         if lang == 'english':# In het engels andere ts_vector document in databank gebruiken en engelse keywords gebruiken
                             type_docu+='_eng'
@@ -147,14 +149,18 @@ def main(path_txt_keywords_eng,path_kmos_nl_en):
                         args = (lang,words_query,kmo_id)
                         res=pg_engine.execute(query,args).all()
                         if len(res) > 0:
-                            score += float(res[0][0])
-                    print(f'{subdomain} : {score} : ID {id}') if not score == 0 else None
-                    insert_subdomain_score(kmo_id,score,subdomain,id)
-                    id+=1
-            teller+=1
-            end = datetime.now()
-            print(f'{round(((count_kom_ids-teller)*(end-start).total_seconds())/3600,2)} hours left')
+                            score = float(res[0][0])
+                        if not score == 0: print(f'{subdomain} : {score} : ID {id}')
+
+                        if kmo_id in som_score_kmos.keys():
+                            insert_subdomain_score(kmo_id,score+som_score_kmos[kmo_id],subdomain,id)
+                        else:
+                            som_score_kmos[kmo_id] = score 
+                        id+=1
+                teller+=1
+                end = datetime.now()
+                print(f'{round(((count_kmo_ids-teller)*(end-start).total_seconds())/3600,2)} hours left')
     
     print('Klaar let\'s go')
 
-# main()
+# main(r'C:\Users\manuv\Documents\School\test\DEP2G02\data\keywords_eng.txt',r'C:\Users\manuv\Documents\School\test\DEP2G02\data\kmo_langs.txt')
