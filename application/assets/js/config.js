@@ -113,6 +113,48 @@ function addWord() {
 
 }
 
+function checkScores() {
+    fetch(`http://vichogent.be:40046/api/status`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.status == "done") {
+                document.getElementById("recalc").innerHTML = "Herbereken scores";
+                document.getElementById("recalc").onclick = herberekenScores;
+                document.getElementById("recalc").title = "Herbereken de scores van de verschillende categorieën.";
+
+            } else {
+                document.getElementById("recalc").innerHTML = "Scores aan het herberekenen...";
+                document.getElementById("recalc").style.backgroundColor = "rgb(230, 158, 151)";
+                document.getElementById("recalc").style.borderColor = "rgb(230, 158, 151)";
+                document.getElementById("recalc").onclick = "alert('Scores worden herberekend, dit kan tot 8 uur duren.')";
+                document.getElementById("resultset").style.display = "none";
+            }
+
+        })
+}
+
+function herberekenScores() {
+    let confirmation = confirm("Scores worden kan tot 8 uur duren.", "Herbereken scores", "Annuleer");
+    if (confirmation) {
+
+        document.getElementById("recalc").innerHTML = "Scores aan het herberekenen...";
+        document.getElementById("recalc").style.backgroundColor = "rgb(230, 158, 151)";
+        document.getElementById("recalc").style.borderColor = "rgb(230, 158, 151)";
+        document.getElementById("resultset").style.display = "none";
+        fetch(`http://vichogent.be:40046/api/recalculate/DikkeBerta`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                window.location.reload();
+                alert("Scores zijn herberekend.")
+                
+            })
+    } else {
+        console.log("not confirmed");
+    }
+}
+
+
 function enterkeylistner() {
     document.getElementById("newword").addEventListener("keyup", (event) => {
         if (event.key === "Enter") {
@@ -126,6 +168,7 @@ function init () {
     getCategories();
     checkSession();
     enterkeylistner();
+    checkScores();
 }
 
 window.onload = init;
