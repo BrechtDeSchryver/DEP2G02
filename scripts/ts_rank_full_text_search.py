@@ -7,9 +7,9 @@ import json
 
 #tekst bestand met dictionary van keywords vertaalt naar engels
 # path_txt_keywords_eng = r'C:\Users\manuv\Documents\School\DEP2\OudProjectTeam\DEP2G02\data\keywords_eng.txt'# vertaalde keywords van nederlands naar engels -> Eerst vertaal_keywords.py uitvoeren
-# path_kmos_nl_en = r'C:\Users\manuv\Documents\School\DEP2\OudProjectTeam\DEP2G02\data\kmos_lang.txt'# Alle kmo_ids in het nederlands en engels -> Voer eerst detect_lang.py, dan get_nl_eng_kmo_ids.py uit
+# path_kmos_nl_en = r'C:\Users\manuv\Documents\School\DEP2\OudProjectTeam\DEP2G02\data\kmos_lang.txt'# Alle kmo_ids in het nederlands en engels -> Voer detect_lang.py uit
 N_afstand = 10
-DOCS = ['ts_jaarrekening','ts_website']
+DOCS = ['ts_website','ts_jaarrekening']
 LANGUAGES = ['dutch','english']
 
 pg_engine = get_database()
@@ -131,29 +131,28 @@ def main(path_txt_keywords_eng,path_kmos_nl_en):
     
     for type_docu in DOCS:
         for lang in LANGUAGES:
+            if lang == 'english':# In het engels andere ts_vector document in databank gebruiken en engelse keywords gebruiken
+                type_docu+='_eng'
             print(f'START {lang} : {type_docu}')
             #Loop over elke kmo van specifieke language en specifieke document(website,jaarrekening) en dan over elke subdomein en bepaal subdomainscore.
-            for kmo_id in kmos_met_data[type_docu.replace('ts_','')][lang]:
+            for kmo_id in kmos_met_data[type_docu.replace('ts_','').replace('_eng','')][lang]:
                 start = datetime.now()
                 print(f'KMO({kmo_id}) bezig : {round(teller/count_kmo_ids,4)*100}%')
                 for domain in keywords.keys():
                     for subdomain in keywords[domain].keys():
                         #subdomain score is de optelling van de scores van de 2 documenten
                         score = 0
-                        words = keywords[domain][subdomain]
-                        if lang == 'english':# In het engels andere ts_vector document in databank gebruiken en engelse keywords gebruiken
-                            type_docu+='_eng'
-                            words = keywords_eng[domain][subdomain]
+                        words = keywords_eng[domain][subdomain] if lang == 'english' else keywords[domain][subdomain]
                         query = f'SELECT ts_rank({type_docu},queri) as rank FROM raw_data,to_tsquery(%s,%s) queri WHERE "ondernemingsNummer" = %s and queri @@ {type_docu};'
                         words_query = get_query_keywords(words,kmo_id,type_docu)
                         args = (lang,words_query,kmo_id)
                         res=pg_engine.execute(query,args).all()
                         if len(res) > 0:
                             score = float(res[0][0])
-                        if not score == 0: print(f'{subdomain} : {score} : ID {id}')
 
                         if kmo_id in som_score_kmos.keys():
-                            insert_subdomain_score(kmo_id,score+som_score_kmos[kmo_id],subdomain,id)
+                            # insert_subdomain_score(kmo_id,score+som_score_kmos[kmo_id],subdomain,id)
+                            if not score == 0: print(f'{subdomain} : {score} : ID {id}')
                         else:
                             som_score_kmos[kmo_id] = score 
                         id+=1
