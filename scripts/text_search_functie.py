@@ -10,8 +10,8 @@ import calculate_scores
 import calculate_kmoscores
 import ts_rank_full_text_search
 
-PATH_KEYWORDS_ENG = r'C:\Users\manuv\Documents\School\test\DEP2G02\data\keywords_eng.txt'
-PATH_KMO_LANGS = r'C:\Users\manuv\Documents\School\test\DEP2G02\data\kmo_langs.txt'
+PATH_KEYWORDS_ENG = r'/root/DEP2G02/data/keywords_eng.txt'
+PATH_KMO_LANGS = r'/root/DEP2G02/data/kmo_langs.txt'
 
 pg_engine = get_database()
 

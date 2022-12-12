@@ -1,7 +1,7 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 #from sqlfunctions import select_passwordhashes
-#from text_search_functie import fill_tables_with_score
+from text_search_functie import fill_tables_with_score
 import json
 import time
 app = Flask(__name__)
@@ -20,8 +20,8 @@ def get_posts(code):
     if code=="DikkeBerta":
       if running!="running":
           running="running"
-          test()
-          #fill_tables_with_score()
+          #test()
+          fill_tables_with_score()
           running="done"
     x = {"status" : running}
     return json.dumps(x)
