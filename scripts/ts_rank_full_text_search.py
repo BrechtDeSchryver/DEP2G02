@@ -151,7 +151,7 @@ def main(path_txt_keywords_eng,path_kmos_nl_en):
                             score = float(res[0][0])
 
                         if kmo_id in som_score_kmos.keys():
-                            # insert_subdomain_score(kmo_id,score+som_score_kmos[kmo_id],subdomain,id)
+                            insert_subdomain_score(kmo_id,score+som_score_kmos[kmo_id],subdomain,id)
                             if not score == 0: print(f'{subdomain} : {score} : ID {id}')
                         else:
                             som_score_kmos[kmo_id] = score 

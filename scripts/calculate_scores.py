@@ -50,27 +50,24 @@ def main():
     keywords = get_all_keywords_by_domains()
     id = get_laatste_id_score()+1
     res = pg_engine.execute('SELECT score,subdomain,\"ondernemingsNummer\" FROM subdomain_score ORDER BY \"ID\"').all()
-    if len(res) == 0:
-        print('subdomain_score table is empty')
-    else:
-        domain_score = 0
-        vorig_domain = 'Environment'
-        teller = 0
-        for row in res:
-            print(f'{round(teller/len(res),4)*100}%')
-            sub_score, subdomain, kmo_id = float(row[0]),row[1],row[2]
+    domain_score = 0
+    vorig_domain = 'Environment'
+    teller = 0
+    for row in res:
+        print(f'{round(teller/len(res),4)*100}%')
+        sub_score, subdomain, kmo_id = float(row[0]),row[1],row[2]
 
-            domain = get_domain_from_subdomain(subdomain,keywords)
+        domain = get_domain_from_subdomain(subdomain,keywords)
 
-            if not domain == vorig_domain:
-                domain_score = domain_score/len(keywords[domain])# domain_score is de som van alle subdomain_scores en dan delen door het aantal subdomeinen van het domein. ~ Gemiddelde van de subdomeinscores
-                insert_kmo_into_score(id,domain_score,vorig_domain,kmo_id)
-                print(f'{kmo_id} : {vorig_domain} {domain_score} : ID {id}')
-                id+=1
-                domain_score = 0
-            domain_score+=sub_score
-            vorig_domain = domain
-            
-            teller+=1
+        if not domain == vorig_domain:
+            domain_score = domain_score/len(keywords[domain])# domain_score is de som van alle subdomain_scores en dan delen door het aantal subdomeinen van het domein. ~ Gemiddelde van de subdomeinscores
+            insert_kmo_into_score(id,domain_score,vorig_domain,kmo_id)
+            print(f'{kmo_id} : {vorig_domain} {domain_score} : ID {id}')
+            id+=1
+            domain_score = 0
+        domain_score+=sub_score
+        vorig_domain = domain
+        
+        teller+=1
 
 # main()

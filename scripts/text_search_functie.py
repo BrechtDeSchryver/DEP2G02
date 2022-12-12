@@ -54,7 +54,7 @@ def fill_tables_with_score():
 
     # Executing script to fill score
     try:
-        empty_table('subdomain_score')
+        empty_table('score')
         print('Executing calculate_scores.py ......')
         calculate_scores.main()
     except:
