@@ -124,19 +124,22 @@ function checkScores() {
 
             } else {
                 document.getElementById("recalc").innerHTML = "Scores aan het herberekenen...";
+                document.getElementById("loadingscreen").style.display = "block";
                 document.getElementById("recalc").style.backgroundColor = "rgb(230, 158, 151)";
                 document.getElementById("recalc").style.borderColor = "rgb(230, 158, 151)";
-                document.getElementById("recalc").onclick = "alert('Scores worden herberekend, dit kan tot 8 uur duren.')";
+                document.getElementById("recalc").onclick = "alert('Scores worden herberekend, dit kan een paar minuten duren.')";
                 document.getElementById("resultset").style.display = "none";
+                realoadWhenDone();
+                console.log("recalculating");
             }
 
         })
 }
 
 function herberekenScores() {
-    let confirmation = confirm("Scores worden kan tot 8 uur duren.", "Herbereken scores", "Annuleer");
-    if (confirmation) {
-
+    let confirmation = confirm("Scores worden herberekend, dit kan een paar minuten duren.", "Herbereken scores", "Annuleer");
+        if (confirmation) {
+        document.getElementById("loadingscreen").style.display = "block"
         document.getElementById("recalc").innerHTML = "Scores aan het herberekenen...";
         document.getElementById("recalc").style.backgroundColor = "rgb(230, 158, 151)";
         document.getElementById("recalc").style.borderColor = "rgb(230, 158, 151)";
@@ -145,13 +148,28 @@ function herberekenScores() {
             .then(response => response.json())
             .then(data => {
                 console.log(data);
+                document.getElementById("loadingscreen").style.display = "none";
                 window.location.reload();
                 alert("Scores zijn herberekend.")
                 
             })
     } else {
         console.log("not confirmed");
+        document.getElementById("loadingscreen").style.display = "none";
     }
+}
+
+function realoadWhenDone() {
+    fetch(`http://vichogent.be:40046/api/status`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.status == "done") {
+                window.location.reload();
+                console.log("Recalculation done");
+            } else {
+                setTimeout(realoadWhenDone, 1000);
+            }
+        })
 }
 
 
@@ -169,6 +187,8 @@ function init () {
     checkSession();
     enterkeylistner();
     checkScores();
+    document.getElementById("loadingscreen").style.display = "none"
+
 }
 
 window.onload = init;
