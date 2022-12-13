@@ -21,7 +21,7 @@ def predcit(Omzet,personeel,postcode,sector,jaarrekening,beursgenoteerd):
     score=0
     #hier moet de predict komen en uitkomst stop je in score
     print(Omzet,personeel,postcode,sector,jaarrekening,beursgenoteerd)
-    x = {"test" : score}
+    x = {"score" : score}
     return json.dumps(x)
 @app.route("/api/recalculate/<code>",methods=['GET'])
 def get_posts(code):
@@ -49,4 +49,4 @@ def uptime():
   x = {"status" : "online"}
   return json.dumps(x)
 
-app.run(host='127.0.0.1', debug=True, port=6969)
+app.run(host='0.0.0.0', debug=True, port=8080)
