@@ -16,6 +16,9 @@
         <loc>/login.html</loc>
     </url>
     <url>
+        <loc>/predict.html</loc>
+    </url>
+    <url>
         <loc>/search.html</loc>
     </url>
     <url>

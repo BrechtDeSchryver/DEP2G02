@@ -55,13 +55,14 @@
   border-radius: 50%;
 }
 
+/* make .nondragable class images not dragable by the user */
+
 .nondragable {
-  user-drag: none;
-  user-select: none;
-  -moz-user-select: none;
-  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
   -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
   -ms-user-select: none;
-  pointer-events: none;
+  user-select: none;
 }
 

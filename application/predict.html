@@ -5,7 +5,7 @@
     <meta charset="utf-8">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Sector - Data Engineering Project</title>
+    <title>Voorspellen - Data Engineering Project</title>
     <meta name="theme-color" content="rgb(89,182,195)">
     <meta name="twitter:description" content="Het Data Engineering Project van groep 2!">
     <meta name="description" content="Het Data Engineering Project II van groep 2!">
@@ -38,9 +38,10 @@
                 <hr class="sidebar-divider my-0">
                 <ul class="navbar-nav text-light" id="accordionSidebar">
                     <li class="nav-item"><a class="nav-link" href="index.html"><i class="fa fa-home"></i><span>Home</span></a></li>
-                    <li class="nav-item"><a class="nav-link active" href="sectoren.html"><i class="fa fa-bar-chart"></i><span>Sectoren</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="predict.html"><i class="fa fa-calculator"></i><span>Predict</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="sectoren.html"><i class="fa fa-bar-chart"></i><span>Sectoren</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#"><i class="fa fa-calculator"></i><span>Predict</span></a></li>
                     <li class="nav-item" id="navconfig"><a class="nav-link" href="config.html"><i class="fa fa-gears"></i><span>Configuratie</span></a></li>
+                    <li class="nav-item"></li>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
             </div>
@@ -48,12 +49,19 @@
         <div class="d-flex flex-column" id="content-wrapper">
             <div id="content">
                 <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
-                    <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button><a class="btn btn-primary" role="button" id="comparebtn" style="background: rgb(89,182,195);border-color: rgb(89,182,195);display:none" href="compare.html">Button</a>
+                    <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
                         <ul class="navbar-nav flex-nowrap ms-auto">
                             <li class="nav-item dropdown no-arrow mx-1">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" id="alert" href="#"><span class="badge bg-danger badge-counter" id="badge" style="display:none">1</span><i class="fas fa-balance-scale fa-fw" style="font-size: 20px;"></i></a>
-                                    <div class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in" id="comparemenu">
-                                        <h6 class="dropdown-header" style="background: rgb(89,182,195);border-width: 1px;border-color: rgb(89,182,195);">Vergelijken</h6>
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" id="alert" href="#"><i class="fas fa-bell fa-fw"></i></a>
+                                    <div class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
+                                        <h6 class="dropdown-header" style="background: rgb(89,182,195);border-width: 1px;border-color: rgb(89,182,195);">Meldingen</h6><a class="dropdown-item d-flex align-items-center" href="#" style="border-radius: 0px;border-bottom-left-radius: 6px;border-bottom-right-radius: 6px;">
+                                            <div class="me-3">
+                                                <div class="bg-warning icon-circle"><i class="fas fa-exclamation-triangle text-white"></i></div>
+                                            </div>
+                                            <div><span class="small text-gray-500">3/10/2022</span>
+                                                <p>Dit is een testomgeving!</p>
+                                            </div>
+                                        </a>
                                     </div>
                                 </div>
                             </li>
@@ -66,61 +74,48 @@
                     </div>
                 </nav>
                 <div class="container-fluid" id="resultset">
-                    <div class="d-sm-flex justify-content-between align-items-center align-items-lg-start mb-4">
-                        <h3 class="text-dark mb-0" id="naam" style="font-weight: bold;">&nbsp;</h3>
-                        <div>
-                            <p>Bedrijven:&nbsp;<span id="aantal">&nbsp;</span></p><a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" id="sectordetailsbtn" href="#" style="background: rgb(89,182,195);border-color: rgb(89,182,195);" title="Details van deze sector"><i class="fas fa-search fa-sm text-white-50"></i>&nbsp;Sector Details</a>
-                        </div>
+                    <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                        <h3 class="text-dark mb-0" id="naam" style="font-weight: bold;">Voorspel score</h3>
                     </div>
                     <div class="card shadow">
                         <div class="card-header py-3">
-                            <p class="text-primary m-0 fw-bold noselect" style="color: rgb(89,182,195) !important;">Bedrijven</p>
+                            <p class="text-primary m-0 fw-bold noselect" style="color: rgb(89,182,195) !important;">Rekenmachine</p>
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-6 text-nowrap"></div>
-                                <div class="col-md-6"></div>
+                                <div class="col d-flex flex-column"><label class="form-label noselect" style="font-weight: bold;font-size: 18px;">Omzet</label><input class="bg-light border-0 small" type="text" id="omzet" placeholder="Omzet in euro..." style="max-width: 400px;border-radius: 4px;" autocomplete="off" autofill="off" name="input"></div>
+                                <div class="col d-flex flex-column"><label class="form-label noselect" style="font-weight: bold;font-size: 18px;">Personeel</label><input class="bg-light border-0 small" type="text" id="personeel" placeholder="Hoeveelheid personeel..." style="max-width: 400px;border-radius: 4px;" autocomplete="off" autofill="off" name="input" inputmode="numeric"></div>
+                                <div class="col d-flex flex-column"><label class="form-label noselect" style="font-weight: bold;font-size: 18px;">Postcode</label><input class="bg-light border-0 small" type="text" id="postcode" placeholder="Postcode..." style="max-width: 400px;border-radius: 4px;" autocomplete="off" autofill="off" name="input" inputmode="numeric" maxlength="4"></div>
                             </div>
-                            <div class="table-responsive table mt-2" id="dataTable-1" role="grid" aria-describedby="dataTable_info">
-                                <table class="table my-0" id="dataTable">
-                                    <thead>
-                                        <tr>
-                                            <th id="namefield" class="noselect" style="cursor: pointer;">Naam<i class="fas fa-sort-down" id="namefieldarrow"></i></th>
-                                            <th class="text-end noselect" id="employeesfield" style="cursor: pointer;">Personeel<i class="fas fa-sort-down" id="employeesfieldarrow"></i></th>
-                                            <th class="text-end noselect" id="turnoverfield" style="cursor: pointer;">Omzet<i class="fas fa-sort-down" id="turnoverfieldarrow"></i></th>
-                                            <th class="text-center noselect" id="stocksfield" style="cursor: pointer;">Beursnotatie<i class="fas fa-sort-down" id="stocksfieldarrow"></i></th>
-                                            <th class="text-end noselect" id="scorefield" style="cursor: pointer;">Score<i class="fas fa-sort-down" id="scorefieldarrow"></i></th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="bedrijventbl">
-                                        <tr>
-                                            <td id="bedrijfnaam" title="${data[i].ondernemingsNummer}">Bedrijf</td>
-                                            <td id="personeel">0</td>
-                                            <td class="text-end" id="omzet">0</td>
-                                            <td id="beurs"><i class="fas fa-check"></i></td>
-                                            <td id="score">0</td>
-                                            <td><a class="btn btn-sm morebtn" role="button" id="detailsbtn" href="#" style="background: rgb(89,182,195);color: rgb(255,255,255);">Details</a></td>
-                                        </tr>
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td class="noselect"><strong>Naam<br></strong></td>
-                                            <td class="text-end noselect"><strong>Personeel</strong></td>
-                                            <td class="text-end noselect"><strong>Omzet</strong></td>
-                                            <td class="text-center noselect"><strong>Beursnotatie</strong></td>
-                                            <td class="text-end noselect"><strong>Score</strong></td>
-                                            <td><strong></strong></td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
+                            <div class="row" style="margin-top: 10px;">
+                                <div class="col d-flex flex-column" id="sectorcol"><label class="form-label noselect" style="font-weight: bold;font-size: 18px;">Sector</label><input class="bg-light border-0 small" type="text" id="nacebel" placeholder="Nacebel code..." style="max-width: 400px;border-radius: 4px;" autocomplete="off" autofill="off" name="input" inputmode="numeric" maxlength="5" minlength="5"></div>
+                                <div class="col d-flex flex-column"><label class="form-label noselect" style="font-weight: bold;font-size: 18px;">Jaarrekening aanwezig</label><label class="toggler-wrapper style-12">
+    <input id="jaarrekening" type="checkbox" >
+    <div class="toggler-slider">
+      <div class="toggler-knob"></div>
+    </div>
+  </label></div>
+                                <div class="col d-flex flex-column"><label class="form-label noselect" style="font-weight: bold;font-size: 18px;">Beursgenoteerd</label><label class="toggler-wrapper style-12">
+    <input id="beurs" type="checkbox" >
+    <div class="toggler-slider">
+      <div class="toggler-knob"></div>
+    </div>
+  </label></div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-6 align-self-center">
-                                    <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">0 resultaten</p>
-                                </div>
-                            </div>
+                            <div class="d-flex justify-content-center" style="margin-top: 20px;"><button class="btn btn-primary" id="submitbtn" type="button" style="background: rgb(89,182,195);border-color: rgb(89,182,195);">Bereken</button></div>
                         </div>
+                    </div>
+                </div>
+                <div class="container d-flex justify-content-center" style="margin-top: 25px;">
+                    <div class="card" id="result" style="width: 50%; display:none;">
+                        <div class="card-body d-flex justify-content-center">
+                            <h3 class="text-muted card-subtitle mb-2" id="score">Score</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="container" id="loadingscreen" style="display:none">
+                    <div class="d-flex flex-column justify-content-center align-items-center"><img class="nondragable" src="assets/img/loading.gif" draggable="false" dragstart="false;">
+                        <p class="noselect" style="font-weight: bold;">Score voorspellen...</p>
                     </div>
                 </div>
             </div>
@@ -134,7 +129,7 @@
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/bs-init.js"></script>
     <script src="assets/js/acchandler.js"></script>
-    <script src="assets/js/bedrijvenlist.js"></script>
+    <script src="assets/js/predict.js"></script>
     <script src="assets/js/theme.js"></script>
 </body>
 
