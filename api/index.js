@@ -175,6 +175,14 @@ app.get("/sector", async (req, res) => {
   console.log("["+ db.getLocalTime(new Date()) + "] " + "Returned sectors to " + req.socket.remoteAddress);
 });
 
+/** Geef de gemiddelde score van een sector per subcategory */
+app.get("/sector/average", async (req, res) => {
+  let nacebelCode = req.query.sector;
+  let subdomains = await db.getAverageScoreFromSector(nacebelCode);
+  res.status(200).json({ subdomains });
+  console.log("["+ db.getLocalTime(new Date()) + "] " + "Returned average scores of sector " + nacebelCode + " to " + req.socket.remoteAddress);
+});
+
 /** Geeft de jaarrekening, de website en eventueel een duurzaamheidsrapport terug in json formaat na het ontvangen van een btw nummer. */
 
 /*

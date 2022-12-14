@@ -198,6 +198,17 @@ function getSectorName(nacebelcode) {
   return result;
 }
 
+function getAverageScoreFromSector(nacebelcode) {
+  // select avg(kmo.score) as "Gemiddelde", kmo."nacebelCode", s.subdomain from subdomain_score s join kmo ON kmo."ondernemingsNummer" = s."ondernemingsNummer" where kmo."nacebelCode" = '47112'group by kmo."nacebelCode", s.subdomain
+  let result = knex("subdomain_score")
+    .select("subdomain")
+    .join("kmo", "kmo.ondernemingsNummer", "=", "subdomain_score.ondernemingsNummer")
+    .avg("kmo.score")
+    .where("kmo.nacebelCode", nacebelcode)
+    .groupBy("kmo.nacebelCode", "subdomain");
+  return result;
+}
+
 module.exports = {
   getAll,
   getKmoByOndernemingsnummer,
@@ -215,6 +226,7 @@ module.exports = {
   getLocalTime,
   getSectors,
   getSector,
-  getSectorName
+  getSectorName,
+  getAverageScoreFromSector
 
 };
