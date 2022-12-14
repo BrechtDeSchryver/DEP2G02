@@ -36,6 +36,8 @@ function getFromBTW(btw) {
       document.getElementById("btwnum").innerHTML = data.bedrijven[0].ondernemingsNummer
       document.getElementById("werknemers").innerHTML = data.bedrijven[0].employees
       console.log(data.bedrijven[0].score);
+      if (data.bedrijven[0].score!= null){
+        loadscoregraph(data.bedrijven[0].score)}
       let score = data.bedrijven[0].score == null ? "Geen score" : data.bedrijven[0].score
       document.getElementById("score").innerHTML = `${score}`
       document.getElementById("pdflink").href = `https://consult.cbso.nbb.be/api/external/broker/public/deposits/pdf/${data.bedrijven[0].nbbID}`
@@ -90,6 +92,8 @@ function getFromNaam(naam) {
       document.getElementById("btwnum").innerHTML = data.bedrijven[0].ondernemingsNummer
       document.getElementById("werknemers").innerHTML = data.bedrijven[0].employees
       console.log(data.bedrijven[0].score);
+      if (data.bedrijven[0].score!= null){
+        loadscoregraph(data.bedrijven[0].score)}
       let score = data.bedrijven[0].score == null ? "Geen score" : data.bedrijven[0].score
       document.getElementById("score").innerHTML = `${score}`
 
@@ -236,6 +240,36 @@ if (beta != "seen") {
 
 
 
+
+
+function loadscoregraph(score) {
+  var ctxL = document.getElementById("lineChart").getContext('2d');
+var myLineChart = new Chart(ctxL, {
+  type: 'line',
+  data: {
+    labels: [2021],
+    datasets: [
+    {
+      label: "Score",
+      data: [score],
+      backgroundColor: [
+        'rgba(0, 137, 132, .2)',
+      ],
+      borderColor: [
+        'rgb(89, 182, 195, .7)',
+      ],
+      borderWidth: 3
+    }
+    ]
+  },
+  options: {
+    responsive: true
+  }
+});
+}
+
+
+
 /*function getJaarRekening(btw) {
   newbtw = btw.toLowerCase().replace("be", "")
   console.log(newbtw);
@@ -334,7 +368,6 @@ suggestOff();
   /*getSector(document.getElementById("searchbar").value);
   getJaarRekening(document.getElementById("searchbar").value);*/
   //getCodingTree(document.getElementById("searchbar").value);
-  
 }
 
 window.onload = init;
