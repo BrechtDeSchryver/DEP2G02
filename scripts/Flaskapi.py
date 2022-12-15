@@ -3,6 +3,7 @@ from flask_cors import CORS
 #from sqlfunctions import select_passwordhashes
 # from text_search_functie import fill_tables_with_score
 import pickle
+from ml_model import transform_data
 import json
 import time
 app = Flask(__name__)
@@ -19,18 +20,25 @@ def test():
 
 
 
-@app.route("/api/predict/Omzet=<Omzet>&personeel=<personeel>&sector=<sector>&jr=<jaarrekening>&pdf=<pdf>&beurs=<beursgenoteerd>", methods=['GET'])
-def predict(Omzet, personeel, postcode, sector, jaarrekening,pdf ,beursgenoteerd):
+@app.route("/api/predict/Omzet=<Omzet>&personeel=<personeel>&sector=<sector>&jr=<jaarrekening>&website=<website>&beurs=<beursgenoteerd>", methods=['GET'])
+def predict(Omzet, personeel, sector, jaarrekening, website, beursgenoteerd):
     # Omzet= omzetcijfer (int)
     # personeel= aantal personeelsleden (int)
     # postcode= postcode (4 char int)
     # sector= sectornacebel (5 char int)
     # jaarrekening= jaarrekening aanwezig (boolean)
     # beursgenoteerd= beursgenoteerd (boolean)
+
+    beursgenoteerd = 1 if beursgenoteerd == "true" else 0
+    website = 1 if website == "true" else 0
+    jaarrekening = 1 if jaarrekening == "true" else 0
+
+    data = [int(Omzet), bool(beursgenoteerd), sector, int(personeel), website, pdf]
+
     score = 0
     # hier moet de predict komen en uitkomst stop je in score
-    score = final_model.predict([[Omzet, personeel, postcode, sector, jaarrekening, pdf, beursgenoteerd]])
-    print(Omzet, personeel, postcode, sector, jaarrekening, beursgenoteerd)
+    # score = final_model.predict([[Omzet, personeel,  sector, jaarrekening, pdf, beursgenoteerd]])
+    # print(Omzet, personeel, sector, jaarrekening, beursgenoteerd)
     x = {"score": score}
     return json.dumps(x)
 
