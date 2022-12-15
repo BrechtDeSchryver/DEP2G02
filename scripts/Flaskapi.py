@@ -1,7 +1,7 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 #from sqlfunctions import select_passwordhashes
-from text_search_functie import fill_tables_with_score
+# from text_search_functie import fill_tables_with_score
 import pickle
 import json
 import time
@@ -15,12 +15,12 @@ def test():
     time.sleep(10)
 
 
-final_model = pickle.load(open('final_model.sav', 'rb'))
+# final_model = pickle.load(open('final_model.sav', 'rb'))
 
 
 
 @app.route("/api/predict/Omzet=<Omzet>&personeel=<personeel>&sector=<sector>&jr=<jaarrekening>&pdf=<pdf>&beurs=<beursgenoteerd>", methods=['GET'])
-def predict(Omzet, personeel, postcode, sector, jaarrekening, beursgenoteerd):
+def predict(Omzet, personeel, postcode, sector, jaarrekening,pdf ,beursgenoteerd):
     # Omzet= omzetcijfer (int)
     # personeel= aantal personeelsleden (int)
     # postcode= postcode (4 char int)
@@ -35,21 +35,21 @@ def predict(Omzet, personeel, postcode, sector, jaarrekening, beursgenoteerd):
     return json.dumps(x)
 
 
-@app.route("/api/recalculate/<code>", methods=['GET'])
-def get_posts(code):
-    global running
-    # sql=select_passwordhashes()
-    # hashes=[]
-    # for hash in sql:
-    # hashes.append(hash[0])
-    if code == "DikkeBerta":
-        if running != "running":
-            running = "running"
-            # test()
-            fill_tables_with_score()
-            running = "done"
-    x = {"status": running}
-    return json.dumps(x)
+# @app.route("/api/recalculate/<code>", methods=['GET'])
+# def get_posts(code):
+#     global running
+#     # sql=select_passwordhashes()
+#     # hashes=[]
+#     # for hash in sql:
+#     # hashes.append(hash[0])
+#     if code == "DikkeBerta":
+#         if running != "running":
+#             running = "running"
+#             # test()
+#             fill_tables_with_score()
+#             running = "done"
+#     x = {"status": running}
+#     return json.dumps(x)
 
 
 @app.route("/api/status", methods=['GET'])
