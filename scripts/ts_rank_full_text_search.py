@@ -107,6 +107,7 @@ def insert_subdomain_score(kmo_id,score,subdomain,id=None):
     if not id:
         id = get_laatste_id_subdomain_score()
         id+=1
+    score*=1000# voor mooiheid
     pg_engine.execute('INSERT INTO subdomain_score VALUES(%s,%s,%s,%s)',(id,score,subdomain,kmo_id))
 
 def main(path_txt_keywords_eng,path_kmos_nl_en):
