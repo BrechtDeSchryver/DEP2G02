@@ -3,7 +3,7 @@ from flask_cors import CORS
 #from sqlfunctions import select_passwordhashes
 # from text_search_functie import fill_tables_with_score
 import pickle
-from ml_model import transform_data
+from ml_model import transform_data, get_initial_dataframe
 import json
 import time
 app = Flask(__name__)
@@ -16,8 +16,7 @@ def test():
     time.sleep(10)
 
 
-# final_model = pickle.load(open('final_model.sav', 'rb'))
-
+final_model = pickle.load(open('scripts\\final_model.sav', 'rb'))
 
 
 @app.route("/api/predict/Omzet=<Omzet>&personeel=<personeel>&sector=<sector>&jr=<jaarrekening>&website=<website>&beurs=<beursgenoteerd>", methods=['GET'])
@@ -28,18 +27,28 @@ def predict(Omzet, personeel, sector, jaarrekening, website, beursgenoteerd):
     # sector= sectornacebel (5 char int)
     # jaarrekening= jaarrekening aanwezig (boolean)
     # beursgenoteerd= beursgenoteerd (boolean)
-
+    dataframe = get_initial_dataframe()
+    # TODO: sneller maken, hoeven niets telkens de volledige dataframe te laden
     beursgenoteerd = 1 if beursgenoteerd == "true" else 0
     website = 1 if website == "true" else 0
     jaarrekening = 1 if jaarrekening == "true" else 0
+    data = [int(Omzet), bool(beursgenoteerd), 'Vervaardiging van elektronische onderdelen',
+            int(personeel), website, jaarrekening]
+    # appendd values to dataframe
+    print(dataframe)
+    print(data)
+    dataframe.loc[len(dataframe)] = data
+    transformed_data = transform_data(dataframe)
+    # get last row
+    transformed_data = transformed_data.tail(1)
 
-    data = [int(Omzet), bool(beursgenoteerd), sector, int(personeel), website, pdf]
+    # get score
+    score = final_model.predict(transformed_data)
 
-    score = 0
     # hier moet de predict komen en uitkomst stop je in score
     # score = final_model.predict([[Omzet, personeel,  sector, jaarrekening, pdf, beursgenoteerd]])
     # print(Omzet, personeel, sector, jaarrekening, beursgenoteerd)
-    x = {"score": score}
+    x = {"score": float(score)}
     return json.dumps(x)
 
 

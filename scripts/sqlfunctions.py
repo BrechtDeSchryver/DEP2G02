@@ -260,7 +260,7 @@ def get_datapunten_voor_model(pg_conn=None):
     pg_conn = get_database()
     result = pg_conn.execute("""
         select rd."ondernemingsNummer",f.turnover as omzet, f.beursgenoteerd, k."sector_ID" as sector, e.total as total_employees, \
-        a.capital_city, CASE WHEN rd.website = '' or rd.website is null THEN 0 ELSE 1 END AS site_aanwezig, \
+        CASE WHEN rd.website = '' or rd.website is null THEN 0 ELSE 1 END AS site_aanwezig, \
         case when rd.jaarrekening = '' or rd.jaarrekening is null then 0 else 1 end as pdf_aanwezig, s.score as total_score \
         from raw_data rd  \
         join adress a on a."ondernemingsNummer"=rd."ondernemingsNummer" \
