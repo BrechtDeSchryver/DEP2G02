@@ -64,7 +64,6 @@ def main():
 
             if not domain == vorig_domain:
                 domain_score = domain_score/len(keywords[domain])# domain_score is de som van alle subdomain_scores en dan delen door het aantal subdomeinen van het domein. ~ Gemiddelde van de subdomeinscores
-                domain_score*=1000# voor mooiheid
                 insert_kmo_into_score(id,domain_score,vorig_domain,kmo_id)
                 print(f'{kmo_id} : {vorig_domain} {domain_score} : ID {id}')
                 id+=1
