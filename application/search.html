@@ -94,7 +94,7 @@
                     </div>
                     <div class="d-flex justify-content-between">
                         <h6 id="btwnum"></h6>
-                        <h6 id="framework"></h6>
+                        <h6 id="nacebel"></h6>
                     </div>
                     <h6 id="sector">[Sector]</h6>
                     <h6 id="sectordetail"></h6>
@@ -161,9 +161,9 @@
                             <div class="card shadow mb-4">
                                 <div class="card-header d-flex justify-content-between py-3" style="max-height: 48px;">
                                     <h6 class="fw-bold m-0 noselect" style="color: rgb(89,182,195);">Score evolutie</h6>
-                                </div><canvas id="lineChart"></canvas>
-
-                                <div class="card-body" id="scorechart"></div>
+                                </div>
+                                <div class="card-body" id="scorechart"><canvas id="lineChart"></canvas>
+</div>
                             </div>
                         </div>
                         <div class="col-lg-6 mb-4">
@@ -172,6 +172,100 @@
                                     <h6 class="fw-bold m-0 noselect" style="color: rgb(89,182,195);">Menselijk Kapitaal</h6>
                                 </div>
                                 <div class="card-body"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="card shadow mb-4">
+                                <div class="card-header d-flex justify-content-between py-3" style="max-height: 48px;">
+                                    <h6 class="fw-bold m-0 noselect" style="color: rgb(89,182,195);">Score vs gemiddelde sector score</h6>
+                                </div>
+                                <div class="card-body"><div>
+    <canvas id="myChart"></canvas>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <script>
+
+    const ctx = document.getElementById('myChart');
+
+    function getBedrijfScore() {  
+      fetch(`http://localhost:8080/bedrijf/scores/${localStorage.getItem('btwnum')}`)
+        .then(response => response.json())
+        .then(data => {
+            // save scores in localstorage
+            localStorage.setItem('scores', JSON.stringify(data.scores));
+        });
+    }
+
+    function getScores() {  
+      fetch(`http://localhost:8080/sector/average?sector=${localStorage.getItem('nacebel')}`)
+        .then(response => response.json())
+        .then(data => {
+
+            // get scores from localstorage
+            let kmoscores = JSON.parse(localStorage.getItem('scores'));
+            let kmoscorearray = [];
+            kmoscores.forEach(score => {
+                kmoscorearray.push(score.score);
+            });
+
+            console.log(kmoscorearray);
+          let subdomains = [];
+        let scores = [];
+        let color = [];
+            data.subdomains.forEach(subdomain => {
+                subdomains.push(subdomain.subdomain);
+                scores.push(subdomain.avg);
+            });
+            let graphscores = [];
+            for (let i = 0; i < kmoscorearray.length; i++) {
+                graphscores.push(kmoscorearray[i] - scores[i]);
+            }
+            console.log(graphscores);
+            let colors = [];
+            graphscores.forEach(score => {
+                if (score < 0) {
+                    colors.push('rgba(255, 99, 132, 0.7)');
+                } else {
+                    colors.push('rgba(75, 192, 192, 0.7)');
+                }
+            });
+
+            new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: subdomains,
+        datasets: [{
+          label: 'Scores',
+          data: graphscores,
+          backgroundColor: colors,
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+        
+
+
+});
+
+    }
+    // 5 seconds delay
+    setTimeout(function() {
+      getBedrijfScore();
+      getScores();
+    }, 2000);
+  </script></div>
                             </div>
                         </div>
                     </div>
