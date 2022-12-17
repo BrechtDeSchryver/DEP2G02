@@ -91,6 +91,22 @@ def get_all_keywords_by_domains():
 
     return dict_domains
 
+#Returnt true als kmo alleen een website of alleen een jaarrekening heeft
+def kmo_is_lonely(kmo_id,type_docu,lang,kmos_met_data):
+    type_docu = type_docu.replace('ts_','').replace('_eng','')
+    if type_docu == 'website':
+        if kmo_id in kmos_met_data['jaarrekening']['dutch']:
+            return False
+        elif kmo_id in kmos_met_data['jaarrekening']['english']:
+            return False
+    elif type_docu == 'jaarrekening':
+        if kmo_id in kmos_met_data['website']['dutch']:
+            return False
+        elif kmo_id in kmos_met_data['website']['english']:
+            return False
+
+    return True
+
 #Laatste ID van tabel subdomain_score
 def get_laatste_id_subdomain_score():
     res = pg_engine.execute('SELECT * FROM subdomain_score ORDER BY "ID" desc fetch first 1 rows only').all()
@@ -138,6 +154,7 @@ def main(path_txt_keywords_eng,path_kmos_nl_en):
             #Loop over elke kmo van specifieke language en specifieke document(website,jaarrekening) en dan over elke subdomein en bepaal subdomainscore.
             for kmo_id in kmos_met_data[type_docu.replace('ts_','').replace('_eng','')][lang]:
                 start = datetime.now()
+                lonely_kmo = kmo_is_lonely(kmo_id,type_docu,lang,kmos_met_data)
                 print(f'KMO({kmo_id}) bezig : {round(teller/count_kmo_ids,4)*100}%')
                 for domain in keywords.keys():
                     for subdomain in keywords[domain].keys():
@@ -151,11 +168,13 @@ def main(path_txt_keywords_eng,path_kmos_nl_en):
                         if len(res) > 0:
                             score = float(res[0][0])
 
-                        if kmo_id in som_score_kmos.keys():
-                            insert_subdomain_score(kmo_id,score+som_score_kmos[kmo_id],subdomain,id)
+                        
+                        trash = kmo_id+subdomain
+                        if trash in som_score_kmos.keys() or lonely_kmo:
+                            insert_subdomain_score(kmo_id,score+som_score_kmos[trash],subdomain,id)
                             if not score == 0: print(f'{subdomain} : {score} : ID {id}')
                         else:
-                            som_score_kmos[kmo_id] = score 
+                            som_score_kmos[trash] = score 
                         id+=1
                 teller+=1
                 end = datetime.now()
