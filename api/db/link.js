@@ -203,11 +203,24 @@ function getAverageScoreFromSector(nacebelcode) {
   let result = knex("subdomain_score")
     .select("subdomain")
     .join("kmo", "kmo.ondernemingsNummer", "=", "subdomain_score.ondernemingsNummer")
-    .avg("kmo.score")
+    .avg("subdomain_score.score")
     .where("kmo.nacebelCode", nacebelcode)
-    .groupBy("kmo.nacebelCode", "subdomain");
+    .groupBy("kmo.nacebelCode", "subdomain")
+    .orderBy("subdomain", "asc");
+
   return result;
 }
+
+function getScoreFromKmo(ondernemingsNummer) {
+  //select score from subdomain_score where "ondernemingsNummer" = '0474964260' order by subdomain ASC;
+  let result = knex("subdomain_score")
+    .select("score")
+    .where("ondernemingsNummer", ondernemingsNummer)
+    .orderBy("subdomain", "asc");
+  return result;
+}
+
+
 
 module.exports = {
   getAll,
@@ -227,6 +240,7 @@ module.exports = {
   getSectors,
   getSector,
   getSectorName,
-  getAverageScoreFromSector
+  getAverageScoreFromSector,
+  getScoreFromKmo
 
 };

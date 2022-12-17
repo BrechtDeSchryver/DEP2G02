@@ -34,7 +34,10 @@ function getFromBTW(btw) {
       console.log(data.bedrijven[0].name);
       document.getElementById("naam").innerHTML = data.bedrijven[0].name
       document.getElementById("btwnum").innerHTML = data.bedrijven[0].ondernemingsNummer
+      localStorage.setItem("btwnum", data.bedrijven[0].ondernemingsNummer)
       document.getElementById("werknemers").innerHTML = data.bedrijven[0].employees
+      document.getElementById("nacebel").innerHTML = data.bedrijven[0].nacebelCode
+      localStorage.setItem("nacebel", data.bedrijven[0].nacebelCode)
       console.log(data.bedrijven[0].score);
       if (data.bedrijven[0].score!= null){
         loadscoregraph(data.bedrijven[0].score)}
@@ -88,7 +91,10 @@ function getFromNaam(naam) {
       let mapsadress = data.bedrijven[0].street.replace(" ", "+")
       console.log(data.bedrijven[0].name);
       document.getElementById("naam").innerHTML = data.bedrijven[0].name
+      document.getElementById("nacebel").innerHTML = data.bedrijven[0].nacebelCode
       document.getElementById("sector").innerHTML = data.bedrijven[0].sector
+      localStorage.setItem("nacebel", data.bedrijven[0].nacebelCode)
+      localStorage.setItem("btwnum", data.bedrijven[0].ondernemingsNummer)
       document.getElementById("btwnum").innerHTML = data.bedrijven[0].ondernemingsNummer
       document.getElementById("werknemers").innerHTML = data.bedrijven[0].employees
       console.log(data.bedrijven[0].score);
@@ -333,8 +339,7 @@ function numberWithCommas(x) {
  * zet een listner op je toetsenbord en detecteerd het intypen van letters of een enter
  */
 function init() {
-suggestOff();
-  try{
+suggestOff();  try{
     const vars = getUrlVars();
     if(vars.btw != undefined){
 

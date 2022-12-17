@@ -183,6 +183,14 @@ app.get("/sector/average", async (req, res) => {
   console.log("["+ db.getLocalTime(new Date()) + "] " + "Returned average scores of sector " + nacebelCode + " to " + req.socket.remoteAddress);
 });
 
+app.get("/bedrijf/scores/:nummer", async (req, res) => {
+  let btw = req.params.nummer;
+  let scores = await db.getScoreFromKmo(btw);
+  res.status(200).json({ scores });
+  console.log("["+ db.getLocalTime(new Date()) + "] " + "Returned scores of company " + btw + " to " + req.socket.remoteAddress);
+  
+});
+
 /** Geeft de jaarrekening, de website en eventueel een duurzaamheidsrapport terug in json formaat na het ontvangen van een btw nummer. */
 
 /*

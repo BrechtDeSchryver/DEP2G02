@@ -85,10 +85,12 @@
                             <div class="row">
                                 <div class="col d-flex flex-column"><label class="form-label noselect" style="font-weight: bold;font-size: 18px;">Omzet</label><input class="bg-light border-0 small" type="text" id="omzet" placeholder="Omzet in euro..." style="max-width: 400px;border-radius: 4px;" autocomplete="off" autofill="off" name="input"></div>
                                 <div class="col d-flex flex-column"><label class="form-label noselect" style="font-weight: bold;font-size: 18px;">Personeel</label><input class="bg-light border-0 small" type="text" id="personeel" placeholder="Hoeveelheid personeel..." style="max-width: 400px;border-radius: 4px;" autocomplete="off" autofill="off" name="input" inputmode="numeric"></div>
-                                <div class="col d-flex flex-column"><label class="form-label noselect" style="font-weight: bold;font-size: 18px;">Postcode</label><input class="bg-light border-0 small" type="text" id="postcode" placeholder="Postcode..." style="max-width: 400px;border-radius: 4px;" autocomplete="off" autofill="off" name="input" inputmode="numeric" maxlength="4"></div>
                             </div>
                             <div class="row" style="margin-top: 10px;">
                                 <div class="col d-flex flex-column" id="sectorcol"><label class="form-label noselect" style="font-weight: bold;font-size: 18px;">Sector</label><input class="bg-light border-0 small" type="text" id="nacebel" placeholder="Nacebel code..." style="max-width: 400px;border-radius: 4px;" autocomplete="off" autofill="off" name="input" inputmode="numeric" maxlength="5" minlength="5"></div>
+                                <div class="col d-flex flex-column"><label class="form-label noselect" style="font-weight: bold;font-size: 18px;">Postcode</label><input class="bg-light border-0 small" type="text" id="postcode" placeholder="Postcode..." style="max-width: 400px;border-radius: 4px;" autocomplete="off" autofill="off" name="input" inputmode="numeric" maxlength="4"></div>
+                            </div>
+                            <div class="row" style="margin-top: 10px;">
                                 <div class="col d-flex flex-column"><label class="form-label noselect" style="font-weight: bold;font-size: 18px;">Jaarrekening aanwezig</label><label class="toggler-wrapper style-12">
     <input id="jaarrekening" type="checkbox" >
     <div class="toggler-slider">
@@ -97,6 +99,12 @@
   </label></div>
                                 <div class="col d-flex flex-column"><label class="form-label noselect" style="font-weight: bold;font-size: 18px;">Beursgenoteerd</label><label class="toggler-wrapper style-12">
     <input id="beurs" type="checkbox" >
+    <div class="toggler-slider">
+      <div class="toggler-knob"></div>
+    </div>
+  </label></div>
+                                <div class="col d-flex flex-column"><label class="form-label noselect" style="font-weight: bold;font-size: 18px;">Website aanwezig</label><label class="toggler-wrapper style-12">
+    <input id="website" type="checkbox" >
     <div class="toggler-slider">
       <div class="toggler-knob"></div>
     </div>
