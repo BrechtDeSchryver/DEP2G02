@@ -598,3 +598,15 @@ def select_passwordhashes(pg_conn=None):
     if connaanwezig == False:
         pg_conn.close()
     return results.all()
+def insert_lat_long(postcode, lat, long, pg_conn=None):
+    # connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig = False
+    else:
+        connaanwezig = True
+    # insert functie
+    pg_conn.execute('UPDATE municipality set "lat"=%s, "long"=%s where "zipcode"=%s;',
+                    (lat, long, postcode))
+    if connaanwezig == False:
+        pg_conn.close()

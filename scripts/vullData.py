@@ -1,7 +1,7 @@
 import csv
 import sys
 from nbb import get_id_onderneming
-from sqlfunctions import insert_municipality,insert_stedelijkheidsklasse,insert_adress,insert_personeel,insert_sector,insert_kmo_sector,select_ondernemingsnummers,getRawPDF,insert_omzet,insert_balanstotaal
+from sqlfunctions import insert_municipality,insert_stedelijkheidsklasse,insert_adress,insert_personeel,insert_sector,insert_kmo_sector,select_ondernemingsnummers,getRawPDF,insert_omzet,insert_balanstotaal,insert_lat_long
 from connectie import get_database
 import time
 
@@ -31,7 +31,17 @@ def insert_csvData():
         # nbb_id = get_id_onderneming(btw)
 
         conn.close()
+def vull_lat_long():
+    csv_lat_long= csv.reader(open('C:/csv/plez.csv'))
+    conn = get_database()
+    for row in csv_lat_long:
+        # get the name field
 
+        gemeente = row[0]
+        lat = row[2]
+        long = row[3]
+        insert_lat_long(gemeente,lat,long,conn)
+    conn.close()
 def vull_sector():
     csv_data_nacebel = csv.reader(open('C:/woorden/kmo.csv'))
     csv_data_namen = csv.reader(open('C:/woorden/nace.csv'))
@@ -169,4 +179,4 @@ def vull_omzet():
     conn.close()
             
 if __name__=='__main__':
-    vull_balanstotaal()
+    insert_lat_long(1931,50.8798,4.4728)
