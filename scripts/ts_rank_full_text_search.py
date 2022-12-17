@@ -12,7 +12,8 @@ N_afstand = 10
 DOCS = ['ts_website','ts_jaarrekening']
 LANGUAGES = ['dutch','english']
 
-pg_engine = get_database()
+pg_engine = get_database
+
 
 #hulpfunctie wordt niet gebruikt in de mainfunctie
 def get_rank_word_in_document(kmo_id,type_docu,word):
@@ -171,7 +172,10 @@ def main(path_txt_keywords_eng,path_kmos_nl_en):
                         
                         trash = kmo_id+subdomain
                         if trash in som_score_kmos.keys() or lonely_kmo:
-                            insert_subdomain_score(kmo_id,score+som_score_kmos[trash],subdomain,id)
+                            if lonely_kmo:
+                                insert_subdomain_score(kmo_id,score,subdomain,id)
+                            else:
+                                insert_subdomain_score(kmo_id,score+som_score_kmos[trash],subdomain,id)
                             if not score == 0: print(f'{subdomain} : {score} : ID {id}')
                         else:
                             som_score_kmos[trash] = score 
