@@ -214,7 +214,7 @@ function getAverageScoreFromSector(nacebelcode) {
 function getScoreFromKmo(ondernemingsNummer) {
   //select score from subdomain_score where "ondernemingsNummer" = '0474964260' order by subdomain ASC;
   let result = knex("subdomain_score")
-    .select("score")
+    .select("score", "subdomain")
     .where("ondernemingsNummer", ondernemingsNummer)
     .orderBy("subdomain", "asc");
   return result;
@@ -250,6 +250,13 @@ function getLongLat() {
 }
 
 
+function getavgscorecoords() {
+  // select m.lat, m.long, avg(k.score) as count from kmo k join adress ON adress."ondernemingsNummer" = k."ondernemingsNummer" join municipality m ON m.zipcode = adress.zipcode where m.lat is not null and m.long is not null group by m.zipcode
+  let result = knex.raw(`select m.lat, m.long, avg(k.score) as count from kmo k join adress ON adress."ondernemingsNummer" = k."ondernemingsNummer" join municipality m ON m.zipcode = adress.zipcode where m.lat is not null and m.long is not null group by m.zipcode`);
+    return result;
+}
+
+
 
 module.exports = {
   getAll,
@@ -274,6 +281,7 @@ module.exports = {
   getRanking,
   getTotalBedrijven,
   getFinnaceData,
-  getLongLat
+  getLongLat,
+  getavgscorecoords
 
 };

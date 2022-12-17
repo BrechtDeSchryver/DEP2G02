@@ -223,8 +223,16 @@ app.get("/heatmap/coords", async (req, res) => {
   let coords = await db.getLongLat();
   coords = coords.rows;
   res.status(200).json({ coords });
-  console.log("["+ db.getLocalTime(new Date()) + "] " + "Returned the number of companies to " + req.socket.remoteAddress);
+  console.log("["+ db.getLocalTime(new Date()) + "] " + "Returned the coords of companies to " + req.socket.remoteAddress);
 });
+
+app.get("/heatmap/coordsavgscore", async (req, res) => {
+  let coords = await db.getavgscorecoords();
+  coords = coords.rows;
+  res.status(200).json({ coords });
+  console.log("["+ db.getLocalTime(new Date()) + "] " + "Returned the coords of companies to " + req.socket.remoteAddress);
+});
+
 
 
 

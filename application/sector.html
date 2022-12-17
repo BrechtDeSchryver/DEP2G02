@@ -156,12 +156,6 @@ const ctx = document.getElementById('myChart');
         .then(response => response.json())
         .then(data => {
 
-            // get scores from localstorage
-            let kmoscores = JSON.parse(localStorage.getItem('scores'));
-            let kmoscorearray = [];
-            kmoscores.forEach(score => {
-                kmoscorearray.push(score.score);
-            });
 
           let subdomains = [];
         let scores = [];
