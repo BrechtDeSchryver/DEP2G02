@@ -12,7 +12,7 @@ N_afstand = 10
 DOCS = ['ts_website','ts_jaarrekening']
 LANGUAGES = ['dutch','english']
 
-pg_engine = get_database
+pg_engine = get_database()
 
 
 #hulpfunctie wordt niet gebruikt in de mainfunctie
