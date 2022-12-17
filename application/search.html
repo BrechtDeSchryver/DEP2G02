@@ -26,6 +26,10 @@
     <link rel="stylesheet" href="assets/fonts/fontawesome5-overrides.min.css">
     <link rel="stylesheet" href="assets/css/Stats.css">
     <link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+    <script src="https://cdn.jsdelivr.net/npm/heatmap.js@2.0.5/build/heatmap.min.js"></script>
+    <script src="https://raw.githubusercontent.com/pa7/heatmap.js/develop/plugins/leaflet-heatmap/leaflet-heatmap.js"></script>
 </head>
 
 <body id="page-top">
@@ -40,6 +44,7 @@
                     <li class="nav-item"><a class="nav-link" href="index.html"><i class="fa fa-home"></i><span>Home</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="sectoren.html"><i class="fa fa-bar-chart"></i><span>Sectoren</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="predict.html"><i class="fa fa-calculator"></i><span>Predict</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="heatmaps.html"><i class="fas fa-map"></i><span>Heatmap</span></a></li>
                     <li class="nav-item" id="navconfig" style="display:none"><a class="nav-link" href="config.html"><i class="fa fa-gears"></i><span>Configuratie</span></a></li>
                     <li class="nav-item"></li>
                     <li class="nav-item"></li>
@@ -94,10 +99,12 @@
                     </div>
                     <div class="d-flex justify-content-between">
                         <h6 id="btwnum"></h6>
+                        <div id="beurs"></div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <h6 id="sector">[Sector]</h6>
                         <h6 id="nacebel"></h6>
                     </div>
-                    <h6 id="sector">[Sector]</h6>
-                    <h6 id="sectordetail"></h6>
                     <div class="row">
                         <div class="col-md-6 col-xl-3 mb-4">
                             <div class="card shadow border-start-primary py-2">
@@ -137,7 +144,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-auto"><i class="fas fa-balance-scale fa-2x text-gray-300"></i></div>
+                                        <div class="col-auto"><i class="fas fa-chart-line fa-2x text-gray-300"></i></div>
                                     </div>
                                 </div>
                             </div>
@@ -212,7 +219,6 @@
                 kmoscorearray.push(score.score);
             });
 
-            console.log(kmoscorearray);
           let subdomains = [];
         let scores = [];
         let color = [];
@@ -224,7 +230,6 @@
             for (let i = 0; i < kmoscorearray.length; i++) {
                 graphscores.push(kmoscorearray[i] - scores[i]);
             }
-            console.log(graphscores);
             let colors = [];
             graphscores.forEach(score => {
                 if (score < 0) {

@@ -220,6 +220,35 @@ function getScoreFromKmo(ondernemingsNummer) {
   return result;
 }
 
+function getRanking(ondernemingsNummer) {
+  //WITH score_rank AS (select "ondernemingsNummer", score, RANK () OVER (ORDER BY score desc) AS positie from kmo o where score is not NULL) select positie from score_rank where "ondernemingsNummer" = '0759399340'
+  let result = knex.raw(`WITH score_rank AS (select "ondernemingsNummer", score, RANK () OVER (ORDER BY score desc) AS positie from kmo o where score is not NULL) select positie from score_rank where "ondernemingsNummer" = '${ondernemingsNummer}'`);
+  return result;
+}
+
+function getTotalBedrijven() {
+  //select count("ondernemingsNummer") from kmo
+  let result = knex("kmo")
+   .count("ondernemingsNummer")
+   .from("kmo");
+  return result;
+}
+
+function getFinnaceData(btw) {
+  let result = knex("finance")
+  .select("*")
+  .where("ondernemingsNummer", btw);
+  return result;
+}
+
+function getLongLat() {
+  // select m.lat, m.long, '1' as count from kmo k join adress ON adress."ondernemingsNummer" = k."ondernemingsNummer" join municipality m ON m.zipcode = adress.zipcode
+  let result = knex.raw(`select m.lat, m.long, k.score as count from kmo k join adress ON adress."ondernemingsNummer" = k."ondernemingsNummer" join municipality m ON m.zipcode = adress.zipcode where m.lat is not null and m.long is not null`);
+   return result;
+
+
+}
+
 
 
 module.exports = {
@@ -241,6 +270,10 @@ module.exports = {
   getSector,
   getSectorName,
   getAverageScoreFromSector,
-  getScoreFromKmo
+  getScoreFromKmo,
+  getRanking,
+  getTotalBedrijven,
+  getFinnaceData,
+  getLongLat
 
 };

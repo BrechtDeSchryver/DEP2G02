@@ -5,7 +5,7 @@
     <meta charset="utf-8">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Configuratie - Data Engineering Project</title>
+    <title>Voorspellen - Data Engineering Project</title>
     <meta name="theme-color" content="rgb(89,182,195)">
     <meta name="twitter:description" content="Het Data Engineering Project van groep 2!">
     <meta name="description" content="Het Data Engineering Project II van groep 2!">
@@ -43,10 +43,9 @@
                 <ul class="navbar-nav text-light" id="accordionSidebar">
                     <li class="nav-item"><a class="nav-link" href="index.html"><i class="fa fa-home"></i><span>Home</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="sectoren.html"><i class="fa fa-bar-chart"></i><span>Sectoren</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="predict.html"><i class="fa fa-calculator"></i><span>Predict</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="heatmaps.html"><i class="fas fa-map"></i><span>Heatmap</span></a></li>
-                    <li class="nav-item" id="navconfig" style="display:none"><a class="nav-link active" href="config.html"><i class="fa fa-gears"></i><span>Configuratie</span></a></li>
-                    <li class="nav-item"></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-calculator"></i><span>Predict</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#"><i class="fas fa-map"></i><span>Heatmap</span></a></li>
+                    <li class="nav-item" id="navconfig"><a class="nav-link" href="config.html"><i class="fa fa-gears"></i><span>Configuratie</span></a></li>
                     <li class="nav-item"></li>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
@@ -57,6 +56,20 @@
                 <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
                     <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
                         <ul class="navbar-nav flex-nowrap ms-auto">
+                            <li class="nav-item dropdown no-arrow mx-1">
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" id="alert" href="#"><i class="fas fa-bell fa-fw"></i></a>
+                                    <div class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
+                                        <h6 class="dropdown-header" style="background: rgb(89,182,195);border-width: 1px;border-color: rgb(89,182,195);">Meldingen</h6><a class="dropdown-item d-flex align-items-center" href="#" style="border-radius: 0px;border-bottom-left-radius: 6px;border-bottom-right-radius: 6px;">
+                                            <div class="me-3">
+                                                <div class="bg-warning icon-circle"><i class="fas fa-exclamation-triangle text-white"></i></div>
+                                            </div>
+                                            <div><span class="small text-gray-500">3/10/2022</span>
+                                                <p>Dit is een testomgeving!</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
                             <li class="nav-item dropdown no-arrow" id="profiledropdown">
                                 <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span class="d-none d-lg-inline me-2 text-gray-600 small">Gebruiker</span><img class="border rounded-circle img-profile" src="data:image/jpeg;base64,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"></a>
                                     <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in"><a class="dropdown-item" id="logoutbutton" href="#"><i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Logout</a></div>
@@ -65,47 +78,76 @@
                         </ul><a class="btn btn-primary" role="button" id="loginbtn" style="background: rgb(89,182,195);border-color: rgb(89,182,195);" href="login.html">Login</a>
                     </div>
                 </nav>
-                <div class="container-fluid">
+                <div class="container-fluid" id="resultset">
                     <div class="d-sm-flex justify-content-between align-items-center mb-4">
-                        <h3 class="text-dark mb-0" id="naam" style="font-weight: bold;">Vergelijk</h3>
+                        <h3 class="text-dark mb-0" id="naam" style="font-weight: bold;">Voorspel score</h3>
                     </div>
-                    <div id="resultset">
-                        <div class="row" id="kmorow">
-                            <div class="col">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <ul class="nav nav-tabs card-header-tabs">
-                                            <li class="nav-item"><a class="nav-link active" href="#" style="color: rgb(89,182,195) !important;">Algemeen</a></li>
-                                            <li class="nav-item"><a class="nav-link" href="#" style="color: rgb(89,182,195) !important;">Gegevens</a></li>
-                                            <li class="nav-item"><a class="nav-link" href="#" style="color: rgb(89,182,195) !important;">Scores</a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="card-body">
-                                        <h5 id="name" style="color: rgb(58,59,69);font-weight: bold;margin-bottom: 5px;">Naam</h5>
-                                        <p id="btw" style="font-size: 9px;">btw</p>
-                                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="card shadow">
+                                <div class="card-header py-3">
+                                    <p class="text-primary m-0 fw-bold noselect" style="color: rgb(89,182,195) !important;">Score verdeling</p>
                                 </div>
-                            </div>
-                            <div class="col">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <ul class="nav nav-tabs card-header-tabs">
-                                            <li class="nav-item"><a class="nav-link active" href="#" style="color: rgb(89,182,195) !important;">Algemeen</a></li>
-                                            <li class="nav-item"><a class="nav-link" href="#" style="color: rgb(89,182,195) !important;">Gegevens</a></li>
-                                            <li class="nav-item"><a class="nav-link" href="#" style="color: rgb(89,182,195) !important;">Scores</a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="card-body">
-                                        <h5 style="color: rgb(58,59,69);font-weight: bold;margin-bottom: 5px;">Naam</h5>
-                                        <p style="font-size: 9px;">btw</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card" id="additioncard" style="margin-top: 20px; display:none">
-                            <div class="card-body">
-                                <h6 class="text-muted card-subtitle mb-2" style="margin-left: 10px;margin-right: 10px;">Voeg een zoekterm toe</h6><input type="text" id="newword" style="margin-right: 10px;margin-left: 10px;border: 1px solid rgb(133,135,150);border-radius: 5px;"><button class="btn btn-primary" type="button" style="font-size: 12px;background: rgb(89,182,195);border-color: rgb(89,182,195);" onclick="addWord()">Voeg toe</button>
-                                <p id="errortext" style="color: rgb(234,38,26);font-family: ABeeZee, sans-serif;font-size: 13px;display:none">Deze zoekterm is al aanwezig.</p>
+                                <div class="card-body d-flex justify-content-center align-items-center" style="height: 70vh;"><div id="map" style="height: 90%; width: 99%; margin-top: 60px; border-radius: 10px;"></div>
+
+<!-- Initialize the map and set the center and zoom level -->
+<script src="https://cdn.jsdelivr.net/npm/heatmapjs@2.0.2/heatmap.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet-heatmap@1.0.0/leaflet-heatmap.js"></script>
+<script>
+    function fetchdata() {
+        fetch('http://localhost:8080/heatmap/coords')
+           .then(r => r.json())
+           .then(dta => {
+            dta = dta.coords
+            /*dta.forEach(element => {
+                element.count = 1
+            });*/
+            console.log(dta)
+
+
+            var data = {
+    max: 8,
+    data: dta
+  }
+  var cfg = {
+  // radius should be small ONLY if scaleRadius is true (or small radius is intended)
+  // if scaleRadius is false it will be the constant radius used in pixels
+  "radius": 0.15,
+  "blur" : 1,
+  "maxOpacity": .8,
+  // scales the radius based on map zoom
+  "scaleRadius": true,
+
+
+  // if set to false the heatmap uses the global maximum for colorization
+  // if activated: uses the data maximum within the current map boundaries
+  //   (there will always be a red spot with useLocalExtremas true)
+  "useLocalExtrema": true,
+  // which field name in your data represents the latitude - default "lat"
+  latField: 'lat',
+  // which field name in your data represents the longitude - default "lng"
+  lngField: 'long',
+  // which field name in your data represents the data value - default "value"
+  valueField: 'count'
+  }
+  var heatmapLayer = new HeatmapOverlay(cfg);
+  // Add a base map layer
+  var titlelayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: 'Map data © OpenStreetMap | Data Engineering Project Groep 2'
+  })
+  var map = L.map('map',{
+    center: [50.7, 4.5],
+    zoom: 8.3,
+    minZoom: 7.7,
+    layers: [titlelayer,heatmapLayer]
+  });
+  heatmapLayer.setData(data);
+
+
+           })
+    }
+    fetchdata()
+</script></div>
                             </div>
                         </div>
                     </div>
@@ -116,12 +158,11 @@
                     <div class="text-center my-auto copyright"><span>Copyright © Groep 2 DEP II 2022</span></div>
                 </div>
             </footer>
-        </div>
+        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
     </div>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/bs-init.js"></script>
     <script src="assets/js/acchandler.js"></script>
-    <script src="assets/js/compare.js"></script>
     <script src="assets/js/theme.js"></script>
 </body>
 

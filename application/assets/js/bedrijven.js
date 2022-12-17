@@ -34,6 +34,7 @@ function getFromBTW(btw) {
       console.log(data.bedrijven[0].name);
       document.getElementById("naam").innerHTML = data.bedrijven[0].name
       document.getElementById("btwnum").innerHTML = data.bedrijven[0].ondernemingsNummer
+      getFinanceData(data.bedrijven[0].ondernemingsNummer)
       localStorage.setItem("btwnum", data.bedrijven[0].ondernemingsNummer)
       document.getElementById("werknemers").innerHTML = data.bedrijven[0].employees
       document.getElementById("nacebel").innerHTML = data.bedrijven[0].nacebelCode
@@ -42,7 +43,7 @@ function getFromBTW(btw) {
       if (data.bedrijven[0].score!= null){
         loadscoregraph(data.bedrijven[0].score)}
       let score = data.bedrijven[0].score == null ? "Geen score" : data.bedrijven[0].score
-      document.getElementById("score").innerHTML = `${score}`
+      document.getElementById("score").innerHTML = `${parseFloat(score).toFixed(5).replace(".", ",")}%`
       document.getElementById("pdflink").href = `https://consult.cbso.nbb.be/api/external/broker/public/deposits/pdf/${data.bedrijven[0].nbbID}`
       let websiteicon = document.getElementById("websitelink");
       let website = data.bedrijven[0].website
@@ -54,11 +55,6 @@ function getFromBTW(btw) {
           websiteicon.href = website
         }else{websiteicon.style.display = "none"}
       }
-      /*if (data.bedrijven[0].Omzet_EUR_Laatst_beschikb_jr.toLowerCase().startsWith("n.b")) {
-          document.getElementById("omzet").innerHTML = `€ ${formatNumber(data.bedrijven[0].Omzet_EUR_Laatst_beschikb_jr)}`
-      } else {
-          document.getElementById("omzet").innerHTML = `€ ${formatNumber(data.bedrijven[0].Omzet_EUR_Laatst_beschikb_jr)}`
-      }*/
       document.getElementById("locatie").innerHTML = `<a href="https://www.google.com/maps/place/${mapsadress},+${data.bedrijven[0].zipcode}+${data.bedrijven[0].city}" target="_blank">${data.bedrijven[0].city}</a>`
       //getKMOdata(data.bedrijven[0].ondernemingsNummer);
       console.log(data.bedrijven[0].telephone);
@@ -96,12 +92,13 @@ function getFromNaam(naam) {
       localStorage.setItem("nacebel", data.bedrijven[0].nacebelCode)
       localStorage.setItem("btwnum", data.bedrijven[0].ondernemingsNummer)
       document.getElementById("btwnum").innerHTML = data.bedrijven[0].ondernemingsNummer
+      getFinanceData(data.bedrijven[0].ondernemingsNummer)
       document.getElementById("werknemers").innerHTML = data.bedrijven[0].employees
       console.log(data.bedrijven[0].score);
       if (data.bedrijven[0].score!= null){
         loadscoregraph(data.bedrijven[0].score)}
       let score = data.bedrijven[0].score == null ? "Geen score" : data.bedrijven[0].score
-      document.getElementById("score").innerHTML = `${score}`
+      document.getElementById("score").innerHTML = `${parseFloat(score).toFixed(5).replace(".", ",")}%`
 
       let websiteicon = document.getElementById("websitelink");
       let website = data.bedrijven[0].website
@@ -111,11 +108,6 @@ function getFromNaam(naam) {
           websiteicon.href = website
         } else {websiteicon.style.display = "none"}
       }
-      /*if (data.bedrijf[0].Omzet_EUR_Laatst_beschikb_jr.toLowerCase().startsWith("n.b")) {
-          document.getElementById("omzet").innerHTML = `€ ${formatNumber(data.bedrijf[0].Omzet_EUR_Laatst_beschikb_jr)}`
-      } else {
-          document.getElementById("omzet").innerHTML = `€ ${formatNumber(data.bedrijf[0].Omzet_EUR_Laatst_beschikb_jr)}`
-      }*/
       document.getElementById("locatie").innerHTML = `<a href="https://www.google.com/maps/place/${mapsadress},+${data.bedrijven[0].zipcode}+${data.bedrijven[0].city}" target="_blank">${data.bedrijven[0].city}</a>`
       //getKMOdata(data.bedrijf[0].Ondernemingsnummer);
       if (data.bedrijven[0].telephone != null){
@@ -272,6 +264,21 @@ var myLineChart = new Chart(ctxL, {
     responsive: true
   }
 });
+}
+
+function getFinanceData(btw) {
+  fetch(`http://localhost:8080/bedrijf/finance/${btw}`)
+   .then(response => response.json())
+   .then(data => {
+    data = data.finance
+    console.log(data)
+      let omzet = document.getElementById("omzet")
+      omzet.innerHTML = data.turnover
+      let balans = document.getElementById("balans")
+      balans.innerHTML = data.total_assets
+      let beurs = document.getElementById("beurs")
+      beurs.innerHTML = data.beursgenoteerd ? `<i class="fas fa-chart-line" title="Beursgenoteerd"></i>` : `<i class="fas fa-times" title="Niet beursgenoteerd"></i>`
+   })
 }
 
 

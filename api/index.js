@@ -28,6 +28,7 @@ app.get("/", (req, res) => {
 /** Geeft een KMO terug in json formaat na het ontvangen van een btw nummer. */
 app.get("/bedrijf/btw/:nummer", async (req, res) => {
   let bedrijven = await db.getKmoByOndernemingsnummer(req.params.nummer, req.body);
+  
   res.status(200).json({ bedrijven });
   console.log(`[${db.getLocalTime(new Date())}] ${req.socket.remoteAddress} heeft ${req.params.nummer} opgevraagd`);
 });
@@ -190,6 +191,43 @@ app.get("/bedrijf/scores/:nummer", async (req, res) => {
   console.log("["+ db.getLocalTime(new Date()) + "] " + "Returned scores of company " + btw + " to " + req.socket.remoteAddress);
   
 });
+
+app.get("/bedrijf/ranking/:nummer", async (req, res) => {
+  let btw = req.params.nummer;
+  let ranking = await db.getRanking(btw);
+  ranking = ranking.rows[0];
+  let total = await db.getTotalBedrijven();
+  total = total[0].count
+  res.status(200).json({ "rank" : ranking.positie, "total" : total });
+  console.log("["+ db.getLocalTime(new Date()) + "] " + "Returned the rank of company " + btw + " to " + req.socket.remoteAddress);
+  
+});
+
+app.get("/bedrijf/total", async (req, res) => {
+  let total = await db.getTotalBedrijven();
+  total = total[0].count
+  console.log(total);
+  res.status(200).json({ "total" : total });
+  console.log("["+ db.getLocalTime(new Date()) + "] " + "Returned the number of companies to " + req.socket.remoteAddress);
+  
+});
+
+app.get("/bedrijf/finance/:nummer", async (req, res) => {
+  let total = await db.getFinnaceData(req.params.nummer);
+  finance = total[0]
+  res.status(200).json({ finance });
+  console.log("["+ db.getLocalTime(new Date()) + "] " + "Returned the number of companies to " + req.socket.remoteAddress);
+});
+
+app.get("/heatmap/coords", async (req, res) => {
+  let coords = await db.getLongLat();
+  coords = coords.rows;
+  res.status(200).json({ coords });
+  console.log("["+ db.getLocalTime(new Date()) + "] " + "Returned the number of companies to " + req.socket.remoteAddress);
+});
+
+
+
 
 /** Geeft de jaarrekening, de website en eventueel een duurzaamheidsrapport terug in json formaat na het ontvangen van een btw nummer. */
 

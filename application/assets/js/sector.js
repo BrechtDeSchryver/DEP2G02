@@ -36,6 +36,7 @@ function getUrlVars() {
         document.getElementById("omzetgem").innerHTML = "€ " + numberWithCommas(parseInt(totalturnover / data.aantal));
         document.getElementById("werknemerstot").innerHTML = totalemployees;
         document.getElementById("werknemersgem").innerHTML = parseInt(totalemployees / data.aantal);
+        document.getElementById("nacebel").innerHTML = getUrlVars().sector;
     })
       .catch((error) => {
         console.log(error);
@@ -43,32 +44,7 @@ function getUrlVars() {
 }
 
   /** De duurzaamheidsscore van alle bedrijven binnen een bepaalde sector op het dashboard plaatsen */
-  function getDuurzaamheid() {
-    fetch(`http://www.vichogent.be:40021/getsectorduurzaamheid/${getUrlVars().sector}`)
-      .then((res) => res.json())
-      .then((date) => {
-        return date;
-      })
-      .then((data) => {
-        /*console.log(data)*/
-        const duurz = data.sectorduurzaamheid[0];
-        let i = 0;
-        while (i < duurz.length) {
-          document.getElementById("tbody").insertAdjacentHTML("beforeend", `
-          <tr id="row">
-            <td>${duurz[i].score_duurzaamheid}</td>
-            <td>${duurz[i].aantal}</td>
-          </tr>
-          `)
-          i +=1;
-        }
 
-
-    })
-      .catch((error) => {
-        console.log(error);
-      });
-}
 /*
 function getsectorzoektermen() {
   fetch(`http://www.vichogent.be:40021/getsectorzoektermen/${getUrlVars().sector}`)
@@ -94,53 +70,7 @@ function getsectorzoektermen() {
   })
 }*/
 
-/** Maakt een grafiek voor het gemiddelde van HumanCapital en NaturalCapital voor een bepaalde sector */
-function createChart() {
-  fetch(`http://vichogent.be:40021/getAvgRaportering/${getUrlVars().sector}`)
-      .then((res) => res.json())
-      .then((date) => {
-        return date;
-      })
-      .then((data) => {
-        /*console.log(data.avgRaportering[0][0])*/
-        const avgRaportering = data.avgRaportering[0][0]
-        var ctxD = document.getElementById("pieChart").getContext('2d');
-  var myLineChart = new Chart(ctxD, {
-    type: 'doughnut',
-    data: {
-      labels: ["Gendergelijkheid", "Implementatie Werknemersrechten", "Sociale relaties op het werk", "Werkgelegenheid", "Organisatie op het werk", "Gezondheid & veiligheid", "Opleidingsbeleid", "SDG"],
-      datasets: [{
-        data: [avgRaportering.avgGENDERGELIJKHEID, avgRaportering.avgIMPLEMENTATIE_WERKNEMERSRECHTEN, avgRaportering.avgSOCIALE_RELATIES_OP_HET_WERK, avgRaportering.avgWERKGELEGENHEID, avgRaportering.avgORGANISATIE_OP_HET_WERK, avgRaportering.avgGEZONDHEID_EN_VEILIGHEID, avgRaportering.avgOPLEIDINGSBELEID, avgRaportering.avgSDG_H],
-        backgroundColor: ["#4251f5", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360", "#F7464A", "#00ff40", "#e300f7"],/*#F7464A, #FF5A5E*/
-        hoverBackgroundColor: ["#656fe0", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774", "#FF5A5E", "#41fa6f", "#ea88f2"]
-      }]
-    },
-    options: {
-      responsive: true
-    }
-  });
 
-  var ctxD = document.getElementById("pieChartt").getContext('2d');
-  var myLineChartt = new Chart(ctxD, {
-    type: 'doughnut',
-    data: {
-      labels: ["Gebruik van energiebronnen", "Gebruik van waterbronnen", "Emissies van broeikasgassen", "Vervuilende uitstoot", "Milieu impact", "Impact op gezondheid & veiligheid", "Verdere eisen over bepaalde onderwerpen", "Milieu beleid", "SDG"],
-      datasets: [{
-        data: [avgRaportering.avgGEBRUIK_VAN_ENERGIEBRONNEN, avgRaportering.avgGEBRUIK_VAN_WATERBRONNEN, avgRaportering.avgEMISSIES_VAN_BROEIKASGASSEN, avgRaportering.avgVERVUILENDE_UITSTOOT, avgRaportering.avgMILIEU_IMPACT, avgRaportering.avgIMPACT_OP_GEZONDHEID_EN_VEILIGHEID, avgRaportering.avgVERDERE_EISEN_OVER_BEPAALDE_ONDERWERPEN, avgRaportering.avgMILIEU_BELEID, avgRaportering.avgSDG_N],
-        backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360", "#4251f5", "#00ff40", "#e300f7"],
-        hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774", "#656fe0", "#41fa6f", "#ea88f2"]
-      }]
-    },
-    options: {
-      responsive: true
-    }
-  });
-        })
-      .catch((error) => {
-        console.log(error);
-      });
-  /*<div style="color: rgb(89,182,195) !important;"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div><canvas data-bss-chart="{&quot;type&quot;:&quot;pie&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;January&quot;,&quot;February&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Revenue&quot;,&quot;backgroundColor&quot;:[&quot;rgb(239,2,2)&quot;,&quot;rgb(255,138,0)&quot;],&quot;borderColor&quot;:[&quot;#4e73df&quot;,&quot;#4e73df&quot;],&quot;data&quot;:[&quot;4500&quot;,&quot;5300&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:true,&quot;legend&quot;:{&quot;display&quot;:false,&quot;labels&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;,&quot;fontColor&quot;:&quot;rgb(89,182,195) !important&quot;}},&quot;title&quot;:{&quot;fontStyle&quot;:&quot;bold&quot;,&quot;text&quot;:&quot;&quot;}}}" style="display: block; width: 467px; height: 233px;" width="467" height="233" class="chartjs-render-monitor"></canvas></div>*/
-}
 
 /** controleert of er in de local storage staat of de notificatie ooit al aangeklikt is */
 function checkAlert() {

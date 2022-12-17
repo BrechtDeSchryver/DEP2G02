@@ -26,6 +26,10 @@
     <link rel="stylesheet" href="assets/fonts/fontawesome5-overrides.min.css">
     <link rel="stylesheet" href="assets/css/Stats.css">
     <link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+    <script src="https://cdn.jsdelivr.net/npm/heatmap.js@2.0.5/build/heatmap.min.js"></script>
+    <script src="https://raw.githubusercontent.com/pa7/heatmap.js/develop/plugins/leaflet-heatmap/leaflet-heatmap.js"></script>
 </head>
 
 <body id="page-top">
@@ -40,6 +44,7 @@
                     <li class="nav-item"><a class="nav-link" href="index.html"><i class="fa fa-home"></i><span>Home</span></a></li>
                     <li class="nav-item"><a class="nav-link active" href="sectoren.html"><i class="fa fa-bar-chart"></i><span>Sectoren</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="predict.html"><i class="fa fa-calculator"></i><span>Predict</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="heatmaps.html"><i class="fas fa-map"></i><span>Heatmap</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="config.html"><i class="fa fa-gears"></i><span>Configuratie</span></a></li>
                     <li class="nav-item"></li>
                     <li class="nav-item"></li>
@@ -61,6 +66,7 @@
                             <p>Bedrijven:&nbsp;<span id="aantal">0</span></p><a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" id="bedrijvenbtn" href="#" style="background: rgb(89,182,195);border-color: rgb(89,182,195);"><i class="fas fa-list fa-sm text-white-50"></i>&nbsp;Toon bedrijven</a>
                         </div>
                     </div>
+                    <p id="nacebel"></p>
                     <div class="row">
                         <div class="col-md-6 col-xl-3 mb-4">
                             <div class="card shadow border-start-primary py-2">
@@ -116,6 +122,95 @@
                                         <div class="col-auto"><i class="fas fa-euro-sign fa-2x text-gray-300"></i></div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="card shadow" style="margin-top: 25px;">
+                                <div class="card-header py-3">
+                                    <p class="text-primary m-0 fw-bold noselect" style="color: rgb(89,182,195) !important;">Gemiddelde score</p>
+                                </div>
+                                <div class="card-body"><div>
+    <canvas id="myChart"></canvas>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <script>
+    function getUrlVars() {
+  var vars = {};
+  var parts = window.location.href.replace(
+    /[?&]+([^=&]+)=([^&]*)/gi,
+    function (m, key, value) {
+      vars[key] = value;
+    }
+  );
+  return vars;
+}
+
+const ctx = document.getElementById('myChart');
+
+    function getScores() {  
+      fetch(`http://localhost:8080/sector/average?sector=${getUrlVars()['sector']}`)
+        .then(response => response.json())
+        .then(data => {
+
+            // get scores from localstorage
+            let kmoscores = JSON.parse(localStorage.getItem('scores'));
+            let kmoscorearray = [];
+            kmoscores.forEach(score => {
+                kmoscorearray.push(score.score);
+            });
+
+          let subdomains = [];
+        let scores = [];
+        let color = [];
+            data.subdomains.forEach(subdomain => {
+                subdomains.push(subdomain.subdomain);
+                scores.push(subdomain.avg);
+            });
+            let graphscores = [];
+            let colors = [];
+            subdomains.forEach(score => {
+                if (score < 0) {
+                    colors.push('rgba(255, 99, 132, 0.7)');
+                } else {
+                    colors.push('rgba(75, 192, 192, 0.7)');
+                }
+            });
+
+            new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: subdomains,
+        datasets: [{
+          label: 'Scores',
+          data: scores,
+          backgroundColor: colors,
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+        
+
+
+});
+
+    }
+    // 5 seconds delay
+    setTimeout(function() {
+      getScores();
+    }, 0);
+  </script></div>
                             </div>
                         </div>
                     </div>
