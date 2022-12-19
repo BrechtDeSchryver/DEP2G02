@@ -1,7 +1,7 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
-#from sqlfunctions import select_passwordhashes
-# from text_search_functie import fill_tables_with_score
+from sqlfunctions import select_passwordhashes
+from text_search_functie import fill_tables_with_score
 import pickle
 from ml_model import transform_data
 from sqlfunctions import get_stedelijkheidsklasse
@@ -19,11 +19,11 @@ def test():
     time.sleep(10)
 
 
-final_model = pickle.load(open('scripts\\ml_files\\final_model.sav', 'rb'))
+final_model = pickle.load(open('ml_files/final_model.sav', 'rb'))
 min_max_scaler_omzet = pickle.load(
-    open('scripts\\ml_files\\min_max_scaler_omzet.sav', 'rb'))
+    open('ml_files/min_max_scaler_omzet.sav', 'rb'))
 min_max_scaler_personeel = pickle.load(
-    open('scripts\\ml_files\\min_max_scaler_personeelsleden.sav', 'rb'))
+    open('ml_files/min_max_scaler_personeelsleden.sav', 'rb'))
 
 
 @app.route("/api/predict/omzet=<omzet>&personeel=<personeel>&sector=<sector>&jr=<jaarrekening>&website=<website>&beurs=<beursgenoteerd>&postcode=<postcode>", methods=['GET'])
@@ -59,21 +59,21 @@ def predict(omzet, personeel, sector, jaarrekening, website, beursgenoteerd, pos
     return json.dumps(x)
 
 
-# @app.route("/api/recalculate/<code>", methods=['GET'])
-# def get_posts(code):
-#     global running
-#     # sql=select_passwordhashes()
-#     # hashes=[]
-#     # for hash in sql:
-#     # hashes.append(hash[0])
-#     if code == "DikkeBerta":
-#         if running != "running":
-#             running = "running"
-#             # test()
-#             fill_tables_with_score()
-#             running = "done"
-#     x = {"status": running}
-#     return json.dumps(x)
+@app.route("/api/recalculate/<code>", methods=['GET'])
+def get_posts(code):
+     global running
+     # sql=select_passwordhashes()
+     # hashes=[]
+     # for hash in sql:
+     # hashes.append(hash[0])
+     if code == "DikkeBerta":
+         if running != "running":
+             running = "running"
+             # test()
+             fill_tables_with_score()
+             running = "done"
+     x = {"status": running}
+     return json.dumps(x)
 
 
 @app.route("/api/status", methods=['GET'])

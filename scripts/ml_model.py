@@ -4,9 +4,9 @@ from sklearn.preprocessing import OrdinalEncoder, MinMaxScaler
 import pickle
 
 min_max_scaler_omzet = pickle.load(
-    open('scripts\\ml_files\\min_max_scaler_omzet.sav', 'rb'))
+    open('ml_files/min_max_scaler_omzet.sav', 'rb'))
 min_max_scaler_personeel = pickle.load(
-    open('scripts\\ml_files\\min_max_scaler_personeelsleden.sav', 'rb'))
+    open('ml_files/min_max_scaler_personeelsleden.sav', 'rb'))
 
 
 def get_initial_dataframe():
