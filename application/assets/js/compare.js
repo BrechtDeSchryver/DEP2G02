@@ -50,7 +50,13 @@ function getgegevens() {
     .then((res) => res.json())
     .then((data) => {
         data.bedrijven.forEach(bedrijf => {
-            let website = `<a href="${bedrijf.website}" style="margin-right: 10px;"><i class="fas fa-globe-europe" style="color: rgb(89,182,195);font-size: 20px;" title="Website"></i></a>`;
+            let websiteurl = bedrijf.website;
+            if (!websiteurl.toLowerCase().startsWith("https") && !websiteurl.toLowerCase().startsWith("http")) {
+                websiteurl = `https://${websiteurl}`
+              } else if (websiteurl.toLowerCase().startsWith("https") || websiteurl.toLowerCase().startsWith("http")) {
+                websiteurl = websiteurl;
+              }
+            website = `<a href="${websiteurl}" style="margin-right: 10px;"><i class="fas fa-globe-europe" style="color: rgb(89,182,195);font-size: 20px;" title="Website"></i></a>`;
             let pdf = `<a href="https://consult.cbso.nbb.be/api/external/broker/public/deposits/pdf/${bedrijf.nbbID}" style="margin-left: 0px;margin-right: 10px;"><i class="far fa-file-pdf" style="color: rgb(89,182,195);font-size: 20px;" title="Jaarrekening"></i></a>`;
             content.insertAdjacentHTML("beforeend", `
         <div class="col">
@@ -66,7 +72,7 @@ function getgegevens() {
             <h5 id="name" style="color: rgb(58,59,69);font-weight: bold;margin-bottom: 5px;">${bedrijf.name}</h5>
             <p style="font-size: 13px;">${bedrijf.ondernemingsNummer}</p>
             <h6 style="color: rgb(58,59,69);font-weight: bold;margin-bottom: 5px;">Adres:</h6>
-            <p style="font-size: 16px; margin-bottom:3px;">${bedrijf.street}</p>
+            <p style="font-size: 16px; margin-bottom:3px;">${bedrijf.street.replace("Ã«", "ë")}</p>
             <p style="font-size: 16px;">${bedrijf.zipcode + " " + bedrijf.city}</p>
             <div>${pdf + website}</div>
         </div>
@@ -110,7 +116,6 @@ function getscores() {
         </div>
         <div class="card-body">
             <h5 id="name" style="color: rgb(58,59,69);font-weight: bold;margin-bottom: 5px;">BTW: ${getcompareitems()[counter]}</h5>
-            <p style="font-size: 13px;">${0}</p>
             <div>
     <canvas id="${btw}"></canvas>
   </div>

@@ -29,6 +29,7 @@ function getFromBTW(btw) {
           document.getElementById("resultset").style.display = "none";
       } else{
       document.getElementById("sector").innerHTML = data.bedrijven[0].sector
+      document.getElementById("sectorlink").href = `sector.html?sector=${data.bedrijven[0].nacebelCode}`;
       //document.getElementById("resultset").style.display = "block";
       let mapsadress = data.bedrijven[0].street.replace(" ", "+")
       console.log(data.bedrijven[0].name);
