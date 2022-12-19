@@ -259,22 +259,20 @@ def getRawDuurzaamheidsrapport(ondernemingsnummer, pg_conn=None):
 def get_datapunten_voor_model(pg_conn=None):
     pg_conn = get_database()
     result = pg_conn.execute("""
-        select rd."ondernemingsNummer",f.turnover as omzet, f.beursgenoteerd, km."nacebelCode" as sector, e.total as total_employees, \ 
-CASE WHEN rd.website = '' or rd.website is null THEN 0 ELSE 1 END AS site_aanwezig, \
-case when rd.jaarrekening = '' or rd.jaarrekening is null then 0 else 1 end as pdf_aanwezig,m.stedelijkheidsklasse ,km.score as total_score \
-from raw_data rd  \
-join adress a on a."ondernemingsNummer"=rd."ondernemingsNummer" \
-join municipality m ON m.zipcode = a.zipcode \
-join finance f on rd."ondernemingsNummer"=f."ondernemingsNummer" \
-join employees e on f."ondernemingsNummer"=e."ondernemingsNummer" \
-join kmo km on km."ondernemingsNummer" = e."ondernemingsNummer"; \
-
+        select rd."ondernemingsNummer",f.turnover as omzet, f.beursgenoteerd, km."nacebelCode" as sector, e.total as total_employees,  
+        CASE WHEN rd.website = '' or rd.website is null THEN 0 ELSE 1 END AS site_aanwezig, \
+        case when rd.jaarrekening = '' or rd.jaarrekening is null then 0 else 1 end as pdf_aanwezig,m.stedelijkheidsklasse ,km.score as total_score \
+        from raw_data rd  \
+        join adress a on a."ondernemingsNummer"=rd."ondernemingsNummer" \
+        join municipality m ON m.zipcode = a.zipcode \
+        join finance f on rd."ondernemingsNummer"=f."ondernemingsNummer" \
+        join employees e on f."ondernemingsNummer"=e."ondernemingsNummer" \
+        join kmo km on km."ondernemingsNummer" = e."ondernemingsNummer"; \
                              """).fetchall()
     pg_conn.close()
     return result
+    
 # returnt 0 als het niet voorkomt, 1 als het op website voorkomt, 2 als het op duurzaamheidsrapport voorkomt en 3 als het op beide voorkomt
-
-
 def get_score_for_word(ondernemingsnummer, word, pg_conn=None):
     # connect met de databank
     if pg_conn is None:

@@ -36,8 +36,8 @@ def predict(omzet, personeel, sector, jaarrekening, website, beursgenoteerd, ste
     beursgenoteerd = 1 if beursgenoteerd == "true" else 0
     website = 1 if website == "true" else 0
     jaarrekening = 1 if jaarrekening == "true" else 0
-    data = np.array([int(omzet), beursgenoteerd, int(sector),
-            int(personeel), website, jaarrekening, int(stedelijkheidsklasse)])
+    data = np.array([float(omzet), beursgenoteerd, int(sector),
+            float(personeel), int(website), int(jaarrekening), int(stedelijkheidsklasse)])
     data = data.reshape(1, -1)
     # appendd values to dataframe
     dataframe = pd.DataFrame(data, columns=['omzet', 'beursgenoteerd', 'sector',
