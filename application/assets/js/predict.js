@@ -76,14 +76,14 @@ function predict(array) {
     let score = document.getElementById("score");
     button.innerHTML = "Predicting...";
     button.disabled = true;
-    fetch(`http://vichogent.be:40046/api/predict/Omzet=${array[0]}&personeel=${array[1]}&postcode=${array[2]}&sector=${array[3]}&jr=${array[4]}&beurs=${array[5]}&website=${array[6]}`)
+    fetch(`http://vichogent.be:40046//api/predict/omzet=${array[0]}&personeel=${array[1]}&sector=${array[3]}&jr=${array[4]}&website=${array[6]}&beurs=${array[5]}&postcode=${array[2]}`)
         .then(response => response.json())
         .then(data => {
             console.log(data);
             button.innerHTML = "Predict";
             button.disabled = false;
             loadingscreen.style.display = "none";
-            score.innerHTML = data.score;
+            score.innerHTML = parseFloat(data.score).toFixed(5).replace(".", ",") + "%";
             result.style.display = "block";
 
         })
