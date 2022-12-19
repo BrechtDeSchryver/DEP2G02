@@ -259,15 +259,16 @@ def getRawDuurzaamheidsrapport(ondernemingsnummer, pg_conn=None):
 def get_datapunten_voor_model(pg_conn=None):
     pg_conn = get_database()
     result = pg_conn.execute("""
-        select rd."ondernemingsNummer",f.turnover as omzet, f.beursgenoteerd, k."sector_ID" as sector, e.total as total_employees, \
-        CASE WHEN rd.website = '' or rd.website is null THEN 0 ELSE 1 END AS site_aanwezig, \
-        case when rd.jaarrekening = '' or rd.jaarrekening is null then 0 else 1 end as pdf_aanwezig, s.score as total_score \
-        from raw_data rd  \
-        join adress a on a."ondernemingsNummer"=rd."ondernemingsNummer" \
-        join finance f on rd."ondernemingsNummer"=f."ondernemingsNummer" \
-        join employees e on f."ondernemingsNummer"=e."ondernemingsNummer" \
-        join kmo_sector k on k."ondernemingsNummer"=e."ondernemingsNummer" \
-        join score s on s."forain_ID"=e."ondernemingsNummer";
+        select rd."ondernemingsNummer",f.turnover as omzet, f.beursgenoteerd, km."nacebelCode" as sector, e.total as total_employees, \ 
+CASE WHEN rd.website = '' or rd.website is null THEN 0 ELSE 1 END AS site_aanwezig, \
+case when rd.jaarrekening = '' or rd.jaarrekening is null then 0 else 1 end as pdf_aanwezig,m.stedelijkheidsklasse ,km.score as total_score \
+from raw_data rd  \
+join adress a on a."ondernemingsNummer"=rd."ondernemingsNummer" \
+join municipality m ON m.zipcode = a.zipcode \
+join finance f on rd."ondernemingsNummer"=f."ondernemingsNummer" \
+join employees e on f."ondernemingsNummer"=e."ondernemingsNummer" \
+join kmo km on km."ondernemingsNummer" = e."ondernemingsNummer"; \
+
                              """).fetchall()
     pg_conn.close()
     return result
@@ -574,6 +575,7 @@ def insert_omzet(odn, omzet, pg_conn=None):
     if connaanwezig == False:
         pg_conn.close()
 
+
 def insert_bevolkingsdichtheid(name, bev, pg_conn=None):
     # connect met de databank
     if pg_conn is None:
@@ -586,6 +588,8 @@ def insert_bevolkingsdichtheid(name, bev, pg_conn=None):
                     (bev, name))
     if connaanwezig == False:
         pg_conn.close()
+
+
 def select_passwordhashes(pg_conn=None):
     # connect met de databank
     if pg_conn is None:
@@ -598,6 +602,8 @@ def select_passwordhashes(pg_conn=None):
     if connaanwezig == False:
         pg_conn.close()
     return results.all()
+
+
 def insert_lat_long(postcode, lat, long, pg_conn=None):
     # connect met de databank
     if pg_conn is None:
