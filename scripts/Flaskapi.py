@@ -34,28 +34,31 @@ def predict(omzet, personeel, sector, jaarrekening, website, beursgenoteerd, pos
     # sector= sectornacebel (5 char int)
     # jaarrekening= jaarrekening aanwezig (boolean)
     # beursgenoteerd= beursgenoteerd (boolean)
-    beursgenoteerd = 1 if beursgenoteerd == "true" else 0
-    website = 1 if website == "true" else 0
-    jaarrekening = 1 if jaarrekening == "true" else 0
-    stedelijkheidsklasse = get_stedelijkheidsklasse(postcode)
-    data = np.array([int(omzet), beursgenoteerd, int(sector),
-            int(personeel), website, jaarrekening, int(stedelijkheidsklasse)])
-    data = data.reshape(1, -1)
-    # appendd values to dataframe
-    dataframe = pd.DataFrame(data, columns=['omzet', 'beursgenoteerd', 'sector',
-                             'personeelsleden', 'site_aanwezig', 'pdf_aanwezig', 'stedelijkheidsklasse'])
-    print(dataframe)
-    # transform data
-    dataframe = transform_data(dataframe)
-    last_row = dataframe.iloc[-1]
-    print(last_row)
-    # get score
-    score = final_model.predict([last_row])
+    try:
+        beursgenoteerd = 1 if beursgenoteerd == "true" else 0
+        website = 1 if website == "true" else 0
+        jaarrekening = 1 if jaarrekening == "true" else 0
+        stedelijkheidsklasse = get_stedelijkheidsklasse(postcode)
+        data = np.array([int(omzet), beursgenoteerd, int(sector),
+                int(personeel), website, jaarrekening, int(stedelijkheidsklasse)])
+        data = data.reshape(1, -1)
+        # appendd values to dataframe
+        dataframe = pd.DataFrame(data, columns=['omzet', 'beursgenoteerd', 'sector',
+                                'personeelsleden', 'site_aanwezig', 'pdf_aanwezig', 'stedelijkheidsklasse'])
+        print(dataframe)
+        # transform data
+        dataframe = transform_data(dataframe)
+        last_row = dataframe.iloc[-1]
+        print(last_row)
+        # get score
+        score = final_model.predict([last_row])
 
-    # hier moet de predict komen en uitkomst stop je in score
-    # score = final_model.predict([[Omzet, personeel,  sector, jaarrekening, pdf, beursgenoteerd]])
-    # print(Omzet, personeel, sector, jaarrekening, beursgenoteerd)
-    x = {"score": float(score)}
+        # hier moet de predict komen en uitkomst stop je in score
+        # score = final_model.predict([[Omzet, personeel,  sector, jaarrekening, pdf, beursgenoteerd]])
+        # print(Omzet, personeel, sector, jaarrekening, beursgenoteerd)
+        x = {"score": float(score)}
+    except:
+        x = {"score": "error"}
     return json.dumps(x)
 
 
