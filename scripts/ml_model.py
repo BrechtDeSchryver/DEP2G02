@@ -21,21 +21,20 @@ def get_initial_dataframe():
 
 
 def transform_data(data):
-    # TODO: we hebben originele data nodig om nieuwe data te transformeren
     data["sector"] = data["sector"].astype('category')
-    # ordinal_encoder = OrdinalEncoder()
-    # data["sector"] = ordinal_encoder.fit_transform(data[["sector"]])
-    # print(ordinal_encoder.categories_)
     data["beursgenoteerd"] = data["beursgenoteerd"].astype('category')
     data["pdf_aanwezig"] = data["pdf_aanwezig"].astype('category')
     data["site_aanwezig"] = data["site_aanwezig"].astype('category')
     data["stedelijkheidsklasse"] = data["stedelijkheidsklasse"].astype(
         'category')
 
-    data["omzet"] = min_max_scaler_omzet.fit_transform(data[["omzet"]])
-    data["personeelsleden"] = min_max_scaler_personeel.fit_transform(
-        data[["personeelsleden"]])
+    data["beursgenoteerd"] = data["beursgenoteerd"].cat.codes
+    data["beursgenoteerd"] = data["beursgenoteerd"].astype('category')
 
     data["personeelsleden"] = data["personeelsleden"].astype('float')
+
+    data = data.dropna()
+
+    data["sector"] = data["sector"].astype('category')
 
     return data
