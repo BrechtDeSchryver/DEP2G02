@@ -62,14 +62,21 @@ def main():
     #     f.write(r)
     db = get_database()
     kmos = select_bedrijven_zonder_site(db)
-    # use threadpoolexecutor
-    print(kmos)
-    with ThreadPoolExecutor(max_workers=10) as executor:
+
+    with ThreadPoolExecutor(max_workers=12) as executor:
         for kmo in kmos:
             on = kmo[0]
             site = kmo[4].rstrip()
-            print(on, site)
-            # executor.submit(do_all, site, on, db)
+            # print(on, site)
+            if site:
+                executor.submit(do_all, site, on, db)
+
+    # for kmo in kmos:
+    #     on = kmo[0]
+    #     site = kmo[4].rstrip()
+    #     if site:
+    #         # print(on, site)
+    #         do_all(site, on, db)
 
 
 if __name__ == "__main__":
