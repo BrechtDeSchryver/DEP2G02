@@ -83,7 +83,16 @@ function predict(array) {
             button.innerHTML = "Predict";
             button.disabled = false;
             loadingscreen.style.display = "none";
+            if (data.score == "error") {
+                score.innerHTML = `De ingevulde gegevens zijn incorrect.`;
+                score.style.color = "red";
+                score.style.fontSize = "rgb(255,60,47)"
+                score.style.fontSize = "20px"
+            } else {
+            score.style.color = "rgb(133,135,150)";
+            score.style.fontSize = "28px"
             score.innerHTML = parseFloat(data.score).toFixed(5).replace(".", ",") + "%";
+            }
             result.style.display = "block";
 
         })
