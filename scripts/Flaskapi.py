@@ -3,7 +3,9 @@ from flask_cors import CORS
 #from sqlfunctions import select_passwordhashes
 # from text_search_functie import fill_tables_with_score
 import pickle
-from ml_model import transform_data, get_initial_dataframe
+from ml_model import transform_data
+import pandas as pd
+import numpy as np
 import json
 import time
 app = Flask(__name__)
@@ -16,34 +18,37 @@ def test():
     time.sleep(10)
 
 
-final_model = pickle.load(open('scripts\\final_model.sav', 'rb'))
+final_model = pickle.load(open('scripts\\ml_files\\final_model.sav', 'rb'))
+min_max_scaler_omzet = pickle.load(
+    open('scripts\\ml_files\\min_max_scaler_omzet.sav', 'rb'))
+min_max_scaler_personeel = pickle.load(
+    open('scripts\\ml_files\\min_max_scaler_personeelsleden.sav', 'rb'))
 
 
-@app.route("/api/predict/Omzet=<Omzet>&personeel=<personeel>&sector=<sector>&jr=<jaarrekening>&website=<website>&beurs=<beursgenoteerd>", methods=['GET'])
-def predict(Omzet, personeel, sector, jaarrekening, website, beursgenoteerd):
+@app.route("/api/predict/omzet=<omzet>&personeel=<personeel>&sector=<sector>&jr=<jaarrekening>&website=<website>&beurs=<beursgenoteerd>&stedelijkheidsklasse=<stedelijkheidsklasse>", methods=['GET'])
+def predict(omzet, personeel, sector, jaarrekening, website, beursgenoteerd, stedelijkheidsklasse):
     # Omzet= omzetcijfer (int)
     # personeel= aantal personeelsleden (int)
     # postcode= postcode (4 char int)
     # sector= sectornacebel (5 char int)
     # jaarrekening= jaarrekening aanwezig (boolean)
     # beursgenoteerd= beursgenoteerd (boolean)
-    dataframe = get_initial_dataframe()
-    # TODO: sneller maken, hoeven niets telkens de volledige dataframe te laden
     beursgenoteerd = 1 if beursgenoteerd == "true" else 0
     website = 1 if website == "true" else 0
     jaarrekening = 1 if jaarrekening == "true" else 0
-    data = [int(Omzet), bool(beursgenoteerd), 'Vervaardiging van elektronische onderdelen',
-            int(personeel), website, jaarrekening]
+    data = np.array([int(omzet), beursgenoteerd, int(sector),
+            int(personeel), website, jaarrekening, int(stedelijkheidsklasse)])
+    data = data.reshape(1, -1)
     # appendd values to dataframe
+    dataframe = pd.DataFrame(data, columns=['omzet', 'beursgenoteerd', 'sector',
+                             'personeelsleden', 'site_aanwezig', 'pdf_aanwezig', 'stedelijkheidsklasse'])
     print(dataframe)
-    print(data)
-    dataframe.loc[len(dataframe)] = data
-    transformed_data = transform_data(dataframe)
-    # get last row
-    transformed_data = transformed_data.tail(1)
-
+    # transform data
+    dataframe = transform_data(dataframe)
+    last_row = dataframe.iloc[-1]
+    print(last_row)
     # get score
-    score = final_model.predict(transformed_data)
+    score = final_model.predict([last_row])
 
     # hier moet de predict komen en uitkomst stop je in score
     # score = final_model.predict([[Omzet, personeel,  sector, jaarrekening, pdf, beursgenoteerd]])
