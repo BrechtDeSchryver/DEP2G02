@@ -4,6 +4,7 @@ from flask_cors import CORS
 # from text_search_functie import fill_tables_with_score
 import pickle
 from ml_model import transform_data
+from sqlfunctions import get_stedelijkheidsklasse
 import pandas as pd
 import numpy as np
 import json
@@ -25,8 +26,8 @@ min_max_scaler_personeel = pickle.load(
     open('scripts\\ml_files\\min_max_scaler_personeelsleden.sav', 'rb'))
 
 
-@app.route("/api/predict/omzet=<omzet>&personeel=<personeel>&sector=<sector>&jr=<jaarrekening>&website=<website>&beurs=<beursgenoteerd>&stedelijkheidsklasse=<stedelijkheidsklasse>", methods=['GET'])
-def predict(omzet, personeel, sector, jaarrekening, website, beursgenoteerd, stedelijkheidsklasse):
+@app.route("/api/predict/omzet=<omzet>&personeel=<personeel>&sector=<sector>&jr=<jaarrekening>&website=<website>&beurs=<beursgenoteerd>&postcode=<postcode>", methods=['GET'])
+def predict(omzet, personeel, sector, jaarrekening, website, beursgenoteerd, postcode):
     # Omzet= omzetcijfer (int)
     # personeel= aantal personeelsleden (int)
     # postcode= postcode (4 char int)
@@ -36,8 +37,9 @@ def predict(omzet, personeel, sector, jaarrekening, website, beursgenoteerd, ste
     beursgenoteerd = 1 if beursgenoteerd == "true" else 0
     website = 1 if website == "true" else 0
     jaarrekening = 1 if jaarrekening == "true" else 0
-    data = np.array([float(omzet), beursgenoteerd, int(sector),
-            float(personeel), int(website), int(jaarrekening), int(stedelijkheidsklasse)])
+    stedelijkheidsklasse = get_stedelijkheidsklasse(postcode)
+    data = np.array([int(omzet), beursgenoteerd, int(sector),
+            int(personeel), website, jaarrekening, int(stedelijkheidsklasse)])
     data = data.reshape(1, -1)
     # appendd values to dataframe
     dataframe = pd.DataFrame(data, columns=['omzet', 'beursgenoteerd', 'sector',

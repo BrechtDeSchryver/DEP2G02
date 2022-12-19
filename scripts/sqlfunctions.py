@@ -182,7 +182,19 @@ def insertRawWebsite(ondernemingsnummer, websitetext, pg_conn=None):
     if connaanwezig == False:
         pg_conn.close()
 
-
+def get_stedelijkheidsklasse(postcode, pg_conn=None):
+    # connect met de databank
+    if pg_conn is None:
+        pg_conn = get_database()
+        connaanwezig = False
+    else:
+        connaanwezig = True
+    # select functie
+    result = pg_conn.execute(
+        'SELECT stedelijkheidsklasse FROM municipality WHERE zipcode = %s;', postcode)
+    if connaanwezig == False:
+        pg_conn.close()
+    return result.first()[0]
 def insertRawDuurzaamheidsrapport(ondernemingsnummer, duurzaamheidsrapporttext, pg_conn=None):
     # connect met de databank
     if pg_conn is None:
