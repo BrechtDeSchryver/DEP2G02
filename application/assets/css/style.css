@@ -121,3 +121,7 @@ a.choice div:hover {
   width: 50%;
 }
 
+.clickableList {
+  cursor: pointer;
+}
+

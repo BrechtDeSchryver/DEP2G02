@@ -233,6 +233,13 @@ app.get("/heatmap/coordsavgscore", async (req, res) => {
   console.log("["+ db.getLocalTime(new Date()) + "] " + "Returned the coords of companies to " + req.socket.remoteAddress);
 });
 
+app.get("/getScorepartitions", async (req, res) => {
+  let partitions = await db.getScorePartitions();
+  partitions = partitions.rows;
+  res.status(200).json({ partitions });
+  console.log("["+ db.getLocalTime(new Date()) + "] " + "Returned the partitions to " + req.socket.remoteAddress);
+});
+
 
 
 

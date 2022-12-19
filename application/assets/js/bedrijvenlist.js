@@ -28,7 +28,7 @@ function getBedrijven(sector, sortingkey, sorting) {
                 let score = bedrijf.score == null ? `<i class="fas fa-times" title="Niet beoordeeld"></i>` : bedrijf.score.replace(".", ",");
                 tbl.insertAdjacentHTML("beforeend", `
                 <tr>
-    <td id="bedrijfnaam" onclick="addToCompare('${bedrijf.ondernemingsNummer}')" title="${bedrijf.ondernemingsNummer}">${bedrijf.name}</td>
+    <td id="bedrijfsnaam" title="Klik om te vergelijken" onclick="addToCompare('${bedrijf.ondernemingsNummer}')"><span class="clickableList" id="${bedrijf.ondernemingsNummer}">${bedrijf.name}</span></td>
     <td id="personeel" class="text-end">${bedrijf.personeel}</td>
     <td id="omzet" class="text-end">${numberWithCommas(bedrijf.turnover)}</td>
     <td id="beurs" class="text-center">${beurs}</td>
@@ -37,7 +37,21 @@ function getBedrijven(sector, sortingkey, sorting) {
 </tr>
                 `)
             })
+
+            let compare = localStorage.getItem("compare");
+        if (compare != null && compare != "") {
+            let comparearray = compare.split(",");
+            console.log(comparearray);
+            comparearray.forEach((btw) => {
+                console.log(btw)
+                //wait for the list to load
+                compareStyle(btw, "add");
+            })
+        }
+
+
         })
+        // get the items from the compare list and style them
 
 }
 
@@ -69,17 +83,59 @@ function addToCompare(btw) {
     if (compare == null) {
         localStorage.setItem("compare", btw);
         initBedrijvenlist();
+        tooltipAlert(btw, "Bedrijf toegevoegd aan vergelijking!");
+        compareStyle(btw, "add");
     } else {
         let comparearray = compare.split(",");
         if (comparearray.length > 1) {
             alert("Je kan maar 2 bedrijven tegelijk vergelijken");
         } else { 
+            if (comparearray.includes(btw)) {
+                alert("Dit bedrijf staat al in de vergelijking.");
+            } else {
         compare = compare + "," + btw;
         localStorage.setItem("compare", compare);
         initBedrijvenlist();
+        compareStyle(btw, "add");
+        tooltipAlert(btw, "Bedrijf toegevoegd aan vergelijking!");
+            }
+    
     }
     //document.getElementById("comparebtn").innerHTML = `<i class="fas fa-chart-bar fa-fw"></i> Vergelijk (${localStorage.getItem("compare").split(",").length})`;
 }
+}
+
+function tooltipAlert(item, text) {
+    // add data-bs-toggle="tooltip" to the element using bootstrap tooltip
+    item = document.getElementById(item);
+    item.setAttribute("data-bs-toggle", "tooltip");
+    item.setAttribute("data-bs-placement", "top");
+    item.setAttribute("title", text);
+    item.setAttribute("data-bs-trigger", "manual");
+    item.setAttribute("data-bs-delay", "0");
+    item.setAttribute("data-bs-html", "true");
+    item.setAttribute("data-bs-animation", "false");
+
+    // show tooltip
+    var tooltip = new bootstrap.Tooltip(item);
+    tooltip.show();
+    // hide after 2 seconds
+    setTimeout(function() {
+        tooltip.hide();
+    }, 4000);
+
+}
+
+function compareStyle (item, action) {
+    item = document.getElementById(item);
+    if (action == "add") {
+        item.style.color = "rgb(89,182,195)";
+        item.style.fontWeight = "bold";
+    } else {
+        item.style.color = "rgb(133,135,150)";
+        item.style.fontWeight = "normal";
+    }
+
 }
 
 function removeFromCompare(btw) {
@@ -87,6 +143,7 @@ function removeFromCompare(btw) {
     if (compare != null && compare != "") {
         compare = compare.split(",");
         compare = compare.filter((item) => item != btw);
+        compareStyle(btw, "remove");
         if (compare.length == 0) {
             localStorage.removeItem("compare");
             document.getElementById("badge").style.display = "none";

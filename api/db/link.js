@@ -257,6 +257,23 @@ function getavgscorecoords() {
 }
 
 
+function getScorePartitions() {
+  let result = knex.raw(`select count("ondernemingsNummer"), 1 as partitie from kmo where score <1
+  union
+  select count("ondernemingsNummer"), 2 as partitie from kmo where score >= 1 and score <2.5
+  union
+  select count("ondernemingsNummer"), 3 as partitie from kmo where score >= 2.5 and score <5
+  union
+  select count("ondernemingsNummer"), 4 from kmo where score >= 5 and score <7.5
+  union
+  select count("ondernemingsNummer"), 5 as partitie from kmo where score >= 7.5 and score <10
+  union
+  select count("ondernemingsNummer"), 6 as partitie from kmo where score >= 10
+  order by partitie asc`);
+  return result;
+}
+
+
 
 module.exports = {
   getAll,
@@ -282,6 +299,7 @@ module.exports = {
   getTotalBedrijven,
   getFinnaceData,
   getLongLat,
-  getavgscorecoords
+  getavgscorecoords,
+  getScorePartitions
 
 };
