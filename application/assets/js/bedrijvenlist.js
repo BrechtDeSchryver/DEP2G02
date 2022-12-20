@@ -131,13 +131,18 @@ function tooltipAlert(item, text) {
 }
 
 function compareStyle (item, action) {
-    item = document.getElementById(item);
-    if (action == "add") {
-        item.style.color = "rgb(89,182,195)";
-        item.style.fontWeight = "bold";
-    } else {
-        item.style.color = "rgb(133,135,150)";
-        item.style.fontWeight = "normal";
+    try {
+        item = document.getElementById(item);
+        if (action == "add") {
+            item.style.color = "rgb(89,182,195)";
+            item.style.fontWeight = "bold";
+        } else {
+            item.style.color = "rgb(133,135,150)";
+            item.style.fontWeight = "normal";
+        }
+    }
+    catch (error) {
+        console.log(error);
     }
 
 }
