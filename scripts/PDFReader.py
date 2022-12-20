@@ -46,11 +46,13 @@ def GetDataPDF(file_path,dest):
                     pass
         x.close()
     return path
+#zet de pdf om naar een een string
 def GetDataPDF2(file_path):
     raw = parser.from_file(file_path)
     content=raw['content']
     content=content.replace("\n",' ')
     return content
+#strings die we zoeken in de pdf
 def getString(paginas,kieszelf):
     '''
     
@@ -80,7 +82,7 @@ def getString(paginas,kieszelf):
             strings.append('1001')
             strings.append('1002')
     return strings
-    
+#haalt de info uit de pdf    
 def GetinfoPDF(file_path,kieszelf=False):
 #
 # GetinfoPDF neemt een file_path naar een pdf bestand van een jaarrekening 
@@ -132,7 +134,7 @@ def GetinfoPDF(file_path,kieszelf=False):
     if informatie=='' and kieszelf==False:
         return GetinfoPDF(file_path,True)
     return informatie
-
+#main function voor data ophalen
 def main():
     location="D:/shared"
     for file in os.listdir(location):
@@ -140,4 +142,5 @@ def main():
             file_path=f"{location}/{file}"
             data=GetinfoPDF(file_path)
             print(data)
-main()
+if __name__ == "__main__":
+    main()

@@ -25,7 +25,8 @@ min_max_scaler_omzet = pickle.load(
 min_max_scaler_personeel = pickle.load(
     open('ml_files/min_max_scaler_personeelsleden.sav', 'rb'))
 
-
+# gebruikt de machine learning model om een score te berekenen
+# en returned deze in een json
 @app.route("/api/predict/omzet=<omzet>&personeel=<personeel>&sector=<sector>&jr=<jaarrekening>&website=<website>&beurs=<beursgenoteerd>&postcode=<postcode>", methods=['GET'])
 def predict(omzet, personeel, sector, jaarrekening, website, beursgenoteerd, postcode):
     # Omzet= omzetcijfer (int)
@@ -61,7 +62,8 @@ def predict(omzet, personeel, sector, jaarrekening, website, beursgenoteerd, pos
         x = {"score": "error"}
     return json.dumps(x)
 
-
+# herberekent de scores van alle bedrijven
+# en returned de status van de herberekening
 @app.route("/api/recalculate/<code>", methods=['GET'])
 def get_posts(code):
      global running
@@ -78,17 +80,16 @@ def get_posts(code):
      x = {"status": running}
      return json.dumps(x)
 
-
+# returned de status van de herberekening
 @app.route("/api/status", methods=['GET'])
 def get_status():
     x = {"status": running}
     return json.dumps(x)
 
-
+# returned de status van de api
 @app.route("/", methods=['GET'])
 def uptime():
     x = {"status": "online"}
     return json.dumps(x)
-
 
 app.run(host='0.0.0.0', debug=True, port=8080)
