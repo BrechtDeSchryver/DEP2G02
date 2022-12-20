@@ -41,11 +41,6 @@ function getKmoByOndernemingsnummer(ondernemingsnummer) {
 /** Retourneert een rij uit de tabel "KMO" waar "name" overeenkomt met de meegegeven naam. */
 function getKmoNaam(name) {
   let realname = unescape(name);
-  /*let result = knex("kmo")
-    .select("*")
-    .where("name", "like", `${realname.toUpperCase()}%`);
-  result.limit(5);
-  return result;*/
   //select k."ondernemingsNummer", k."name", k.email, k.telephone, k.website, k."nbbID", k."nacebelCode", k.score, a.street, a.zipcode, m."name" as 'city', m.stedelijkheidsklasse from kmo k join adress a ON a."ondernemingsNummer" = k."ondernemingsNummer" join municipality m ON m.zipcode = a.zipcode
   let result = knex("kmo")
     .select(
@@ -190,7 +185,7 @@ function getSector(nacebelcode, sortingkey, sorting) {
     .orderBy(sortingkey, sorting);
   return result;
 }
-
+/** Retourneert de sector naam van de meegegeven nacebel code*/
 function getSectorName(nacebelcode) {
   let result = knex("sector")
     .select("*")
@@ -198,6 +193,7 @@ function getSectorName(nacebelcode) {
   return result;
 }
 
+/** Retourneert de gemiddelde score van een sector */
 function getAverageScoreFromSector(nacebelcode) {
   // select avg(kmo.score) as "Gemiddelde", kmo."nacebelCode", s.subdomain from subdomain_score s join kmo ON kmo."ondernemingsNummer" = s."ondernemingsNummer" where kmo."nacebelCode" = '47112'group by kmo."nacebelCode", s.subdomain
   let result = knex("subdomain_score")
@@ -211,6 +207,7 @@ function getAverageScoreFromSector(nacebelcode) {
   return result;
 }
 
+/** Retourneert de subdomein scores van een sector */
 function getScoreFromKmo(ondernemingsNummer) {
   //select score from subdomain_score where "ondernemingsNummer" = '0474964260' order by subdomain ASC;
   let result = knex("subdomain_score")
@@ -220,12 +217,14 @@ function getScoreFromKmo(ondernemingsNummer) {
   return result;
 }
 
+/** Retourneert de rank van een onderneming  */
 function getRanking(ondernemingsNummer) {
   //WITH score_rank AS (select "ondernemingsNummer", score, RANK () OVER (ORDER BY score desc) AS positie from kmo o where score is not NULL) select positie from score_rank where "ondernemingsNummer" = '0759399340'
   let result = knex.raw(`WITH score_rank AS (select "ondernemingsNummer", score, RANK () OVER (ORDER BY score desc) AS positie from kmo o where score is not NULL) select positie from score_rank where "ondernemingsNummer" = '${ondernemingsNummer}'`);
   return result;
 }
 
+/** Retourneert het totaal aantal bedrijven als getal */
 function getTotalBedrijven() {
   //select count("ondernemingsNummer") from kmo
   let result = knex("kmo")
@@ -234,6 +233,7 @@ function getTotalBedrijven() {
   return result;
 }
 
+/** Retourneert de financiële data van een bedrijf */
 function getFinnaceData(btw) {
   let result = knex("finance")
   .select("*")
@@ -241,6 +241,7 @@ function getFinnaceData(btw) {
   return result;
 }
 
+/** Retourneert de coords van alle bedrijven */
 function getLongLat() {
   // select m.lat, m.long, '1' as count from kmo k join adress ON adress."ondernemingsNummer" = k."ondernemingsNummer" join municipality m ON m.zipcode = adress.zipcode
   let result = knex.raw(`select m.lat, m.long, k.score as count from kmo k join adress ON adress."ondernemingsNummer" = k."ondernemingsNummer" join municipality m ON m.zipcode = adress.zipcode where m.lat is not null and m.long is not null`);
@@ -249,14 +250,14 @@ function getLongLat() {
 
 }
 
-
+/** Retourneert de coords en gemiddelde score per postcode */
 function getavgscorecoords() {
   // select m.lat, m.long, avg(k.score) as count from kmo k join adress ON adress."ondernemingsNummer" = k."ondernemingsNummer" join municipality m ON m.zipcode = adress.zipcode where m.lat is not null and m.long is not null group by m.zipcode
   let result = knex.raw(`select m.lat, m.long, avg(k.score) as count from kmo k join adress ON adress."ondernemingsNummer" = k."ondernemingsNummer" join municipality m ON m.zipcode = adress.zipcode where m.lat is not null and m.long is not null group by m.zipcode`);
     return result;
 }
 
-
+/** Retourneert het aantal bedrijven per score range */
 function getScorePartitions() {
   let result = knex.raw(`select count("ondernemingsNummer"), 1 as partitie from kmo where score <1
   union
@@ -274,7 +275,7 @@ function getScorePartitions() {
 }
 
 
-
+/** Exporteert alle functies */
 module.exports = {
   getAll,
   getKmoByOndernemingsnummer,

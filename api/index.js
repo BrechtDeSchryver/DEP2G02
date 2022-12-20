@@ -37,14 +37,6 @@ app.get("/bedrijf/btw/:nummer", async (req, res) => {
 app.get("/bedrijf/naam/:naam", async (req, res) => {
   let bedrijven = await db.getKmoNaam(req.params.naam, req.body);
   console.log(bedrijven);
-  /*
-  kmo = bedrijf[0];
-  let adress = await db.getAdressByNumber(kmo.ondernemingsNummer, req.body);
-  adress = adress[0];
-  // check if adress is undefined
-  if (!adress === undefined) {
-    delete adress.ondernemingsNummer;
-  }*/
   res.status(200).json({ bedrijven });
   // get local time hh:mm:ss
   console.log(`[${db.getLocalTime(new Date())}] IP: ${req.socket.remoteAddress} | Naam: ${req.params.naam}`);
@@ -184,14 +176,16 @@ app.get("/sector/average", async (req, res) => {
   console.log("["+ db.getLocalTime(new Date()) + "] " + "Returned average scores of sector " + nacebelCode + " to " + req.socket.remoteAddress);
 });
 
+/** Geeft de score van bedrijf terug */
 app.get("/bedrijf/scores/:nummer", async (req, res) => {
   let btw = req.params.nummer;
   let scores = await db.getScoreFromKmo(btw);
   res.status(200).json({ scores });
-  console.log("["+ db.getLocalTime(new Date()) + "] " + "Returned scores of company " + btw + " to " + req.socket.remoteAddress);
+  console.log("["+ db.getLocalTime(new Date()) + "] " + "Returned score of company " + btw + " to " + req.socket.remoteAddress);
   
 });
 
+/** Geeft de ranking van bedrijf terug */
 app.get("/bedrijf/ranking/:nummer", async (req, res) => {
   let btw = req.params.nummer;
   let ranking = await db.getRanking(btw);
@@ -203,6 +197,7 @@ app.get("/bedrijf/ranking/:nummer", async (req, res) => {
   
 });
 
+/** Geeft het totaal aantal van bedrijven terug */
 app.get("/bedrijf/total", async (req, res) => {
   let total = await db.getTotalBedrijven();
   total = total[0].count
@@ -212,6 +207,7 @@ app.get("/bedrijf/total", async (req, res) => {
   
 });
 
+/** Geeft de financiele gegevens van bedrijf terug */
 app.get("/bedrijf/finance/:nummer", async (req, res) => {
   let total = await db.getFinnaceData(req.params.nummer);
   finance = total[0]
@@ -219,6 +215,7 @@ app.get("/bedrijf/finance/:nummer", async (req, res) => {
   console.log("["+ db.getLocalTime(new Date()) + "] " + "Returned the number of companies to " + req.socket.remoteAddress);
 });
 
+/** Geeft de coords van de bedrijven */
 app.get("/heatmap/coords", async (req, res) => {
   let coords = await db.getLongLat();
   coords = coords.rows;
@@ -226,6 +223,7 @@ app.get("/heatmap/coords", async (req, res) => {
   console.log("["+ db.getLocalTime(new Date()) + "] " + "Returned the coords of companies to " + req.socket.remoteAddress);
 });
 
+/** Geeft de coords van de bedrijven en de avg score */
 app.get("/heatmap/coordsavgscore", async (req, res) => {
   let coords = await db.getavgscorecoords();
   coords = coords.rows;
@@ -233,26 +231,13 @@ app.get("/heatmap/coordsavgscore", async (req, res) => {
   console.log("["+ db.getLocalTime(new Date()) + "] " + "Returned the coords of companies to " + req.socket.remoteAddress);
 });
 
+/** Geeft het aantal bedrijven per score range */
 app.get("/getScorepartitions", async (req, res) => {
   let partitions = await db.getScorePartitions();
   partitions = partitions.rows;
   res.status(200).json({ partitions });
   console.log("["+ db.getLocalTime(new Date()) + "] " + "Returned the partitions to " + req.socket.remoteAddress);
 });
-
-
-
-
-
-/** Geeft de jaarrekening, de website en eventueel een duurzaamheidsrapport terug in json formaat na het ontvangen van een btw nummer. */
-
-/*
-app.get("/bedrijf/rawdata/:nummer", async (req, res) => {
-  let rawdata = await db.getRawDataByOndernemingsnummer(req.params.nummer, req.body);
-  rawdata = rawdata[0];
-  res.status(200).json({ rawdata });
-});
-*/
 
 /**Bepaalt de poort waarop de API service draait. */
 let port = 8080;
