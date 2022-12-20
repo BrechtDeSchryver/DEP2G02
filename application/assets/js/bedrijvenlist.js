@@ -131,7 +131,7 @@ function tooltipAlert(item, text) {
     // hide after 2 seconds
     setTimeout(function() {
         tooltip.hide();
-    }, 4000);
+    }, 3000);
 
 }
 
