@@ -1,5 +1,5 @@
 
-
+// luistert naar input velden en checkt of de submit knop aan of uit moet
 function inputlistner() {
     let omzet = document.getElementById("omzet");
     let personeel = document.getElementById("personeel");
@@ -69,6 +69,7 @@ function inputlistner() {
 
 }
 
+// stuurt de data naar de api en haalt de voorspelling op
 function predict(array) {
     let button = document.getElementById("submitbtn");
     let loadingscreen = document.getElementById("loadingscreen");

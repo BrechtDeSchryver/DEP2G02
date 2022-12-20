@@ -10,7 +10,7 @@ function checkSession() {
     }
 }
 
-
+// logt de gebruiker in en slaat de session op in localstorage
 function login() {
         fetch(`http://localhost:8080/getuser?user=${document.getElementById("InputUser").value.toLowerCase()}&pass=${document.getElementById("InputPassword").value}`)
       .then((res) => res.json())
@@ -36,7 +36,7 @@ function login() {
       });
 
 }
-
+// luistert naar de enter toets
 function enterkeylistner() {
     document.getElementById("InputPassword").addEventListener("keyup", (event) => {
         if (event.key === "Enter") {

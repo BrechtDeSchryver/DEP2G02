@@ -240,7 +240,7 @@ if (beta != "seen") {
 
 
 
-
+// laadt de score van een bedrijf in de grafiek
 function loadscoregraph(score) {
   var ctxL = document.getElementById("lineChart").getContext('2d');
 var myLineChart = new Chart(ctxL, {
@@ -266,7 +266,7 @@ var myLineChart = new Chart(ctxL, {
   }
 });
 }
-
+// haalt de financiele gegevens van een bedrijf op en plaatst deze op de pagina
 function getFinanceData(btw) {
   fetch(`http://localhost:8080/bedrijf/finance/${btw}`)
    .then(response => response.json())
@@ -280,62 +280,6 @@ function getFinanceData(btw) {
       let beurs = document.getElementById("beurs")
       beurs.innerHTML = data.beursgenoteerd ? `<i class="fas fa-chart-line" title="Beursgenoteerd"></i>` : `<i class="fas fa-times" title="Niet beursgenoteerd"></i>`
    })
-}
-
-
-
-/*function getJaarRekening(btw) {
-  newbtw = btw.toLowerCase().replace("be", "")
-  console.log(newbtw);
-  fetch(`http://www.vichogent.be:40020/api/jaarrekening/${newbtw}`)
-    .then((res) => res.json())
-    .then((data) => {
-        console.log(data);
-        if (data.Werknemers != "") {
-          document.getElementById("werknemers").innerHTML = Math.ceil(data.Werknemers)
-        }
-        if (data.Omzet != "") {
-          document.getElementById("omzet").innerHTML = `€ ${data.Omzet}`
-        }
-        if (data.Balanstotaal != "") {
-          document.getElementById("balans").innerHTML = `€ ${data.Balanstotaal}`
-        }
-      })
-    .catch((error) => {
-      console.log(error);
-    });
-}*/
-
-/*function getSector(btw) {
-  newbtw = btw.toLowerCase().replace("be", "")
-  fetch(`http://www.vichogent.be:40020/api/pubsearch/${newbtw}`)
-    .then((res) => res.json())
-    .then((data) => {
-        console.log(data);
-        if (data.SectorAlgemeen != "") {
-          document.getElementById("sector").innerHTML = data.SectorAlgemeen
-        }
-        if (data.SectorDetail != "") {
-          document.getElementById("sectordetail").innerHTML = String(data.SectorDetail).replace(",", ", ")
-        }
-      })
-    .catch((error) => {
-      console.log(error);
-    });
-}*/
-/** Vertaalt de locatiescore naar html-icons
- * :par_number: locatiescore 
-  */
-function getIcons(number) {
-  if (number == 0) {
-    return ""
-  } else if (number == 1) {
-    return `<i class="fas fa-globe-americas" id="zoektermwebsite" style="color: #dddfeb;padding-left:15px;font-size: 15px;" title="Website"></i>`
-  } else if (number == 2) {
-    return `<i class="fas fa-file-pdf" id="zoektermpdf" style="color: rgb(221,223,235);font-size: 15px;padding-left: 15px;padding-right: 10px;" title="Jaarrekening"></i>`
-  } else {
-    return `<i class="fas fa-file-pdf" id="zoektermpdf" style="color: rgb(221,223,235);font-size: 15px;padding-left: 15px;padding-right: 10px;" title="Jaarrekening"></i><i class="fas fa-globe-americas" id="zoektermwebsite" style="color: #dddfeb;font-size: 15px;" title="Website"></i>`
-  }
 }
 
 /** grote getallen leesbaar maken door een punt te zetten om de 3 cijfers */
@@ -378,9 +322,6 @@ suggestOff();  try{
      }
   })
   
-  /*getSector(document.getElementById("searchbar").value);
-  getJaarRekening(document.getElementById("searchbar").value);*/
-  //getCodingTree(document.getElementById("searchbar").value);
 }
 
 window.onload = init;

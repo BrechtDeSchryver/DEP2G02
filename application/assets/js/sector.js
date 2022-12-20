@@ -43,34 +43,6 @@ function getUrlVars() {
       });
 }
 
-  /** De duurzaamheidsscore van alle bedrijven binnen een bepaalde sector op het dashboard plaatsen */
-
-/*
-function getsectorzoektermen() {
-  fetch(`http://www.vichogent.be:40021/getsectorzoektermen/${getUrlVars().sector}`)
-  .then((data) => data.json())
-  .then((data) => {
-    const sdata = data.sectorzoektermen[0];
-    console.log(sdata)
-    let i = 0;
-    while (i < sdata.length) {
-      let globe = 'inline'
-      let pdf = 'inline'
-      if (sdata[i].score_zoektermen == 2 || sdata[i].score_zoektermen == 0) {globe = 'none'}
-      if (sdata[i].score_zoektermen == 1 || sdata[i].score_zoektermen == 0) {pdf = 'none'}
-      document.getElementById("tbodys").insertAdjacentHTML("beforeend", `
-          <tr id="row">
-          <td><i class="fas fa-file-pdf" style="margin-right: 10px;display:${pdf}"></i><i class="fas fa-globe-americas" style=display:${globe}></i></td>
-            
-            <td>${sdata[i].aantal}</td>
-          </tr>
-          `)
-      i +=1
-    }
-  })
-}*/
-
-
 
 /** controleert of er in de local storage staat of de notificatie ooit al aangeklikt is */
 function checkAlert() {

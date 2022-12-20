@@ -1,5 +1,5 @@
 function checkSession() {
-    // check if session is set
+    // check of er 
     if (localStorage.getItem("session") != null)
     {
         fetch(`http://localhost:8080/checksession?pass=${localStorage.getItem("session")}`)
@@ -31,14 +31,14 @@ function checkSession() {
 }
 checkSession();
 
-// remove localstorage session when logout is clicked
+// remove localstorage session wanneer er op de logout knop wordt geklikt
 function logout() {
     localStorage.removeItem("session");
     window.location.href = "index.html";
 }
 
 
-
+// logout wanneer er op de logout knop wordt geklikt
 let logoutbtn = document.getElementById("logoutbutton");
 logoutbtn.onclick = function () {
     logout();
