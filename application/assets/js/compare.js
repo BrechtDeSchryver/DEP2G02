@@ -1,5 +1,4 @@
-let btwnums = "046565"
-
+// toont de bedrijven die je hebt geselecteerd in de compare pagina
 function insertBedrijf() {
     let content = document.getElementById("kmorow");
     content.innerHTML = "";
@@ -40,6 +39,7 @@ function insertBedrijf() {
 
 }
 
+// toont de gegevens subpagina
 function getgegevens() {
     let content = document.getElementById("kmorow");
     content.innerHTML = "";
@@ -91,6 +91,7 @@ function getgegevens() {
 
 }
 
+// toont de scores subpagina en plaatst de grafieken in de pagina
 function getscores() {
     let content = document.getElementById("kmorow");
     //content.innerHTML = "";
@@ -176,6 +177,7 @@ function getscores() {
 }
 
 
+// haalt de bedrijven op die vergeleken moeten worden
 function getcompareitems(){
     let compare = localStorage.getItem("compare");
     let comparearray = compare.split(",");

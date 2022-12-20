@@ -12,6 +12,7 @@ function checkSession() {
     }
 }
 
+// haalt de categorieen op
 function getCategories() {
     fetch('http://localhost:8080/categories')
         .then(response => response.json())
@@ -31,6 +32,7 @@ function getCategories() {
         )
 }
 
+// haalt de subcategorieen op
 function getSubCategorie(category) {
     console.log(category);
     document.getElementById("categories").innerHTML = "";
@@ -50,6 +52,7 @@ function getSubCategorie(category) {
 })
 }
 
+// haalt de zoektermen op
 function getSearchTerms(subcategory, category) {
     console.log(subcategory);
     document.getElementById("categories").innerHTML = "";
@@ -73,6 +76,7 @@ function getSearchTerms(subcategory, category) {
 })
 }
 
+// verwijderd een zoekterm uit de database
 function deleteWord(word) {
     console.log(word);
     fetch(`http://localhost:8080/delete/searchterms?id=${word}&session=${localStorage.getItem("session")}`)
@@ -86,6 +90,7 @@ function deleteWord(word) {
 
 }
 
+// voegt een zoekterm toe aan de database
 function addWord() {
     let word = document.getElementById("newword").value;
     console.log(word);
@@ -113,6 +118,7 @@ function addWord() {
 
 }
 
+// checkt de status van de herberekening van de scores
 function checkScores() {
     fetch(`http://vichogent.be:40046/api/status`)
         .then(response => response.json())
@@ -136,6 +142,7 @@ function checkScores() {
         })
 }
 
+// start het herberekenen van de scores
 function herberekenScores() {
     let confirmation = confirm("Scores worden herberekend, dit kan een paar minuten duren.", "Herbereken scores", "Annuleer");
         if (confirmation) {
@@ -159,6 +166,7 @@ function herberekenScores() {
     }
 }
 
+// luistert of de herberekening klaar is en herlaadt de pagina als dat zo is.
 function realoadWhenDone() {
     fetch(`http://vichogent.be:40046/api/status`)
         .then(response => response.json())
@@ -172,7 +180,7 @@ function realoadWhenDone() {
         })
 }
 
-
+// luistert naar een enter key 
 function enterkeylistner() {
     document.getElementById("newword").addEventListener("keyup", (event) => {
         if (event.key === "Enter") {

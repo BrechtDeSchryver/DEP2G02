@@ -11,6 +11,7 @@ function getUrlVars() {
     return vars;
   }
   
+    /**Deze functie gaat alle bedrijven in de lisjt plaatsen en sorteren op bassis van de meegegeven sorteerterm en de meegeven volgorde */
 function getBedrijven(sector, sortingkey, sorting) {
     sortingkey = sortingkey == undefined ? "name" : sortingkey;
     sorting = sorting == undefined ? "asc" : sorting;
@@ -55,6 +56,7 @@ function getBedrijven(sector, sortingkey, sorting) {
 
 }
 
+// deze functie gaat de sorteerknoppen initialiseren
 function initSorting() {
     document.getElementById("namefield").onclick = function() {getBedrijven(getUrlVars()["sector"], "name", "desc")
 changeSorting("namefield", "name", "asc")};
@@ -68,6 +70,7 @@ changeSorting("stocksfield", "beursgenoteerd", "asc")};
 changeSorting("scorefield", "score", "asc")};
 }
 
+// deze functie gaat de sorteerknoppen aanpassen
 function changeSorting(id, key, sorting) {
     console.log(id);
     console.log(key);
@@ -78,6 +81,7 @@ function changeSorting(id, key, sorting) {
     document.getElementById(id+"arrow").classList = sortingicon;
 }
 
+// voegt bedrijf toe aan vergelijking
 function addToCompare(btw) {
     let compare = localStorage.getItem("compare");
     if (compare == null) {
@@ -96,7 +100,11 @@ function addToCompare(btw) {
         compare = compare + "," + btw;
         localStorage.setItem("compare", compare);
         initBedrijvenlist();
-        compareStyle(btw, "add");
+        try {
+            compareStyle(btw, "add");
+        } catch (error) {
+            console.log(error);
+        }
         tooltipAlert(btw, "Bedrijf toegevoegd aan vergelijking!");
             }
     
@@ -105,6 +113,7 @@ function addToCompare(btw) {
 }
 }
 
+// geeft een visuele indicatie dat een bedrijf toegevoegd is aan de vergelijking
 function tooltipAlert(item, text) {
     // add data-bs-toggle="tooltip" to the element using bootstrap tooltip
     item = document.getElementById(item);
@@ -126,18 +135,25 @@ function tooltipAlert(item, text) {
 
 }
 
+// geeft een andere stijl aan een bedrijf in de vergelijking
 function compareStyle (item, action) {
-    item = document.getElementById(item);
-    if (action == "add") {
-        item.style.color = "rgb(89,182,195)";
-        item.style.fontWeight = "bold";
-    } else {
-        item.style.color = "rgb(133,135,150)";
-        item.style.fontWeight = "normal";
+    try {
+        item = document.getElementById(item);
+        if (action == "add") {
+            item.style.color = "rgb(89,182,195)";
+            item.style.fontWeight = "bold";
+        } else {
+            item.style.color = "rgb(133,135,150)";
+            item.style.fontWeight = "normal";
+        }
+    }
+    catch (error) {
+        console.log(error);
     }
 
 }
 
+// verwijdert bedrijf uit vergelijking
 function removeFromCompare(btw) {
     let compare = localStorage.getItem("compare");
     if (compare != null && compare != "") {
@@ -157,6 +173,7 @@ function removeFromCompare(btw) {
     initBedrijvenlist();
 }
 
+// geeft een array terug met de bedrijven die vergeleken worden
 function returnCompare(btw) {
     let compare = localStorage.getItem("compare");
     if (compare != null) {
@@ -169,6 +186,7 @@ function returnCompare(btw) {
         return false;
 }
 
+// maakt de vergelijkingslijst aan
 function initBedrijvenlist() {
     let menu = document.getElementById("comparemenu");
     let compare = localStorage.getItem("compare");

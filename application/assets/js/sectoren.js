@@ -17,7 +17,7 @@ function getSectoren(sorting) {
         document.getElementById("sortingicon").classList.remove("fa-sort-numeric-asc")
         document.getElementById("sortingicon").classList.add("fa-sort-numeric-desc")
     }
-
+// toont de sectoren in de tabel op basis van de sortering
     fetch(`http://localhost:8080/sectors?sorting=${sorting}`)
       .then((res) => res.json())
       .then((date) => {
