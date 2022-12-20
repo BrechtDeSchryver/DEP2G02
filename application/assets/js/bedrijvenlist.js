@@ -96,7 +96,11 @@ function addToCompare(btw) {
         compare = compare + "," + btw;
         localStorage.setItem("compare", compare);
         initBedrijvenlist();
-        compareStyle(btw, "add");
+        try {
+            compareStyle(btw, "add");
+        } catch (error) {
+            console.log(error);
+        }
         tooltipAlert(btw, "Bedrijf toegevoegd aan vergelijking!");
             }
     
